@@ -28,6 +28,7 @@
       v-if="this.$route.path == '/'"
     >
       <v-row align="center">
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="app-bar-icon" />
         <button class="homepage" disabled>Trang chủ</button>
         <b-input-group class="search">
           <b-input-group-prepend is-text>
@@ -114,7 +115,7 @@ export default {
 <style lang="scss" scoped>
 .toolbar {
   background: #f8f8f8;
-  width: 208px !important;
+  // width: 208px !important;
   line-height: 24px;
   img {
     width: 221px;
@@ -143,7 +144,7 @@ export default {
   }
 }
 .header_box {
-  left: 208px !important;
+  // left: 208px !important;
   background: #eff5f9 !important;
   .homepage {
     width: 77px;
@@ -160,6 +161,7 @@ export default {
   .search {
     margin-left: 378px;
     position: relative;
+    bottom: 10px;
     .bi-search {
       position: absolute;
       top: 5px;
@@ -193,7 +195,7 @@ export default {
   }
   #createBDS {
     position: absolute;
-    left: 81.3%;
+    right: 10%;
     // background: #fbad18;
     border-radius: 15px;
     width: 109px;
@@ -251,7 +253,7 @@ export default {
   }
 }
 .v-main {
-  padding: 64px 0px 36px 209px !important;
+  // padding: 64px 0px 36px 209px !important;
   background: #eff5f9;
 }
 .main_content {
@@ -266,6 +268,23 @@ export default {
     font-size: 13px;
     text-align: center;
     margin: 0 auto;
+  }
+}
+@media screen and (min-width: 1265px) {
+  .toolbar {
+    width: 208px !important;
+  }
+  .header_box {
+    left: 208px !important;
+  }
+  .v-main {
+    padding: 64px 0px 36px 209px !important;
+  }
+  .app-bar-icon {
+    display: none;
+  }
+  .search {
+    bottom: 0 !important;
   }
 }
 </style>

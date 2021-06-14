@@ -130,7 +130,7 @@ export default {
 .header_box {
   left: 208px !important;
   background: #eff5f9 !important;
-  margin-top: -60px !important;
+  margin-top: 20px !important;
   #social_network {
     width: 25px !important;
     height: 15px;
@@ -233,6 +233,11 @@ export default {
       font-size: 14px;
       margin-bottom: 3px;
     }
+  }
+}
+@media screen and (min-width: 1265px) {
+  .header_box {
+    margin-top: -50px !important;
   }
 }
 </style>

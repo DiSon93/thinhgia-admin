@@ -22,11 +22,20 @@
         <img src="@image/icons/address.png" alt="" />
         <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
       </div>
-      <div class="content">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      <div class="content" v-bind:class="{ adjust: read }">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+        is simply dummy text of the printing and typesetting industry. Lorem Ipsum is
+        simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply
+        dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy
+        text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of
+        the printing and typesetting industry.
+
         <br />
-        <button class="more-info">Xem thêm</button>
       </div>
+      <button class="more-info" @click="readMore">
+        {{ read ? "Rút gọn" : "Xem thêm" }}
+      </button>
       <v-row no-gutters class="house-img">
         <CoolLightBox :items="items" :index="index" @close="index = null"> </CoolLightBox>
 
@@ -85,11 +94,20 @@
         <img src="@image/icons/address.png" alt="" />
         <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
       </div>
-      <div class="content">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      <div class="content" v-bind:class="{ adjust: read }">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+        is simply dummy text of the printing and typesetting industry. Lorem Ipsum is
+        simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply
+        dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy
+        text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of
+        the printing and typesetting industry.
+
         <br />
-        <button class="more-info">Xem thêm</button>
       </div>
+      <button class="more-info" @click="readMore">
+        {{ read ? "Rút gọn" : "Xem thêm" }}
+      </button>
       <v-row no-gutters class="house-img">
         <CoolLightBox :items="items" :index="index" @close="index = null"> </CoolLightBox>
 
@@ -148,11 +166,20 @@
         <img src="@image/icons/address.png" alt="" />
         <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
       </div>
-      <div class="content">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      <div class="content" v-bind:class="{ adjust: read }">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+        is simply dummy text of the printing and typesetting industry. Lorem Ipsum is
+        simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply
+        dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy
+        text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of
+        the printing and typesetting industry.
+
         <br />
-        <button class="more-info">Xem thêm</button>
       </div>
+      <button class="more-info" @click="readMore">
+        {{ read ? "Rút gọn" : "Xem thêm" }}
+      </button>
       <v-row no-gutters class="house-img">
         <CoolLightBox :items="items" :index="index" @close="index = null"> </CoolLightBox>
 
@@ -211,11 +238,20 @@
         <img src="@image/icons/address.png" alt="" />
         <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
       </div>
-      <div class="content">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      <div class="content" v-bind:class="{ adjust: read }">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+        is simply dummy text of the printing and typesetting industry. Lorem Ipsum is
+        simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply
+        dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy
+        text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of
+        the printing and typesetting industry.
+
         <br />
-        <button class="more-info">Xem thêm</button>
       </div>
+      <button class="more-info" @click="readMore">
+        {{ read ? "Rút gọn" : "Xem thêm" }}
+      </button>
       <v-row no-gutters class="house-img">
         <CoolLightBox :items="items" :index="index" @close="index = null"> </CoolLightBox>
 
@@ -360,6 +396,7 @@ export default {
   },
   data: function () {
     return {
+      read: false,
       items: [
         {
           title: "In nature, nothing is perfect and everything is perfect",
@@ -384,6 +421,11 @@ export default {
       ],
       index: null,
     };
+  },
+  methods: {
+    readMore: function () {
+      this.read = !this.read;
+    },
   },
 };
 </script>
@@ -449,13 +491,18 @@ export default {
     font-size: 13px;
     line-height: 24px;
     letter-spacing: 0.5px;
-    .more-info {
-      font-weight: 300;
-      font-size: 10px;
-      line-height: 24px;
-      letter-spacing: 0.5px;
-      color: #fbad18;
-    }
+    height: 25px;
+    overflow: hidden;
+  }
+  .more-info {
+    font-weight: 300;
+    font-size: 10px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    color: #fbad18;
+  }
+  .adjust {
+    height: auto !important;
   }
   .house-img {
     // margin-bottom: 5px;

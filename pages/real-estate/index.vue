@@ -145,7 +145,7 @@ export default {
 .header_box {
   left: 208px !important;
   background: #eff5f9 !important;
-  margin-top: -50px !important;
+  margin-top: 20px !important;
   #social_network {
     width: 37px;
     height: 15px;
@@ -304,5 +304,10 @@ export default {
   margin-top: 60px;
   padding: 0 10px;
   padding: 0 30px;
+}
+@media screen and (min-width: 1265px) {
+  .header_box {
+    margin-top: -50px !important;
+  }
 }
 </style>

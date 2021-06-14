@@ -29,19 +29,22 @@
       <v-row class="admin_option">
         <v-col cols="4" v-if="isUser"> 51 người dùng </v-col>
         <v-col cols="4" v-if="isDictionary"> Tổng cộng: 8 loại Loại BĐS </v-col>
-        <v-col cols="4" v-if="isRealEstate"> 2 BĐS </v-col>
+        <v-col cols="4" v-if="isRealEstate"> 1BĐS </v-col>
 
-        <v-col cols="4" align="center"> 1 / 1 </v-col>
+        <v-col cols="4" align="center" v-if="isUser || isDictionary"> 1 / 1 </v-col>
+        <v-col cols="4" align="center" v-if="isRealEstate"> </v-col>
         <v-col cols="4" align="right">
-          <div class="phanquyen">
-            <span>Phân quyền</span>
+          <div class="phanquyen" :class="{ adjust: isRealEstate }">
+            <span v-if="isUser">Phân quyền</span>
+            <span v-if="isDictionary">Loại từ điển</span>
+            <span v-if="isRealEstate"></span>
             <!-- <div> -->
             <!-- <v-select :options="options" label="title" placeholder="Tất cả">
                 <template slot="option" slot-scope="option">
                   <span> {{ option.title }}</span>
                 </template>
               </v-select> -->
-            <el-select v-model="value" placeholder="Tất cả">
+            <el-select v-model="value1" placeholder="Tất cả" v-if="isUser">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -50,11 +53,43 @@
               >
               </el-option>
             </el-select>
+            <el-select v-model="value2" placeholder="Tất cả" v-if="isDictionary">
+              <el-option
+                v-for="item in dictionaris"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <el-select
+              v-model="value3"
+              placeholder="Tất cả"
+              v-if="isRealEstate"
+              class="congDong"
+            >
+              <el-option
+                v-for="item in estate"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
             <!-- </div> -->
-            <v-btn class="mx-2 add_btn" fab dark small color="warning">
+            <v-btn
+              class="mx-2 add_btn"
+              fab
+              dark
+              small
+              color="warning"
+              v-if="!isRealEstate"
+            >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
-            <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
+            <v-btn class="export" fab v-if="!isRealEstate"
+              ><img src="@image/icons/export.png" alt=""
+            /></v-btn>
           </div>
         </v-col>
       </v-row>
@@ -129,7 +164,57 @@ export default {
           label: "Marketer",
         },
       ],
-      value: "",
+      dictionaris: [
+        {
+          value: "Loại BĐS",
+          label: "Loại BĐS",
+        },
+        {
+          value: "Loại Nhà",
+          label: "Loại Nhà",
+        },
+        {
+          value: "Loại Đường",
+          label: "Loại Đường",
+        },
+        {
+          value: "Khách Hàng",
+          label: "Khách Hàng",
+        },
+        {
+          value: "Pháp lý",
+          label: "Pháp lý",
+        },
+        {
+          value: "Hướng",
+          label: "Hướng",
+        },
+        {
+          value: "Quận/Huyện",
+          label: "Quận/Huyện",
+        },
+        {
+          value: "Phường/Xã",
+          label: "Phường/Xã",
+        },
+        {
+          value: "Đường",
+          label: "Đường",
+        },
+      ],
+      estate: [
+        {
+          value: "Cộng Đồng",
+          label: "Cộng Đồng",
+        },
+        {
+          value: "Web",
+          label: "Web",
+        },
+      ],
+      value1: "",
+      value2: "",
+      value3: "",
     };
   },
   methods: {
@@ -156,7 +241,7 @@ export default {
 .header_box {
   left: 208px !important;
   background: #eff5f9 !important;
-  margin-top: -50px !important;
+  margin-top: 20px !important;
   #social_network {
     width: 25px !important;
     height: 15px;
@@ -183,6 +268,7 @@ export default {
   .option_button {
     position: absolute;
     right: 30px;
+    top: -12px;
     .account {
       margin-left: 2px;
       padding: 0;
@@ -297,6 +383,12 @@ export default {
         background-color: aqua;
       }
     }
+    .congDong {
+      right: 0;
+    }
+  }
+  .adjust {
+    width: 150px !important;
   }
 }
 .app_bar {
@@ -322,6 +414,11 @@ export default {
         }
       }
     }
+  }
+}
+@media screen and (min-width: 1265px) {
+  .header_box {
+    margin-top: -50px !important;
   }
 }
 </style>

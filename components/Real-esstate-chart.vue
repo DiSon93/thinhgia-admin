@@ -80,7 +80,7 @@ export default {
   #date_option {
     position: absolute;
     top: -35px;
-    left: 65%;
+    right: 8%;
     border-radius: 2px;
     border: 1px solid rgb(182, 182, 182);
     .btn_date {
