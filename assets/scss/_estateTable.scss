@@ -10,24 +10,24 @@
   tr th,td:first-child{
     width:20px;
   }
-  tr td:nth-child(3){
+  tr td:nth-child(4){
     font-weight: 700;
     color: blue;
   }
   tr{
     height: 60px !important;
   }
-  tr td:nth-child(2){
+  tr td:nth-child(3){
     font-weight: 700;
 }
-tr td:nth-child(17){
+tr td:nth-child(18){
   font-weight: 700;
 }
-  tr td:nth-child(5){
+  tr td:nth-child(6){
     font-weight: 700;
     color: orange;
   }
-  tr td:nth-child(9){
+  tr td:nth-child(10){
     font-weight: 700;
     color: orange;
     .s_detail{
@@ -35,17 +35,17 @@ tr td:nth-child(17){
       color: gray;
     }
   }
-  tr td:nth-child(6){
+  tr td:nth-child(7){
     font-weight: 700;
     .district{
-      font-weight: 500;
+      font-weight: 500!important;
     }
   }
-  tr td:nth-child(7){
+  tr td:nth-child(8){
     font-weight: 700;
   }
 
-  tr td:nth-child(14){
+  tr td:nth-child(15){
     font-weight: 700;
   }
 

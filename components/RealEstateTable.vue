@@ -1,8 +1,24 @@
 <template>
   <div id="estate_table">
-    <v-data-table :headers="headers" :items="desserts" class="elevation-1">
+    <v-data-table
+      v-model="selected"
+      :headers="headers"
+      :items="desserts"
+      :single-select="singleSelect"
+      item-key="amount"
+      show-select
+      class="elevation-1"
+    >
       <template v-slot:item="row">
         <tr>
+          <td>
+            <v-checkbox
+              v-model="selected"
+              :value="row.item"
+              hide-details
+              style="margin: 0px; padding: 0px"
+            ></v-checkbox>
+          </td>
           <td>{{ row.item.amount }}</td>
           <td>{{ row.item.side }}</td>
           <td>{{ row.item.price }}</td>
@@ -62,6 +78,10 @@
 <script>
 export default {
   data: () => ({
+    fullscreenLoading: true,
+    singleSelect: false,
+    selected: [],
+    checkbox: true,
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -118,6 +138,10 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
+  },
+
+  mounted() {
+    this.fullscreenLoading = false;
   },
 
   created() {
