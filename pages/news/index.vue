@@ -23,7 +23,7 @@
         </v-col>
       </v-row>
       <v-row class="news_table">
-        <v-col cols="6" class="content_items">
+        <v-col cols="12" class="content_items">
           <div class="content">
             <div class="d-flex img_fix">
               <img src="@image/layouts/house1.png" alt="" />
@@ -45,10 +45,10 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="6" class="content_items">
+        <v-col cols="12" class="content_items">
           <div class="content">
             <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
+              <img src="@image/layouts/house2.png" alt="" />
               <v-btn class="mx-2" icon color="cyan">
                 <v-icon dark> mdi-pencil </v-icon>
               </v-btn>
@@ -67,10 +67,10 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="6" class="content_items">
+        <v-col cols="12" class="content_items">
           <div class="content">
             <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
+              <img src="@image/layouts/house3.png" alt="" />
               <v-btn class="mx-2" icon color="cyan">
                 <v-icon dark> mdi-pencil </v-icon>
               </v-btn>
@@ -89,10 +89,10 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="6" class="content_items">
+        <v-col cols="12" class="content_items">
           <div class="content">
             <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
+              <img src="@image/layouts/house4.png" alt="" />
               <v-btn class="mx-2" icon color="cyan">
                 <v-icon dark> mdi-pencil </v-icon>
               </v-btn>
@@ -224,20 +224,21 @@ export default {
       font-size: 14px;
     }
     .detail {
-      font-size: 13px;
+      font-size: 15px;
       color: gray;
+      line-height: 25px;
     }
     .introduce {
       font-weight: 500;
       color: gray;
-      font-size: 14px;
+      font-size: 15px;
       margin-bottom: 3px;
     }
   }
 }
 @media screen and (min-width: 1265px) {
   .header_box {
-    margin-top: -50px !important;
+    margin-top: -60px !important;
   }
 }
 </style>
