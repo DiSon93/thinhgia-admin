@@ -1,0 +1,39 @@
+
+#project_table{
+overflow-x: auto;
+.v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
+  font-size: 13px!important;
+  text-align: center; 
+}
+tr th{
+  color: teal!important;
+  text-align: center;
+}
+.v-toolbar__content{
+  display: none;
+}
+.v-sheet.theme--light{
+ display: none;
+}
+tr td:nth-child(1){
+  text-align: left!important;
+}
+tr th:nth-child(1){
+  text-align: left;
+}
+tr td:nth-child(2){
+    font-weight: 700;
+   }
+   tr td:nth-child(4){
+    color: orange;
+    font-weight: 700;
+
+    
+   }
+tr td:nth-child(7) .v-icon.mdi-pencil{
+  color: green;
+}
+tr td:nth-child(7) .v-icon.mdi-delete{
+  color: red;
+}
+}

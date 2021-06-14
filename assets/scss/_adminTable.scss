@@ -1,0 +1,66 @@
+
+#admin_table{
+    overflow-x: auto;
+    .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
+      font-size: 13px!important;
+    //   font-weight: 300;
+    text-align: center; 
+    }
+    tr th{
+      color: teal!important;
+      text-align: center;
+    }
+    .v-toolbar__content{
+      display: none;
+    }
+    .v-sheet.theme--light{
+     display: none;
+    }
+    tr th:nth-child(2){
+        text-align: center;
+    }
+    tr td:first-child{
+      text-align: left!important;
+    }
+    tr td{
+      color: #979797;
+      font-weight: 500;
+    }
+    tr td:nth-child(2){
+     text-align: center; 
+    }
+    tr td:nth-child(2){
+        // color: orange;
+        font-weight: 700;
+       }
+    tr td:nth-child(7) .v-icon.mdi-pencil{
+      color: green;
+    }
+    tr td:nth-child(7) .v-icon.mdi-delete{
+      color: red;
+    }
+    }
+    #administrator_btn {
+        margin-left: 15px;
+        border-radius: 10px;
+        .v-btn {
+          width: 100px;
+          height: 25px;
+          border-radius: 10px;
+          border: none;
+          background-color: #fff;
+          .v-btn__content {
+            font-size: 12px !important;
+            text-transform: capitalize;
+            font-weight: 400;
+          }
+        }
+        .v-btn--active{
+            background-color: #2db7f5; 
+            color: #fff;    
+        opacity: 1;   }
+      }
+
+
+      //Select Box in Administrator
+   

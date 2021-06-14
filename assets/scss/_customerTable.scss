@@ -1,0 +1,13 @@
+#data-customer{
+    overflow-x: auto;
+    .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td{
+      font-size: 13px;
+    }
+  .v-application--is-ltr .v-data-table > .v-data-table__wrapper > table > tbody > tr > th, .v-application--is-ltr .v-data-table > .v-data-table__wrapper > table > thead > tr > th, .v-application--is-ltr .v-data-table > .v-data-table__wrapper > table > tfoot > tr > th {
+    width: 40px;
+  }
+  tr td:nth-child(3){
+      color: orange;
+      font-weight: 700;
+  }
+}
