@@ -65,7 +65,7 @@ export default {};
     border-radius: 15px;
     margin-right: 20px;
     margin-bottom: 20px;
-    padding: 20px 50px;
+    padding: 20px 20px;
     &:hover {
       background-color: rgba(192, 192, 192, 0.466);
       transition: 0.5s;
@@ -88,6 +88,14 @@ export default {};
   .user_share {
     font-size: 13px;
     font-weight: 300;
+  }
+}
+@media screen and (min-width: 1265px) {
+  .data {
+    .data_items {
+      padding-top: 20px;
+      padding-left: 10%;
+    }
   }
 }
 </style>
