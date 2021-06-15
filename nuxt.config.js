@@ -3,6 +3,7 @@ import { resolve } from 'path';
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  ssr: false,
   head: {
     title: 'Thịnh Gia',
     htmlAttrs: {

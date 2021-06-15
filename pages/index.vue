@@ -4,17 +4,17 @@
     :options="{
       threshold: 0.5,
     }"
-    min-height="200"
+    min-height="300"
     transition="fade-transition"
-    max-height="300"
+    max-height="400"
   >
     <v-container fluid id="homepage">
       <v-row no-gutters>
-        <v-col cols="7" class="action">
+        <v-col cols="7" class="action" v-bind:style="{ height: height + 'px' }">
           <div class="pt-0 new-action">Hoạt động mới cập nhật</div>
           <NewAction />
         </v-col>
-        <v-col cols="5" class="detail_data">
+        <v-col cols="5" class="detail_data" v-bind:style="{ height: height + 'px' }">
           <div class="pt-0 time-action" tile>Bất động sản theo thời gian</div>
           <div class="chart">
             <RealEstateChart />
@@ -46,6 +46,7 @@ export default {
   data() {
     return {
       isActive: false,
+      height: window.innerHeight - 90,
     };
   },
   mounted() {
@@ -74,7 +75,7 @@ export default {
 }
 .detail_data {
   overflow-y: auto;
-  height: 700px;
+  // height: 700px;
   .chart {
     height: 300px;
     background: #ffffff;
@@ -85,7 +86,7 @@ export default {
 }
 .action {
   overflow-y: auto;
-  height: 700px;
+  // height: 700px;
 }
 div::-webkit-scrollbar {
   width: 3px !important;

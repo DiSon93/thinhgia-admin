@@ -65,7 +65,7 @@ export default {
     // console.log(this.$route.path);
     return {
       clipped: false,
-      drawer: false,
+      drawer: true,
       fixed: false,
       items: [
         {
