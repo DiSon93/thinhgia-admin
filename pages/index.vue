@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       isActive: false,
-      height: window.innerHeight - 90,
+      height: window.innerHeight - 100,
     };
   },
   mounted() {
