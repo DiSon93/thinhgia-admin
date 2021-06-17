@@ -34,7 +34,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: "@/plugins/bootstrap_icon.js", mode: "client"},
-    { src: "@/plugins/vue-select.js", mode: "client"},
+    // { src: "@/plugins/vue-select.js",  ssr: false},
     { src: "@/plugins/element-ui.js", mode: "client"},
     // { src: "@/plugins/vue-lazyloading.js", mode: "client"},
   ],
@@ -54,7 +54,8 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
+    'nuxt-vue-select',
   ],
 
   // bootstrapVue: {

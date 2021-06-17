@@ -5,6 +5,7 @@
       :items="desserts"
       :items-per-page="5"
       class="elevation-1"
+      :mobile-breakpoint="0"
     >
       <template v-slot:item="row">
         <tr>

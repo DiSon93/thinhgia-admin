@@ -17,6 +17,7 @@
     "core-js": "^3.9.1",
     "element-ui": "^2.15.2",
     "nuxt": "^2.15.3",
+    "nuxt-vue-select": "^0.1.4",
     "vue-chartjs": "^3.5.1",
     "vue-cool-lightbox": "^2.7.4",
     "vue-image-lightbox": "^7.2.0",

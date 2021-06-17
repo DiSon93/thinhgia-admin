@@ -8,25 +8,12 @@
     transition="fade-transition"
   >
     <div class="header_box">
-      <v-row align="center" d-flex>
+      <v-row align="center">
         <button class="homepage" disabled>Bất động sản</button>
-        <v-btn depressed color="primary" id="social_network"> 16:52 </v-btn>
-        <!-- <div id="select_amount">
-          <v-select
-            :options="options"
-            label="title"
-            placeholder="Tất cả"
-            class="style-chooser"
-          >
-            <template slot="option" slot-scope="option">
-              <div>
-                <span class="number">{{ option.number }}</span>
-                <span class="title"> {{ option.title }}</span>
-              </div>
-            </template>
-          </v-select>
-        </div> -->
-        <SelectBox />
+        <v-btn depressed color="primary" id="social_network"> 1652 </v-btn>
+        <div class="select_box">
+          <SelectBox />
+        </div>
         <b-input-group class="search">
           <b-input-group-prepend is-text>
             <b-icon icon="search"></b-icon>
@@ -46,8 +33,9 @@
           <v-btn class="setting" fab><v-icon dark small>mdi-cog</v-icon></v-btn>
         </div>
       </v-row>
+
       <v-row class="data_table">
-        <RealEstateTable />
+        <EstateTable />
       </v-row>
     </div>
   </v-lazy>
@@ -55,14 +43,19 @@
 
 <script>
 import RealEstateTable from "@component/RealEstateTable.vue";
+import EstateTable from "@component/EstateTable.vue";
 import SelectBox from "@component/SelectBox.vue";
 export default {
   components: {
     RealEstateTable,
+    EstateTable,
     SelectBox,
   },
   data() {
     return {
+      clipped: false,
+      drawer: true,
+      fixed: false,
       isActive: false,
       options: [
         {
@@ -176,21 +169,11 @@ export default {
     font-weight: 300 !important;
     margin-left: 8px;
     background-color: #fff;
-    // border: 1px solid rgba(96, 96, 96, 0.2);
-    // border-radius: 15px;
     #vs2__combobox {
       border: 1px solid rgba(96, 96, 96, 0.2);
       border-radius: 15px !important;
     }
-    // .number {
-    //   width: 13px !important;
-    //   height: 13px !important;
-    //   border-radius: 50%;
-    //   background: #c4c4c4;
-    //   color: white;
-    //   font-size: 11px;x`
-    //   font-weight: 300;
-    // }
+
     .title {
       font-size: 11px !important;
       font-weight: 300 !important;
@@ -231,10 +214,6 @@ export default {
       border-radius: 15px;
       border: 1px solid rgba(96, 96, 96, 0.2);
       border-left: none;
-      &:hover {
-        border: 1px solid blue;
-        transition: 0.5s;
-      }
     }
     .input-group-text {
       position: absolute;
@@ -308,6 +287,29 @@ export default {
 @media screen and (min-width: 1265px) {
   .header_box {
     margin-top: -50px !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  .search {
+    display: none;
+  }
+  .select_box {
+    position: absolute;
+    top: 65px;
+    left: 15px;
+  }
+  .data_table {
+    padding: 30px 15px 80px;
+  }
+  .option_button {
+    top: 68px;
+    right: 15px !important;
+  }
+  .homepage {
+    margin-left: 15px !important;
+  }
+  .v-input--hide-details {
+    display: none !important;
   }
 }
 </style>

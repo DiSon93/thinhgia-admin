@@ -9,12 +9,12 @@
   >
     <div class="header_box">
       <v-row align="center" d-flex>
-        <v-col cols="4" class="app_bar">
+        <v-col cols="8" sm="4" class="app_bar">
           <button class="homepage" disabled>Dự án</button>
           <v-btn depressed color="primary" id="social_network"> 16 </v-btn>
         </v-col>
-        <v-col cols="4" align="center" class="app_bar"> 1 / 1 </v-col>
-        <v-col cols="4" class="app_bar">
+        <v-col cols="4" sm="4" align="center" class="app_bar"> 1 / 1 </v-col>
+        <v-col cols="12" sm="4" class="app_bar">
           <div class="option_button">
             <v-btn class="mx-2 add_btn" fab dark small color="warning">
               <v-icon dark small> mdi-plus </v-icon>
@@ -106,6 +106,18 @@ export default {
 @media screen and (min-width: 1265px) {
   .header_box {
     margin-top: -50px !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  .data_table {
+    padding: 0px 15px 80px;
+    margin-top: 40px;
+  }
+  .homepage {
+    margin-left: 15px !important;
+  }
+  .option_button {
+    margin-top: 20px;
   }
 }
 </style>

@@ -11,6 +11,7 @@
 </template>
 
 <script>
+// Vue.component("v-select", VueSelect.VueSelect);
 export default {
   data() {
     return {

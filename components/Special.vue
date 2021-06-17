@@ -117,7 +117,7 @@ export default {
   #table_special {
     border-radius: 15px !important;
     td {
-      font-size: 13px !important;
+      font-size: 13px;
       height: 55px !important;
     }
     tr:hover {
@@ -144,6 +144,30 @@ export default {
     .v-data-table__wrapper {
       border-radius: 15px !important;
     }
+  }
+}
+@media screen and (max-width: 600px) {
+  #social_network {
+    padding: 3px 3px;
+    font-size: 9px;
+    border-radius: 5px !important;
+  }
+  #web {
+    padding: 3px 3px !important;
+    font-size: 9px;
+    border-radius: 5px !important;
+    margin-left: 5px;
+  }
+  .v-btn:not(.v-btn--round).v-size--default {
+    min-width: 30px !important;
+  }
+  #table_special {
+    td {
+      font-size: 12px !important;
+    }
+  }
+  .data_table{
+    margin-bottom: 60px
   }
 }
 </style>

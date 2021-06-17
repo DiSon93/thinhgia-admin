@@ -53,14 +53,14 @@
         <v-col cols="4" align="center">
           <button>
             <img src="@image/icons/heart.png" alt="" />
-            <span>Thích</span>
+            <span class="touch">Thích</span>
             <span>1</span>
           </button>
         </v-col>
         <v-col cols="4" align="center">
           <button>
             <img src="@image/icons/comment.png" alt="" />
-            <span>Bình luận</span>
+            <span class="touch">Bình luận</span>
             <span>2</span>
           </button>
         </v-col>
@@ -125,14 +125,14 @@
         <v-col cols="4" align="center">
           <button>
             <img src="@image/icons/heart.png" alt="" />
-            <span>Thích</span>
+            <span class="touch">Thích</span>
             <span>1</span>
           </button>
         </v-col>
         <v-col cols="4" align="center">
           <button>
             <img src="@image/icons/comment.png" alt="" />
-            <span>Bình luận</span>
+            <span class="touch">Bình luận</span>
             <span>2</span>
           </button>
         </v-col>
@@ -197,14 +197,14 @@
         <v-col cols="4" align="center">
           <button>
             <img src="@image/icons/heart.png" alt="" />
-            <span>Thích</span>
+            <span class="touch">Thích</span>
             <span>1</span>
           </button>
         </v-col>
         <v-col cols="4" align="center">
           <button>
             <img src="@image/icons/comment.png" alt="" />
-            <span>Bình luận</span>
+            <span class="touch">Bình luận</span>
             <span>2</span>
           </button>
         </v-col>
@@ -232,7 +232,7 @@
       <div class="sell-department">
         BÁN CĂN HỘ VINHOMES TẦNG CAO VIEW BIỂN FULL NỘI THẤT ĐẸP
       </div>
-      <div class="d-flex address">
+      <div class="address">
         <img src="@image/icons/nam.png" alt="" />
         <span>Nam</span>
         <img src="@image/icons/address.png" alt="" />
@@ -269,14 +269,14 @@
         <v-col cols="4" align="center">
           <button>
             <img src="@image/icons/heart.png" alt="" />
-            <span>Thích</span>
+            <span class="touch">Thích</span>
             <span>1</span>
           </button>
         </v-col>
         <v-col cols="4" align="center">
           <button>
             <img src="@image/icons/comment.png" alt="" />
-            <span>Bình luận</span>
+            <span class="touch">Bình luận</span>
             <span>2</span>
           </button>
         </v-col>
@@ -288,102 +288,6 @@
         </v-col>
       </v-row>
     </div>
-
-    <!-- <div class="action">
-      <div class="d-flex username">
-        <div class="name_info d-flex">
-          <img src="@image/icons/username.png" alt="" />
-          <div class="name">
-            User Name
-            <div class="seconds">a few seconds ago</div>
-          </div>
-        </div>
-        <div>
-          <img src="@image/icons/i.png" alt="" />
-        </div>
-      </div>
-      <div class="sell-department">
-        BÁN CĂN HỘ VINHOMES TẦNG CAO VIEW BIỂN FULL NỘI THẤT ĐẸP
-      </div>
-      <div class="d-flex address">
-        <img src="@image/icons/nam.png" alt="" />
-        <span>Nam</span>
-        <img src="@image/icons/address.png" alt="" />
-        <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
-      </div>
-      <div class="content">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-        <br />
-        <button class="more-info">Xem thêm</button>
-      </div>
-      <v-row no-gutters class="house-img">
-        <v-col cols="6">
-          <v-dialog v-model="dialog" width="500">
-            <template v-slot:activator="{ on, attrs }">
-              <img v-bind="attrs" v-on="on" src="@image/layouts/house1.png" />
-            </template>
-            <v-card>
-              <img src="@image/layouts/house1.png" alt="" class="big_img" />
-            </v-card>
-          </v-dialog>
-        </v-col>
-        <v-col cols="6" class="img_last">
-          <v-dialog v-model="dialog" width="500">
-            <template v-slot:activator="{ on, attrs }">
-              <img v-bind="attrs" v-on="on" src="@image/layouts/house2.png" />
-            </template>
-            <v-card>
-              <img src="@image/layouts/house2.png" alt="" class="big_img" />
-            </v-card>
-          </v-dialog>
-        </v-col>
-      </v-row>
-      <v-row no-gutters class="house-img">
-        <v-col cols="6">
-          <v-dialog v-model="dialog" width="500">
-            <template v-slot:activator="{ on, attrs }">
-              <img v-bind="attrs" v-on="on" src="@image/layouts/house3.png" />
-            </template>
-            <v-card>
-              <img src="@image/layouts/house3.png" alt="" class="big_img" />
-            </v-card>
-          </v-dialog>
-        </v-col>
-        <v-col cols="6" class="img_last more_picture">
-          <div class="overlay">+8</div>
-          <v-dialog v-model="dialog" width="500">
-            <template v-slot:activator="{ on, attrs }">
-              <img v-bind="attrs" v-on="on" src="@image/layouts/house4.png" />
-            </template>
-            <v-card>
-              <img src="@image/layouts/house3.png" alt="" class="big_img" />
-            </v-card>
-          </v-dialog>
-        </v-col>
-      </v-row>
-      <v-row no-gutters class="comment_like">
-        <v-col cols="4" align="center">
-          <button>
-            <img src="@image/icons/heart.png" alt="" />
-            <span>Thích</span>
-            <span>1</span>
-          </button>
-        </v-col>
-        <v-col cols="4" align="center">
-          <button>
-            <img src="@image/icons/comment.png" alt="" />
-            <span>Bình luận</span>
-            <span>2</span>
-          </button>
-        </v-col>
-        <v-col cols="4" align="center">
-          <button>
-            <img src="@image/icons/share.png" alt="" />
-            <span>Chia sẻ</span>
-          </button>
-        </v-col>
-      </v-row>
-    </div> -->
   </div>
 </template>
 
@@ -525,7 +429,7 @@ export default {
         text-align: center;
         color: #fff;
         font-size: 24px;
-        padding-top: 48px;
+        padding-top: 9%;
         background-color: rgba(0, 0, 0, 0.329);
       }
     }
@@ -542,5 +446,30 @@ export default {
 .big_img {
   width: 500px;
   height: auto;
+}
+@media screen and (max-width: 600px) {
+  .action {
+    width: 100%;
+    padding: 12px 15px;
+    .sell-department {
+      font-size: 11px;
+    }
+    .content {
+      font-size: 11px;
+    }
+    .address {
+      img {
+        margin-top: 2px;
+      }
+    }
+    .overlay {
+      padding-top: 5% !important;
+    }
+    .comment_like {
+      .touch {
+        display: none;
+      }
+    }
+  }
 }
 </style>

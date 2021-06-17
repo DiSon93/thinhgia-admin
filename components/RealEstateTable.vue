@@ -4,17 +4,20 @@
       v-model="selected"
       :headers="headers"
       :items="desserts"
-      :single-select="singleSelect"
       item-key="amount"
       show-select
+      :mobile-breakpoint="0"
       class="elevation-1"
     >
       <template v-slot:item="row">
         <tr>
           <td>
+            <!-- v-model="selected" -->
+            <!-- :value="row.item" -->
+            <!-- hide-details -->
+            <!-- style="margin: 0px; padding: 0px" -->
             <v-checkbox
-              v-model="selected"
-              :value="row.item"
+              v-model="row.item.selected"
               hide-details
               style="margin: 0px; padding: 0px"
             ></v-checkbox>
@@ -78,6 +81,7 @@
 <script>
 export default {
   data: () => ({
+    cb: {},
     fullscreenLoading: true,
     singleSelect: false,
     selected: [],
@@ -85,7 +89,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      { text: "#", value: "amount", width: "50px" },
+      { text: "#", value: "amount", width: "50px", fixed: true },
       {
         text: "Loại",
         align: "start",
@@ -93,7 +97,7 @@ export default {
         value: "side",
         width: "50px",
       },
-      { text: "Giá", value: "price", width: "80px" },
+      { text: "Giá", value: "price", width: "80px", fixed: true },
       { text: "Dự án", value: "project", width: "100px" },
       { text: "Địa chỉ", value: "address", width: "180px" },
       { text: "Khu vực", value: "area", width: "180px" },
@@ -138,6 +142,19 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
+    checked() {
+      return Object.entries(this.cb)
+        .filter((o) => o[1])
+        .map((o) => o[0]);
+    },
+    checkedAll() {
+      console.log("checkedAll");
+    },
+    headers2() {
+      return [{ text: "", fixed: true, width: "100px", sortable: false }].concat(
+        this.headers
+      );
+    },
   },
 
   mounted() {
@@ -152,6 +169,7 @@ export default {
     initialize() {
       this.desserts = [
         {
+          id: 1,
           amount: 3243,
           side: "BÁN",
           price: "7.5 tỷ",
@@ -180,6 +198,7 @@ export default {
           update: "8/6/2020 12:09:33",
         },
         {
+          id: 2,
           amount: 3456,
           side: "BÁN",
           price: "6.5 tỷ",
@@ -209,6 +228,7 @@ export default {
           web: true,
         },
         {
+          id: 3,
           amount: 3086,
           side: "BÁN",
           price: "10.5 tỷ",

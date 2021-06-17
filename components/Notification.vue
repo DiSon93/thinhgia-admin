@@ -80,4 +80,11 @@ export default {};
     }
   }
 }
+@media screen and (max-width: 600px){
+  .user_noti{
+    span{
+      font-size: 11px!important;
+    }
+  }
+}
 </style>

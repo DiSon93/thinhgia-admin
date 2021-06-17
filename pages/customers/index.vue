@@ -10,7 +10,7 @@
     <div class="header_box">
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Khách hàng</button>
-        <v-btn depressed color="primary" id="social_network"> 16:52 </v-btn>
+        <v-btn depressed color="primary" id="social_network"> 3/20 </v-btn>
         <div id="select_amount"></div>
         <b-input-group class="search">
           <b-input-group-prepend is-text>
@@ -139,10 +139,6 @@ export default {
       border-radius: 15px;
       border: 1px solid rgba(96, 96, 96, 0.2);
       border-left: none;
-      &:hover {
-        border: 1px solid blue;
-        transition: 0.5s;
-      }
     }
     .input-group-text {
       position: absolute;
@@ -207,6 +203,21 @@ export default {
 @media screen and (min-width: 1265px) {
   .header_box {
     margin-top: -50px !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  .search {
+    display: none;
+  }
+  .option_button {
+    top: 65px;
+    left: 10px;
+  }
+  .data_table {
+    padding: 30px 15px 80px;
+  }
+  .homepage {
+    margin-left: 15px !important;
   }
 }
 </style>

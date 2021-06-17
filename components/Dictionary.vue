@@ -7,6 +7,7 @@
       sort-by="calories"
       class="elevation-1"
       width="100vw"
+      :mobile-breakpoint="0"
     >
       <template v-slot:top>
         <v-toolbar flat>

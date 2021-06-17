@@ -98,4 +98,16 @@ export default {};
     }
   }
 }
+@media screen and (max-width: 500px) {
+  .data_items {
+    span {
+      font-size: 13px !important;
+      margin-left: 0px !important;
+      font-weight: 700;
+    }
+  }
+  .overview {
+    margin-top: -120px !important;
+  }
+}
 </style>

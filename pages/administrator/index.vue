@@ -9,7 +9,7 @@
   >
     <div class="header_box">
       <v-row align="center" d-flex>
-        <v-col cols="6" class="app_bar">
+        <v-col cols="8" sm="6" class="app_bar">
           <button class="homepage" disabled>Quản trị</button>
           <v-btn-toggle v-model="toggle_exclusive" mandatory id="administrator_btn">
             <v-btn v-on:click="user"> Người dùng </v-btn>
@@ -17,7 +17,7 @@
             <v-btn @click="realEstate"> Duyệt BĐS </v-btn>
           </v-btn-toggle>
         </v-col>
-        <v-col cols="6" class="app_bar">
+        <v-col cols="4" sm="6" class="app_bar">
           <div class="option_button">
             <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
             <v-btn class="notifiaction" fab
@@ -27,13 +27,15 @@
         </v-col>
       </v-row>
       <v-row class="admin_option">
-        <v-col cols="4" v-if="isUser"> 51 người dùng </v-col>
-        <v-col cols="4" v-if="isDictionary"> Tổng cộng: 8 loại Loại BĐS </v-col>
-        <v-col cols="4" v-if="isRealEstate"> 1BĐS </v-col>
+        <v-col cols="6" sm="4" v-if="isUser"> 51 người dùng </v-col>
+        <v-col cols="6" sm="4" v-if="isDictionary"> Tổng cộng: 8 loại Loại BĐS </v-col>
+        <v-col cols="6" sm="4" v-if="isRealEstate"> 1BĐS </v-col>
 
-        <v-col cols="4" align="center" v-if="isUser || isDictionary"> 1 / 1 </v-col>
-        <v-col cols="4" align="center" v-if="isRealEstate"> </v-col>
-        <v-col cols="4" align="right">
+        <v-col cols="6" sm="4" align="center" v-if="isUser || isDictionary">
+          1 / 1
+        </v-col>
+        <v-col cols="6" sm="4" align="center" v-if="isRealEstate"> </v-col>
+        <v-col cols="12" sm="4" align="right" class="res_phanquyen">
           <div class="phanquyen" :class="{ adjust: isRealEstate }">
             <span v-if="isUser">Phân quyền</span>
             <span v-if="isDictionary">Loại từ điển</span>
@@ -96,10 +98,10 @@
       <v-row class="data_table" v-if="isUser">
         <AdminTable />
       </v-row>
-      <v-row class="data_table" v-if="isDictionary">
+      <v-row class="data_table dictionary" v-if="isDictionary">
         <Dictionary />
       </v-row>
-      <v-row class="data_table" v-if="isRealEstate">
+      <v-row class="data_table define" v-if="isRealEstate">
         <DefineRealEstate />
       </v-row>
       <v-row class="data_table" v-if="isUser"> </v-row>
@@ -419,6 +421,48 @@ export default {
 @media screen and (min-width: 1265px) {
   .header_box {
     margin-top: -50px !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  .data_table {
+    padding: 20px 15px 20px;
+  }
+  .app_bar {
+    display: block;
+  }
+  #administrator_btn {
+    margin-top: 20px;
+    .v-btn {
+      width: 90px;
+      font-size: 11px !important;
+    }
+  }
+  .option_button {
+    top: -35px !important;
+  }
+  .admin_option {
+    padding: 0 15px !important;
+  }
+  .res_phanquyen {
+    padding: 12px 0;
+  }
+  .dictionary {
+    margin-bottom: 60px;
+    margin-top: 20px;
+  }
+  .define {
+    margin-top: 20px;
+    margin-bottom: 60px;
+  }
+  .homepage {
+    margin-left: 15px !important;
+  }
+  .congDong {
+    margin-top: -60px;
+    .el-select-dropdown__item.hover,
+    .el-select-dropdown__item:hover {
+      height: 40px !important;
+    }
   }
 }
 </style>

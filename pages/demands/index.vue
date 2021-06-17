@@ -10,7 +10,7 @@
     <div class="header_box">
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Nhu cầu</button>
-        <v-btn depressed color="primary" id="social_network"> 16:52 </v-btn>
+        <v-btn depressed color="primary" id="social_network"> 3 </v-btn>
         <div id="select_amount"></div>
         <div class="option_button">
           <v-btn class="mx-2 add_btn" fab dark small color="warning">
@@ -59,11 +59,9 @@
 </template>
 
 <script>
-import DemandTable from "@component/DemandTable";
 import Demand from "@component/Demand";
 export default {
   components: {
-    DemandTable,
     Demand,
   },
   data() {
@@ -190,6 +188,26 @@ export default {
 @media screen and (min-width: 1265px) {
   .header_box {
     margin-top: -50px !important;
+  }
+}
+@media screen and (max-width: 600px) {
+  #pagination_select {
+    margin-top: 20px;
+    .option {
+      display: none;
+    }
+  }
+  .data_table {
+    padding: 0px 15px 80px;
+  }
+  .homepage {
+    margin-left: 15px !important;
+  }
+  .option_button {
+    right: 15px !important;
+  }
+  .solution_option {
+    right: -15px !important;
   }
 }
 </style>
