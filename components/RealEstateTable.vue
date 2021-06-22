@@ -284,7 +284,7 @@ export default {
     margin-left: 4px;
   }
   tr:hover {
-    background: #ffdf9f41;
+    background: #ffdf9f41 !important;
   }
 }
 .direction {

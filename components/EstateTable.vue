@@ -10,7 +10,6 @@
       <el-table-column prop="amount" label="#" sortable width="60" fixed>
       </el-table-column>
       <el-table-column
-      
         prop="side"
         label="Loại"
         width="80"
@@ -21,8 +20,18 @@
         :filter-method="filterHandler"
       >
       </el-table-column>
-      <el-table-column prop="price" label="Giá" width="80" > </el-table-column>
-      <el-table-column prop="project" label="Dự án" width="100" > </el-table-column>
+      <el-table-column prop="price" label="Giá" width="80" sortable> </el-table-column>
+      <el-table-column
+        prop="project"
+        label="Dự án"
+        width="100"
+        :filters="[
+          { text: 'Có', value: 'Có' },
+          { text: 'Không có', value: 'Không có' },
+        ]"
+        :filter-method="filterHandler"
+      >
+      </el-table-column>
       <el-table-column prop="address" label="Địa chỉ" width="200">
         <!-- <div class="d-flex">
           <v-btn depressed color="primary" id="social_network"> Cộng đồng </v-btn>
@@ -36,14 +45,33 @@
           </v-btn>
         </template>
       </el-table-column>
-      <el-table-column prop="area" label="Khu vực" width="180">
+      <el-table-column
+        prop="area"
+        label="Khu vực"
+        width="180"
+        :filters="[
+          { text: 'Vũng Tàu', value: 'Vũng Tàu' },
+          { text: 'Hồ Chí Minh', value: 'Hồ Chí Minh' },
+        ]"
+        :filter-method="filterHandler"
+      >
         <template slot-scope="scope">
           {{ scope.row.area }}
           <div class="district">{{ scope.row.district }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="estate_type" label="Loại BĐS" width="140"></el-table-column>
-      <el-table-column prop="home_type" label="Loại nhà" width="140"></el-table-column>
+      <el-table-column
+        prop="home_type"
+        label="Loại nhà"
+        width="140"
+        :filters="[
+          { text: 'Nhà cao tầng', value: 'Nhà cao tầng' },
+          { text: 'Nhà câp 2', value: 'Nhà cấp 2' },
+          { text: 'Nhà câp 4', value: 'Nhà cấp 4' },
+        ]"
+        :filter-method="filterHandler"
+      ></el-table-column>
       <el-table-column prop="square" label="Diện tích" width="140">
         <template slot-scope="scope">
           {{ scope.row.square }}
@@ -112,7 +140,7 @@ export default {
           amount: 3456,
           side: "MUA",
           price: "6.5 tỷ",
-          project: "Không có",
+          project: "Có",
           address: "212 D9 Nguyễn Hữu Cảnh",
           area: "Vũng Tàu",
           district: "Phường Thống Nhất",
@@ -144,7 +172,7 @@ export default {
           price: "10.5 tỷ",
           project: "Không có",
           address: "212 D9 Lê Văn Việt",
-          area: "Vũng Tàu",
+          area: "Hồ Chí Minh",
           district: "Phường 6",
           estate_type: "Nhà ở riếng lẻ",
           home_type: "Nhà cấp 2",
