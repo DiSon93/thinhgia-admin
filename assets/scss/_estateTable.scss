@@ -130,10 +130,12 @@
     padding-top: 14px;
   }
   .el-icon-arrow-down:before {
+    content: "\e798";
     font-size: 18px;
     font-weight: 700;
     margin-left: 10px;
-    margin-top: 5px;
+    position: relative;
+    top: 3px;
   }
 }
 // @media screen and (max-width: 600px){
