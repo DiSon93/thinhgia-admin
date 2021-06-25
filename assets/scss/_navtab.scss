@@ -1,0 +1,17 @@
+#navtab_admin {
+    .tabs{
+        .nav-tab.nav-fill.nav {
+            border-bottom: none !important;
+            .nav-item{
+                a.nav-link{
+                    font-size: 12px;
+                    color: red
+
+                }
+                &:hover{
+                    border: none;
+                }
+            }
+          }
+    }
+  }

@@ -1,0 +1,9 @@
+{
+   "apps": [
+      {
+         "name": "thinhgia-fe",
+         "script": "npm",
+         "args": "run dev"
+      }
+   ]
+}

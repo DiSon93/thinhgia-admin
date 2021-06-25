@@ -23,12 +23,12 @@ export default {
     '~/assets/scss/main.scss'
   ],
   loading: true,
-  // loading: {
-  //   color: 'blue',
-  //   height: '5px',
-  //   duration: 500,
-  // },
-  loading: '~/components/LoadingBar.vue',
+  loading: {
+    color: 'blue',
+    height: '5px',
+    duration: 500,
+  },
+  // loading: '~/components/LoadingBar.vue',
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -95,6 +95,9 @@ export default {
     '@asset': resolve(__dirname, './assets'),
     '@lib': resolve(__dirname, './library')
   },
-
+  server: {
+    host: '0',
+    port: 3001
+  },
   extensions: ['*', '.js', '.vue', '.json']
 }
