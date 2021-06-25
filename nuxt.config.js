@@ -23,6 +23,7 @@ export default {
   css: [
     '~/assets/scss/main.scss'
   ],
+  // target: 'static',
   loading: true,
   loading: {
     color: 'blue',
