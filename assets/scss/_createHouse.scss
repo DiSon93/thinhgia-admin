@@ -1,0 +1,64 @@
+.createBDS {
+  .el-select .el-input__inner {
+    border-radius: 16px;
+    height: 30px;
+  }
+  .el-select {
+    width: 100% !important;
+  }
+  .el-select__caret.el-input__icon.el-icon-arrow-up {
+    height: 30px;
+    line-height: 30px;
+  }
+  #input_stress,
+  #input_block,
+  #input_floor,
+  #input_estate.el-input__inner {
+    height: 30px;
+    border-radius: 16px;
+    background-color: #e5e5e5;
+  }
+  #input_estate.el-input__inner {
+    margin-bottom: 10px !important;
+  }
+  .upload {
+    .el-upload--picture-card {
+      width: 120px;
+      height: 120px;
+    }
+    .el-upload-list--picture-card .el-upload-list__item{
+      width: 120px;
+      height: 120px;
+    }
+    .el-upload-dragger {
+      width: 120px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+.el-select-dropdown__item.selected {
+  color: teal !important;
+}
+.el-scrollbar {
+  .el-select-dropdown__item {
+    &:hover {
+      background-color: #fdd27f !important;
+    }
+  }
+}
+.el-select .el-input.is-focus .el-input__inner {
+  border-color: teal !important;
+}
+.el-select .el-input__inner:focus {
+  border-color: teal !important;
+}
+.tox-statusbar {
+  display: none !important;
+}
+.tox.tox-tinymce {
+  border-radius: 15px;
+}
+

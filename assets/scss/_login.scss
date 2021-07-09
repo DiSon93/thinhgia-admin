@@ -1,0 +1,17 @@
+.login{
+    .el-checkbox {
+        margin-bottom: 0;
+        .el-checkbox__label {
+          font-size: 18px !important;
+          color: #224957;
+        }
+      }
+      .el-input__inner{
+        background: #FFFFFF;
+        border: 1.53407px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        border-radius: 15.3407px;
+        height: 50px;
+        font-size: 18px!important;;
+      }
+}

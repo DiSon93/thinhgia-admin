@@ -1,0 +1,23 @@
+.createUser {
+    .el-input__inner {
+        background: #f8f8f8;
+        border: 1px solid #d1d1d1;
+        box-sizing: border-box;
+        border-radius: 16px;
+    }
+}
+#huy_createUser.el-button {
+    border: 1px solid #fbad18;
+    box-sizing: border-box;
+    border-radius: 15px;
+    color: #fbad18;
+    margin-top: 20px;
+}
+#new_createUser.el-button {
+    background: #fbad18;
+    border: 1px solid #fbad18;
+    box-sizing: border-box;
+    color: #fff;
+    border-radius: 15px;
+    margin-top: 20px;
+}

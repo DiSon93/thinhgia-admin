@@ -86,6 +86,7 @@
               small
               color="warning"
               v-if="!isRealEstate"
+              @click="centerDialogVisible = true"
             >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
@@ -95,6 +96,25 @@
           </div>
         </v-col>
       </v-row>
+      <el-dialog
+        title="Tạo người dùng mới"
+        :visible.sync="centerDialogVisible"
+        width="40%"
+        center
+      >
+        <CreateUser />
+        <!-- <span slot="footer" class="dialog-footer" style="float: right">
+          <el-button @click="centerDialogVisible = false" id="huy_createUser"
+            >Hủy</el-button
+          >
+          <el-button
+            type="primary"
+            @click="centerDialogVisible = false"
+            id="new_createUser"
+            >Tạo mới</el-button
+          >
+        </span> -->
+      </el-dialog>
       <v-row class="data_table" v-if="isUser">
         <AdminTable />
       </v-row>
@@ -113,12 +133,13 @@
 import AdminTable from "@component/AdminTable";
 import Dictionary from "@component/Dictionary";
 import DefineRealEstate from "@component/DefineRealEstate";
-
+import CreateUser from "@component/Form/CreateUser";
 export default {
   components: {
     AdminTable,
     Dictionary,
     DefineRealEstate,
+    CreateUser,
   },
   data() {
     return {
@@ -127,6 +148,7 @@ export default {
       isDictionary: false,
       isRealEstate: false,
       toggle_exclusive: [],
+      centerDialogVisible: false,
       // options: [
       //   {
       //     title: "Tất cả",

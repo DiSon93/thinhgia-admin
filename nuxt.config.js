@@ -37,6 +37,7 @@ export default {
     { src: "@/plugins/bootstrap_icon.js", mode: "client"},
     // { src: "@/plugins/vue-select.js",  ssr: false},
     { src: "@/plugins/element-ui.js", mode: "client"},
+    { src: "@/plugins/CKEditor.js", mode: "client"},
     // { src: "@/plugins/vue-lazyloading.js", mode: "client"},
   ],
 

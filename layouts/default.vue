@@ -44,7 +44,7 @@
           </b-input-group>
         </v-col>
         <v-col cols="12" sm="4">
-          <v-btn color="warning" dark id="createBDS"
+          <v-btn color="warning" dark id="createBDS" @click="$router.push('/form/house')"
             ><img src="@image/icons/Vector.svg" />Tạo BĐS
           </v-btn>
           <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
