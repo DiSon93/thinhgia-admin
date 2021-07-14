@@ -28,6 +28,7 @@
           <v-btn color="warning" dark id="createBDS"
             ><img src="@image/icons/Vector.svg" />Tạo BĐS
           </v-btn>
+
           <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
           <v-btn class="notifiaction" fab
             ><img src="@image/icons/bell-badge-noti.jpg" alt=""
@@ -96,10 +97,10 @@ export default {
       height2: window.innerHeight - 110,
     };
   },
+
   mounted() {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
-
       setTimeout(() => this.$nuxt.$loading.finish(), 500);
     });
   },

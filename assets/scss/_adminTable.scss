@@ -63,4 +63,25 @@
 
 
       //Select Box in Administrator
-   
+.edit_modal{
+  margin: 5px 5px;
+  display: flex;
+  align-items: center;
+  .v-icon{
+    margin-right: 4px;
+  }
+}
+
+.el-dropdown-menu .el-dropdown-menu__item:hover {
+  .v-icon{
+    color: #409EFF;
+  }
+}
+// .el-dropdown{
+//   .el-dropdown__caret-button{
+//     display: none;
+//   }
+//   .el-button{
+//     padding: 10px;
+//   }
+// }

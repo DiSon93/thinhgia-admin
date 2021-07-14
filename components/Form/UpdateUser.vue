@@ -12,24 +12,10 @@
             :on-success="handleAvatarSuccess"
             :headers="headers"
           >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+            <img v-if="avatar_image" :src="avatar_image" class="avatar" />
             <img v-else src="@image/icons/user.svg" alt="" />
           </el-upload>
-          <div class="select_img">Thêm ảnh</div>
-
-          <!-- <dropzone
-            v-if="dropzoneOptions"
-            @vdropzone-file-added="onFileAdded"
-            @vdropzone-error="onError"
-            @vdropzone-success="onSuccess"
-            @vdropzone-complete="onComplete"
-            ref="myDropzone"
-            id="dropzone"
-            :options="dropzoneOptions"
-          /> -->
-          <!-- <img src="@image/icons/user.svg" alt="" /> -->
-          <!-- <div class="select_img">Chọn ảnh</div> -->
+          <div class="select_img">Sửa ảnh</div>
         </v-col>
         <v-col cols="4">
           <div>Tên</div>
@@ -48,20 +34,22 @@
           </el-form-item>
           <div>Mật khẩu</div>
           <el-form-item prop="password">
-            <el-input v-model="ruleForm.password"></el-input>
+            <el-input v-model="ruleForm.password" disabled></el-input>
           </el-form-item>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="4">
           <div>Ngày sinh</div>
+          <!-- <el-form-item prop="birth_day">
+            <el-input v-model="ruleForm.birth_day"></el-input>
+          </el-form-item> -->
           <el-form-item prop="birth_day">
             <el-date-picker
               type="date"
               placeholder="Pick a date"
               v-model="ruleForm.birth_day"
               style="width: 100%"
-              value-format="yyyy-MM-dd"
             ></el-date-picker>
           </el-form-item>
         </v-col>
@@ -79,7 +67,6 @@
               placeholder="Pick a date"
               v-model="ruleForm.issued_on"
               style="width: 100%"
-              value-format="yyyy-MM-dd"
             ></el-date-picker>
           </el-form-item>
         </v-col>
@@ -100,36 +87,37 @@
       </v-row>
       <el-form-item class="btn_submit">
         <el-button id="huy_createUser" @click="cancelModal">Hủy</el-button>
-        <el-button id="new_createUser" @click="submitForm('ruleForm')">Tạo mới</el-button>
+        <el-button id="new_createUser" @click="submitForm('ruleForm')"
+          >Cập nhật</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { showErrorMessage, showSuccessMessage } from "../../utils/notification";
 import { mapState, mapActions } from "vuex";
 export default {
+  props: ["userId"],
   data() {
     return {
-      token: "",
-      dropzoneOptions: null,
       headers: null,
-      loadingChild: false,
       ruleForm: {
         name: "",
         email: "",
         phone: "",
-        password: "",
         birth_day: "",
         identity_card: "",
         issued_on: "",
         address: "",
         role_id: "",
+        avatar: "",
       },
+      avatar_image: null,
       imageUrl: "",
-      avatar_id: null,
+      fileList: null,
       selectedFile: null,
+      loadingChild: false,
       rules: {
         name: [
           { required: true, message: "Please input name", trigger: "blur" },
@@ -181,78 +169,83 @@ export default {
     };
   },
   mounted() {
-    this.token = `bearer ${this.currentUser.results.access_token}`;
-    // console.log(this.token);
-    // this.dropzoneOptions = {
-    //   url: "https://thinhgiacore.demo.fit/api/admin/users/upload-avatar",
-    //   thumbnailWidth: 120,
-    //   thumbnailHeight: 100,
-    //   maxFilesize: 5,
-    //   dictDefaultMessage: "<i class='el-icon-user-solid avatar_img'></i>",
-    //   headers: { Authorization: `bearer ${this.currentUser.results.access_token}` },
-    // };
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
   },
+  beforeMount() {
+    this.getUserDetail();
+  },
   computed: {
-    ...mapState("staffs", ["errorMessage", "loading"]),
+    ...mapState("staffs", ["userDetail", "errorMessage"]),
     ...mapState("auth", ["currentUser"]),
   },
   methods: {
-    onFileAdded(e) {},
-    onError(e) {},
-    onSuccess(e) {},
-    onComplete(e) {},
+    async getUserDetail() {
+      await this.$store.dispatch("staffs/showUserDetail", this.userId);
+      await this.initialize();
+    },
+    initialize() {
+      this.ruleForm = {
+        name: this.userDetail.name,
+        email: this.userDetail.email,
+        phone: this.userDetail.phone,
+        birth_day: this.userDetail.birth_day,
+        identity_card: this.userDetail.identity_card,
+        issued_on: this.userDetail.issued_on,
+        address: this.userDetail.address,
+        role_id: this.userDetail.role_id,
+        avatar: this.userDetail.avatar,
+        is_block: this.userDetail.is_block,
+        id: this.userDetail.id,
+      };
+      this.avatar_image = this.userDetail.avatar_image?.main;
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.addUserToSystem();
+          this.updateUserToSystem();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    async addUserToSystem() {
+    async updateUserToSystem() {
       this.loadingChild = true;
-      this.$store.commit("staffs/setLoading");
       try {
-        await this.$store.dispatch("staffs/createUser", {
+        await this.$store.dispatch("staffs/updateUser", {
           ...this.ruleForm,
-          is_block: 0,
-          avatar: this.avatar_id,
         });
-
         if (!this.errorMessage) {
           this.loadingChild = false;
           this.cancelModal();
-          setTimeout(this.openNotificationCreate(), 2000);
-          setTimeout(this.$store.commit("staffs/setLoading"), 5000);
-          this.$emit("reload-page");
+          this.openNotificationUpdate();
         }
       } catch {
         this.loadingChild = false;
+
         this.showErrorMessage();
       }
+    },
+    cancelModal() {
+      this.$emit("close-modals");
+      this.$destroy();
+    },
+    openNotificationUpdate() {
+      this.$notify({
+        title: "Success",
+        message: "Update user successfull!!!",
+        type: "success",
+      });
     },
     showErrorMessage() {
       this.$notify.error({
         title: "Error",
-        message: "Create user failure!!!",
-      });
-    },
-    cancelModal() {
-      this.$emit("close-modals");
-    },
-    openNotificationCreate() {
-      this.$notify({
-        title: "Success",
-        message: "Create user successfull!!!",
-        type: "success",
+        message: "Update user failure!!!",
       });
     },
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-      this.avatar_id = res.results.id;
+      this.avatar_image = URL.createObjectURL(file.raw);
+      this.ruleForm.avatar = res.results.id;
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -317,8 +310,5 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
-}
-#dropzone {
-  padding: 0px;
 }
 </style>

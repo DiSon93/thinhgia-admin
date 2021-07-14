@@ -17,16 +17,16 @@
             <div class="form_label">Nhân viên</div>
             <el-select v-model="value" placeholder="Chọn nhân viên" id="staff">
               <el-option
-                v-for="item in options"
-                :key="item.value"
+                v-for="item in staffList"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
                 style="height: 44px; padding-top: 4px"
               >
                 <span style="line-height: 18px">
                   <div style="font-weight: 500">{{ item.name }}</div>
                   <div class="sdt" style="font-size: 13px">
-                    <i>{{ item.sdt }}</i>
+                    <i>{{ item.phone }}</i>
                   </div>
                 </span>
               </el-option>
@@ -50,12 +50,16 @@
           <v-row class="address">
             <v-col cols="4">
               <div class="form_label">Tỉnh <span style="color: red">*</span></div>
-              <el-select v-model="value03" placeholder="Chọn tỉnh">
+              <el-select
+                v-model="value03"
+                placeholder="Chọn tỉnh"
+                @change="chooseProvince"
+              >
                 <el-option
-                  v-for="item in provinces"
-                  :key="item.value"
+                  v-for="item in provinceList"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -77,12 +81,16 @@
             </v-col>
             <v-col cols="4">
               <div class="form_label">Huyện/TP <span style="color: red">*</span></div>
-              <el-select v-model="value04" placeholder="Chọn huyện/TP">
+              <el-select
+                v-model="value04"
+                placeholder="Chọn huyện/TP"
+                @change="chooseDistrict"
+              >
                 <el-option
-                  v-for="item in districts"
-                  :key="item.value"
+                  v-for="item in dictrictList"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -94,10 +102,10 @@
               <div class="form_label">Phường/Xã <span style="color: red">*</span></div>
               <el-select v-model="value05" placeholder="Chọn phường/xã">
                 <el-option
-                  v-for="item in towns"
-                  :key="item.value"
+                  v-for="item in wardList"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -423,7 +431,7 @@
 <script>
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "@tinymce/tinymce-vue";
-
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   components: {
     editor: Editor,
@@ -446,37 +454,37 @@ export default {
         {
           value: "1",
           name: "Phạm Văn Sơn",
-          sdt: "01278564",
+          phone: "01278564",
         },
         {
           value: "2",
           name: "Phạm Văn Minh",
-          sdt: "09765264",
+          phone: "09765264",
         },
         {
           value: "3",
           name: "Lê Minh Chí",
-          sdt: "012875564",
+          phone: "012875564",
         },
         {
           value: "4",
           name: "Phạm Văn Đồng",
-          sdt: "01278564",
+          phone: "01278564",
         },
         {
           value: "5",
           name: "Phạm Văn Sơn",
-          sdt: "01278564",
+          phone: "01278564",
         },
         {
           value: "6",
           name: "Phạm Văn Linh",
-          sdt: "012226864",
+          phone: "012226864",
         },
         {
           value: "7",
           name: "Phạm Văn Lộc",
-          sdt: "012226864",
+          phone: "012226864",
         },
       ],
       provinces: [
@@ -586,6 +594,18 @@ export default {
     };
   },
   methods: {
+    ...mapActions("customers", ["getCustomerList"]),
+    ...mapActions("staffs", ["getStaffList"]),
+    ...mapActions("global", ["getProvinceList"]),
+
+    chooseProvince() {
+      this.value04 = "";
+      this.$store.dispatch("global/getDictrictList", this.value03);
+    },
+    chooseDistrict() {
+      this.value05 = "";
+      this.$store.dispatch("global/getWardList", this.value04);
+    },
     handleRemove(file) {
       console.log(file);
     },
@@ -596,6 +616,21 @@ export default {
     handleDownload(file) {
       console.log(file);
     },
+  },
+  mounted() {
+    this.getCustomerList();
+    this.getStaffList();
+    // this.getDictrictList();
+    this.getProvinceList();
+  },
+  updated() {
+    // this.getDictrictList();
+  },
+  computed: {
+    ...mapState("staffs", ["staffList"]),
+    ...mapState("global", ["dictrictList"]),
+    ...mapState("global", ["provinceList"]),
+    ...mapState("global", ["wardList"]),
   },
 };
 </script>

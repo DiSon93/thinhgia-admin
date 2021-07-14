@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app v-if="this.$store.state.auth.currentUser && roleList">
     <v-navigation-drawer
       class="toolbar"
       v-model="drawer"
@@ -47,7 +47,14 @@
           <v-btn color="warning" dark id="createBDS" @click="$router.push('/form/house')"
             ><img src="@image/icons/Vector.svg" />Tạo BĐS
           </v-btn>
-          <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
+          <el-dropdown class="account" @command="handleCommand">
+            <el-button type="info" circle icon="el-icon-user-solid"> </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>Thông tin tài khoản</el-dropdown-item>
+              <el-dropdown-item divided command="logout">Log out</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn> -->
           <v-btn class="notifiaction" fab
             ><img src="@image/icons/bell-badge-noti.jpg" alt=""
           /></v-btn>
@@ -80,13 +87,14 @@
 
 <script>
 import SelectBox from "@component/SelectBox.vue";
-
+import { mapState } from "vuex";
 export default {
   components: {
     SelectBox,
   },
   data() {
     return {
+      // dialog: false,
       clipped: false,
       isWidth: window.innerWidth > 600 ? true : false,
       drawer: true,
@@ -135,8 +143,52 @@ export default {
       title: "Vuetify.js",
     };
   },
+  beforeCreate() {
+    if (!this.$store.state.auth.currentUser) {
+      this.$router.push("/admin/login");
+    }
+    this.$store.dispatch("role/getRoleList");
+  },
   beforeMount() {
     this.drawer = this.isWidth;
+  },
+  computed: {
+    ...mapState("role", ["roleList"]),
+  },
+  methods: {
+    handleCommand(command) {
+      if (command == "logout") {
+        this.openLogout();
+      }
+    },
+    openLogout() {
+      this.$confirm("Are you sure to logout. Continue?", "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.handleLogout();
+          setTimeout(
+            this.$message({
+              type: "success",
+              message: "Logout completed",
+            }),
+            2000
+          );
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Logout canceled",
+          });
+        });
+    },
+    handleLogout() {
+      window.localStorage.clear();
+      window.location.reload(true);
+      window.location.replace("/admin/login");
+    },
   },
 };
 </script>
@@ -242,17 +294,15 @@ export default {
   .account {
     position: absolute;
     right: 70px;
-    padding: 0;
-    bottom: 0px;
-    width: 24px !important;
-    height: 24px !important;
-    border-radius: 50%;
-    background-color: #fff !important;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
-    &:hover {
-      border: 1px solid blue;
-      transition: 0.5s;
+    bottom: -1px;
+    .el-button {
+      padding: 4px;
     }
+
+    // &:hover {
+    //   border: 1px solid blue;
+    //   transition: 0.5s;
+    // }
   }
   .notifiaction {
     position: absolute;
@@ -309,6 +359,8 @@ export default {
   }
   .v-main {
     padding: 64px 0px 36px 209px !important;
+    margin-right: 0 !important;
+    width: 100% !important;
   }
   .app-bar-icon {
     display: none;

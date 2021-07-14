@@ -31,7 +31,10 @@
           <a href="#">Forgot password?</a>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">Login</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')" :loading="loading"
+            >Login</el-button
+          >
+          <div class="message">{{ userLogin }} {{ showError }}</div>
         </el-form-item>
       </el-form>
     </div>
@@ -39,6 +42,7 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   layout: "auth",
   data() {
@@ -48,23 +52,79 @@ export default {
         pass: "",
         type: [],
       },
+      loading: false,
       rules: {
-        email: [{ required: true, message: "Please input email", trigger: "change" }],
+        email: [
+          {
+            required: true,
+            message: "Please input email",
+            trigger: "change",
+          },
+          {
+            type: "email",
+            message: "Please input correct email address",
+            trigger: "submit",
+          },
+        ],
         pass: [{ required: true, message: "Please input passwword", trigger: "change" }],
       },
     };
+  },
+  beforeMount() {
+    if (this.$store.state.auth.currentUser.message == "Login success") {
+      this.$router.push("/");
+    }
+  },
+
+  updated() {
+    if (this.$store.state.auth.currentUser.message == "Login success") {
+      this.$router.push("/");
+    }
+    // if (this.$store.state.auth.error) {
+    //   this.openNotification();
+    // }
+  },
+  watch: {
+    showError() {
+      this.openNotification();
+    },
+  },
+  // computed: {
+  //   ...mapState("auth", ["currentUser"]),
+  // },
+  computed: {
+    userLogin() {
+      return this.$store.state.auth.currentUser;
+    },
+    showError() {
+      return this.$store.state.auth.error;
+    },
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.loginIntoServer();
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
     },
+    loginIntoServer() {
+      this.loading = true;
+      this.$store.dispatch("auth/loginIntoServer", {
+        email: this.ruleForm.email,
+        password: this.ruleForm.pass,
+      });
+    },
+    openNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "The email or password does not match.",
+      });
+      this.loading = false;
+    },
+    // ...mapActions("auth", ["loginIntoServer"]),
   },
 };
 </script>
@@ -128,5 +188,8 @@ export default {
       }
     }
   }
+}
+.message {
+  display: none;
 }
 </style>

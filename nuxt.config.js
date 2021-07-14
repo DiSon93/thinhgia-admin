@@ -26,8 +26,8 @@ export default {
   // target: 'static',
   loading: true,
   loading: {
-    color: 'blue',
-    height: '5px',
+    color: 'teal',
+    height: '3px',
     duration: 500,
   },
   // loading: '~/components/LoadingBar.vue',
@@ -58,6 +58,7 @@ export default {
     '@nuxtjs/axios',
     'bootstrap-vue/nuxt',
     'nuxt-vue-select',
+    'dropzone-nuxt',
   ],
 
   // bootstrapVue: {
@@ -66,7 +67,9 @@ export default {
   // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'https://thinhgiacore.demo.fit/api', 
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

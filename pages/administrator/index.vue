@@ -101,8 +101,12 @@
         :visible.sync="centerDialogVisible"
         width="40%"
         center
+        destroy-on-close
       >
-        <CreateUser />
+        <CreateUser
+          v-on:close-modals="centerDialogVisible = false"
+          v-on:reload-page="reload"
+        />
         <!-- <span slot="footer" class="dialog-footer" style="float: right">
           <el-button @click="centerDialogVisible = false" id="huy_createUser"
             >Hủy</el-button
@@ -116,7 +120,7 @@
         </span> -->
       </el-dialog>
       <v-row class="data_table" v-if="isUser">
-        <AdminTable />
+        <AdminTable :key="keyChild" />
       </v-row>
       <v-row class="data_table dictionary" v-if="isDictionary">
         <Dictionary />
@@ -134,6 +138,7 @@ import AdminTable from "@component/AdminTable";
 import Dictionary from "@component/Dictionary";
 import DefineRealEstate from "@component/DefineRealEstate";
 import CreateUser from "@component/Form/CreateUser";
+import { mapState, mapActions } from "vuex";
 export default {
   components: {
     AdminTable,
@@ -143,89 +148,14 @@ export default {
   },
   data() {
     return {
+      keyChild: 0,
       isActive: false,
       isUser: true,
       isDictionary: false,
       isRealEstate: false,
       toggle_exclusive: [],
       centerDialogVisible: false,
-      // options: [
-      //   {
-      //     title: "Tất cả",
-      //   },
-      //   {
-      //     title: "Super Admin",
-      //   },
-      //   {
-      //     title: "Admin",
-      //   },
-      //   {
-      //     title: "Staff",
-      //   },
-      //   {
-      //     title: "Marketer",
-      //   },
-      // ],
-      options: [
-        {
-          value: "Tất cả",
-          label: "Tất cả",
-        },
-        {
-          value: "Super Admin",
-          label: "Super Admin",
-        },
-        {
-          value: "Admin",
-          label: "Admin",
-        },
-        {
-          value: "Staff",
-          label: "Staff",
-        },
-        {
-          value: "Marketer",
-          label: "Marketer",
-        },
-      ],
-      dictionaris: [
-        {
-          value: "Loại BĐS",
-          label: "Loại BĐS",
-        },
-        {
-          value: "Loại Nhà",
-          label: "Loại Nhà",
-        },
-        {
-          value: "Loại Đường",
-          label: "Loại Đường",
-        },
-        {
-          value: "Khách Hàng",
-          label: "Khách Hàng",
-        },
-        {
-          value: "Pháp lý",
-          label: "Pháp lý",
-        },
-        {
-          value: "Hướng",
-          label: "Hướng",
-        },
-        {
-          value: "Quận/Huyện",
-          label: "Quận/Huyện",
-        },
-        {
-          value: "Phường/Xã",
-          label: "Phường/Xã",
-        },
-        {
-          value: "Đường",
-          label: "Đường",
-        },
-      ],
+      options: [],
       estate: [
         {
           value: "Cộng Đồng",
@@ -241,7 +171,28 @@ export default {
       value3: "",
     };
   },
+  mounted() {
+    this.getRoleList();
+  },
+  computed: {
+    ...mapState("role", ["roleList"]),
+  },
   methods: {
+    reload() {
+      this.keyChild += 1;
+    },
+    async getRoleList() {
+      await this.$store.dispatch("role/getRoleList");
+      await this.getRoleOptions();
+    },
+    getRoleOptions() {
+      this.options = this.roleList.map((item, index) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+    },
     user: function () {
       this.isUser = true;
       this.isDictionary = false;

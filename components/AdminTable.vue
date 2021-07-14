@@ -1,12 +1,14 @@
 <template>
-  <div id="admin_table">
+  <div id="admin_table" v-loading="loading">
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="users"
       sort-by="calories"
       class="elevation-1"
       :mobile-breakpoint="0"
+      hide-default-footer
     >
+      <!-- @pagination="paginate" -->
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>My CRUD</v-toolbar-title>
@@ -81,19 +83,21 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <!-- <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-      </template> -->
+
       <template v-slot:item="row">
         <tr>
-          <td>{{ row.item.id }}</td>
+          <td>{{ row.item.index }}</td>
           <td>
             <div class="d-flex">
               <img :src="row.item.image" alt="" id="user_img" />
               <div class="user_detail">
                 {{ row.item.name }}
-                <div v-if="row.item.position == 'Admin'" class="position">
+                <div
+                  v-if="
+                    row.item.position == 'Admin' || row.item.position == 'Super Admin'
+                  "
+                  class="position"
+                >
                   {{ row.item.position }}
                 </div>
                 <div v-else class="staff">
@@ -110,23 +114,90 @@
           <td>{{ row.item.status }}</td>
 
           <td>
-            <v-btn text color="error" class="btn_select"> Chọn </v-btn>
+            <el-dropdown @command="handleCommand" trigger="click">
+              <span class="el-dropdown-link btn_select" @click="user_info(row.item)">
+                Chọn<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="edit">
+                  <v-icon>mdi-pen-plus</v-icon> Sửa
+                </el-dropdown-item>
+                <el-dropdown-item command="delete">
+                  <v-icon>mdi-trash-can</v-icon> Xóa
+                </el-dropdown-item>
+                <el-dropdown-item command="refresh">
+                  <v-icon>mdi-account-convert</v-icon> Đặt lại mật khẩu
+                </el-dropdown-item>
+                <el-dropdown-item command="block">
+                  <v-icon>mdi-account-cancel</v-icon>
+                  {{ row.item.status == "Khóa" ? "Gỡ khóa" : "Khóa" }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </td>
         </tr>
       </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
-      </template>
     </v-data-table>
+    <div class="block_pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage2"
+        :page-sizes="[10, 15, 20, 25]"
+        :page-size="10"
+        layout="sizes, prev, pager, next"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
+    <el-dialog
+      title="Update thông tin người dùng"
+      :visible.sync="centerDialogVisible"
+      width="40%"
+      center
+      destroy-on-close
+    >
+      <UpdateUser
+        :userId="selectedUser.id"
+        v-on:close-modals="updateUserModal"
+        :key="childKey"
+      />
+      <!-- <span slot="footer" class="dialog-footer" style="float: right">
+          <el-button @click="centerDialogVisible = false" id="huy_createUser"
+            >Hủy</el-button
+          >
+          <el-button
+            type="primary"
+            @click="centerDialogVisible = false"
+            id="new_createUser"
+            >Tạo mới</el-button
+          >
+        </span> -->
+    </el-dialog>
   </div>
 </template>
+
 <script>
+import { mapState, mapMutations, mapActions } from "vuex";
+import UpdateUser from "@component/Form/UpdateUser.vue";
 export default {
+  components: {
+    UpdateUser,
+  },
   data: () => ({
+    currentPage2: 1,
     dialog: false,
     dialogDelete: false,
+    centerDialogVisible: false,
+    childKey: 0,
+    page: 1,
+    rowPerPage: 10,
     headers: [
-      { text: "#", value: "id", width: "58px" },
+      {
+        text: "#",
+        value: "id",
+        width: "58px",
+      },
       {
         text: "NHÂN VIÊN",
         align: "start",
@@ -134,15 +205,46 @@ export default {
         value: "name",
         width: "240px",
       },
-      { text: "SĐT", value: "sdt", width: "130px" },
-      { text: "EMAIL", value: "email", width: "140px" },
-      { text: "NGÀY SINH", value: "birthday", width: "140px" },
-      { text: "CMND", value: "cmnd", width: "140px" },
-      { text: "NGÀY CẤP CMND", value: "cmnd_date", width: "160px" },
-      { text: "TRẠNG THÁI", value: "status", sortable: false, width: "140px" },
-      { text: "CHỈNH SỬA", value: "actions", sortable: false, width: "100px" },
+      {
+        text: "SĐT",
+        value: "sdt",
+        width: "130px",
+      },
+      {
+        text: "EMAIL",
+        value: "email",
+        width: "140px",
+      },
+      {
+        text: "NGÀY SINH",
+        value: "birthday",
+        width: "120px",
+      },
+      {
+        text: "CMND",
+        value: "cmnd",
+        width: "140px",
+      },
+      {
+        text: "NGÀY CẤP CMND",
+        value: "cmnd_date",
+        width: "160px",
+      },
+      {
+        text: "TRẠNG THÁI",
+        value: "status",
+        sortable: false,
+        width: "140px",
+      },
+      {
+        text: "CHỈNH SỬA",
+        value: "actions",
+        sortable: false,
+        width: "100px",
+      },
     ],
-    desserts: [],
+    users: [],
+    selectedUser: {},
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -161,80 +263,237 @@ export default {
   }),
 
   computed: {
+    ...mapState("staffs", ["userList", "loading", "total"]),
+    ...mapState("staffs", ["errorMessage"]),
+    ...mapState("staffs", ["blockUser", "delete"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
   },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
+  mounted() {
+    this.getUserListPerPage();
   },
 
-  created() {
-    this.initialize();
-  },
-
+  // created() {
+  //   this.initialize();
+  // },
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          id: 23,
-          name: "Nguyễn Văn Linh",
-          sdt: "09123124",
-          email: "linh123@gmail.com",
-          birthday: "16/12/2020",
-          cmnd: "13123214",
-          cmnd_date: "21/5/2021",
-          status: "Đang hoạt động",
-          position: "Admin",
-          image: require("@/assets/images/layouts/house2.png"),
-        },
-        {
-          id: 45,
-          name: "Nguyễn Tiến Mạnh",
-          sdt: "0124235423",
-          email: "manh23124@gmail.com",
-          birthday: "02/12/1991",
-          cmnd: "2424325",
-          cmnd_date: "11/5/2021",
-          status: "Đang hoạt động",
-          position: "Techical",
-          image: require("@/assets/images/layouts/house3.png"),
-        },
-        {
-          id: 87,
-          name: "Đinh Thị Phượng Hằng",
-          sdt: "012435346",
-          email: "son38124@gmail.com",
-          birthday: "22/09/1993",
-          cmnd: "1324325",
-          cmnd_date: "11/5/2021",
-          status: "Đang hoạt động",
-          position: "Sale",
-          image: require("@/assets/images/layouts/house4.png"),
-        },
-      ];
+    user_info(item) {
+      this.selectedUser = item;
+      this.childKey += 1;
+    },
+    async getUserListPerPage() {
+      this.$store.commit("staffs/setLoading");
+      await this.$store.dispatch("staffs/getUserListPerPage", {
+        page: this.page,
+        rowPerPage: this.rowPerPage,
+      });
+      await this.initializeUserList();
+      this.$store.commit("staffs/setLoading");
+    },
+    initializeUserList() {
+      this.users = this.userList.map((item, index) => {
+        return {
+          index: index + 1,
+          id: item.id,
+          name: item.name,
+          sdt: item.phone,
+          email: item.email,
+          birthday: item.birth_day,
+          cmnd: item.identity_card,
+          cmnd_date: item.issued_on,
+          status: item.is_block == 0 ? "Đang hoạt động" : "Khóa",
+          position: item.role.name,
+          image: item.avatar_image?.main,
+        };
+      });
+    },
+    async handleCommand(command) {
+      if (command == "edit") {
+        this.updateUser();
+      }
+      if (command == "delete") {
+        this.confirmDeleteUser();
+      }
+      if (command == "refresh") {
+        this.confirmEesetPassword();
+      }
+      if (command == "block") {
+        this.confirmBlock();
+      }
+    },
+    updateUser() {
+      this.centerDialogVisible = true;
+    },
+    confirmDeleteUser() {
+      this.$confirm(`Are you sure to delete this user. Continue?`, "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.$store.commit("staffs/setLoading");
+          this.deleteUserInSystem();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Delete canceled",
+          });
+        });
+    },
+    confirmEesetPassword() {
+      this.$confirm(`Are you sure to reset password this user. Continue?`, "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.$store.commit("staffs/setLoading");
+          this.resetPassWordUser();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Delete canceled",
+          });
+        });
+    },
+    confirmBlock() {
+      const text = this.selectedUser.status == "Khóa" ? "unblock" : "block";
+      this.$confirm(`Are you sure to ${text} this user. Continue?`, "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.$store.commit("staffs/setLoading");
+          this.blockUserInSystem();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Block canceled",
+          });
+        });
+    },
+    async blockUserInSystem() {
+      try {
+        await this.$store.dispatch("staffs/blockUser", {
+          _id: this.selectedUser.id,
+          is_block: this.selectedUser.status == "Khóa" ? 0 : 1,
+        });
+        if (!this.errorMessage) {
+          await this.getUserListPerPage();
+          setTimeout(this.openNotificationBlock(), 1000);
+          this.$store.commit("staffs/setLoading");
+        }
+      } catch {
+        this.showErrorNotification();
+      }
+    },
+    async deleteUserInSystem() {
+      try {
+        await this.$store.dispatch("staffs/deleteUser", this.selectedUser.id);
+        if (!this.errorMessage) {
+          await this.getUserListPerPage();
+          setTimeout(this.openNotificationDelete(), 1000);
+          this.$store.commit("staffs/setLoading");
+        }
+      } catch {
+        this.showErrorNotification();
+      }
+    },
+    async resetPassWordUser() {
+      try {
+        await this.$store.dispatch("staffs/resetPassword", this.selectedUser.id);
+        if (!this.errorMessage) {
+          await this.getUserListPerPage();
+          setTimeout(this.openNotificationReset(), 1000);
+          this.$store.commit("staffs/setLoading");
+        }
+      } catch {
+        this.showErrorNotification();
+      }
     },
 
+    updateUserModal() {
+      this.centerDialogVisible = false;
+      this.getUserListPerPage();
+    },
+
+    // getItemPerPage(val) {
+    //   this.rowPerPage = val;
+    //   this.getUserListPerPage();
+    // },
+
+    // async paginate(val) {
+    //   console.log(val);
+    //   this.$store.commit("staffs/setLoading");
+    //   this.page = val.page;
+    //   await this.getUserListPerPage();
+    //   this.$store.commit("staffs/setLoading");
+    // },
+
+    openNotificationBlock() {
+      this.$notify({
+        title: "Success",
+        message:
+          this.selectedUser.status == "Khóa"
+            ? "Unblock User Successfull"
+            : "Block User Successfull",
+        type: "success",
+      });
+    },
+    openNotificationDelete() {
+      this.$notify({
+        title: "Success",
+        message: "Delete user successfull!!!",
+        type: "success",
+      });
+    },
+    openNotificationReset() {
+      this.$notify({
+        title: "Success",
+        message: "Reset password user successfull!!!",
+        type: "success",
+      });
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
+
+    async handleSizeChange(val) {
+      console.log(`${val} items per page`);
+      this.loading = true;
+      this.rowPerPage = val;
+      await this.getUserListPerPage();
+      this.loading = false;
+    },
+    async handleCurrentChange(val) {
+      console.log(`current page: ${val}`);
+      this.loading = true;
+      this.page = val;
+      await this.getUserListPerPage();
+      this.loading = false;
+    },
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      this.users.splice(this.editedIndex, 1);
       this.closeDelete();
     },
 
@@ -256,29 +515,33 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.users[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem);
+        this.users.push(this.editedItem);
       }
       this.close();
     },
   },
 };
 </script>
+
 <style lang="scss" scoped>
 #admin_table {
   width: 100vw;
+
   .user_detail {
     text-align: left;
     margin-left: 10px;
     padding-top: 14px;
     font-size: 14px;
     color: #000;
+
     .position {
       color: orangered !important;
       margin-top: 3px;
       font-size: 13px;
     }
+
     .staff {
       color: gray !important;
       margin-top: 3px;
@@ -292,9 +555,18 @@ export default {
     border-radius: 50%;
     margin: 10px 0;
   }
+
   .btn_select {
     text-transform: capitalize;
     font-size: 13px;
+    color: red;
   }
+}
+.block_pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+.v-application .elevation-1 {
+  box-shadow: none !important;
 }
 </style>
