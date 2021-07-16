@@ -33,6 +33,7 @@ axiosClient.interceptors.response.use((response) => {
       if (error.response && error.response.status === 401) {
         localStorage.removeItem("user"); // <-- add your var
         window.location = "/admin/login";  // <-- add your path
+        // this.$router.push("/admin/login");
       } else
         return Promise.reject(error);
   });

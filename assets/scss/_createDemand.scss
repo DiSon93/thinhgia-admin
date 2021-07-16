@@ -1,0 +1,22 @@
+.create_demand {
+    .el-select .el-input__inner,
+    .el-input__inner {
+        border-radius: 16px;
+        height: 30px;
+        margin-top: 5px;
+    }
+    .el-select__tags {
+        margin-top: 2px;
+    }
+    // .el-select__caret {
+    //     margin-top: 5px !important;
+    // }
+    .el-select__caret.el-input__icon.el-icon-arrow-up {
+        height: 30px;
+        line-height: 30px;
+        margin-top: 5px !important;
+    }
+    #input_price {
+        background-color: #e5e5e5;
+    }
+}

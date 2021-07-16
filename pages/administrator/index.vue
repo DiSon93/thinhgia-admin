@@ -27,8 +27,14 @@
         </v-col>
       </v-row>
       <v-row class="admin_option">
-        <v-col cols="6" sm="4" v-if="isUser"> 51 người dùng </v-col>
-        <v-col cols="6" sm="4" v-if="isDictionary"> Tổng cộng: 8 loại Loại BĐS </v-col>
+        <v-col cols="6" sm="4" v-if="isUser">
+          <span class="figure">{{ totalUser }}</span> người dùng
+        </v-col>
+        <v-col cols="6" sm="4" v-if="isDictionary">
+          Tổng cộng:
+          <span class="figure"> {{ dicSelected[0].dictionaries.length }}</span>
+          {{ dicSelected[0].name }}
+        </v-col>
         <v-col cols="6" sm="4" v-if="isRealEstate"> 1BĐS </v-col>
 
         <v-col cols="6" sm="4" align="center" v-if="isUser || isDictionary">
@@ -46,7 +52,13 @@
                   <span> {{ option.title }}</span>
                 </template>
               </v-select> -->
-            <el-select v-model="value1" placeholder="Tất cả" v-if="isUser">
+
+            <el-select
+              v-model="value1"
+              placeholder="Tất cả"
+              v-if="isUser"
+              @change="handleChangeRole($event)"
+            >
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -55,7 +67,12 @@
               >
               </el-option>
             </el-select>
-            <el-select v-model="value2" placeholder="Tất cả" v-if="isDictionary">
+            <el-select
+              v-model="value2"
+              placeholder="Tất cả"
+              v-if="isDictionary"
+              @change="handleChangeDic($event)"
+            >
               <el-option
                 v-for="item in dictionaris"
                 :key="item.value"
@@ -85,8 +102,19 @@
               dark
               small
               color="warning"
-              v-if="!isRealEstate"
+              v-if="isUser"
               @click="centerDialogVisible = true"
+            >
+              <v-icon dark small> mdi-plus </v-icon>
+            </v-btn>
+            <v-btn
+              class="mx-2 add_btn"
+              fab
+              dark
+              small
+              color="warning"
+              v-if="isDictionary"
+              @click="dialogVisible = true"
             >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
@@ -107,23 +135,23 @@
           v-on:close-modals="centerDialogVisible = false"
           v-on:reload-page="reload"
         />
-        <!-- <span slot="footer" class="dialog-footer" style="float: right">
-          <el-button @click="centerDialogVisible = false" id="huy_createUser"
-            >Hủy</el-button
-          >
-          <el-button
-            type="primary"
-            @click="centerDialogVisible = false"
-            id="new_createUser"
-            >Tạo mới</el-button
-          >
-        </span> -->
       </el-dialog>
-      <v-row class="data_table" v-if="isUser">
-        <AdminTable :key="keyChild" />
+      <el-dialog :visible.sync="dialogVisible" width="30%" destroy-on-close>
+        <CreateDictionaries
+          :select_dic="dicSelected[0]"
+          v-on:close-modals="dialogVisible = false"
+          v-on:close-add-modals="reloadDic"
+        />
+      </el-dialog>
+      <v-row class="data_table" v-show="isUser">
+        <AdminTable :key="keyChild" @getTotal="getTotalUser" :select_role="role_id" />
       </v-row>
       <v-row class="data_table dictionary" v-if="isDictionary">
-        <Dictionary />
+        <Dictionary
+          :key="keyDic"
+          :select_dic="dicSelected[0]"
+          v-on:close-update="reloadDic"
+        />
       </v-row>
       <v-row class="data_table define" v-if="isRealEstate">
         <DefineRealEstate />
@@ -138,6 +166,7 @@ import AdminTable from "@component/AdminTable";
 import Dictionary from "@component/Dictionary";
 import DefineRealEstate from "@component/DefineRealEstate";
 import CreateUser from "@component/Form/CreateUser";
+import CreateDictionaries from "@component/Form/CreateDictionaries";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {
@@ -145,17 +174,25 @@ export default {
     Dictionary,
     DefineRealEstate,
     CreateUser,
+    CreateDictionaries,
   },
   data() {
     return {
       keyChild: 0,
+      keyDic: 0,
       isActive: false,
       isUser: true,
       isDictionary: false,
       isRealEstate: false,
       toggle_exclusive: [],
       centerDialogVisible: false,
+      dialogVisible: false,
+      dicSelected: "",
+      opSelected: 1,
+      addDicVal: 1,
       options: [],
+      totalUser: 0,
+      role_id: 0,
       estate: [
         {
           value: "Cộng Đồng",
@@ -166,27 +203,74 @@ export default {
           label: "Web",
         },
       ],
+      dictionaris: [
+        {
+          value: "Cộng Đồng",
+          label: "Cộng Đồng",
+        },
+        {
+          value: "Web",
+          label: "Web",
+        },
+      ],
       value1: "",
-      value2: "",
+      value2: 1,
       value3: "",
     };
   },
   mounted() {
     this.getRoleList();
+    this.getDictionaryTypeList();
   },
   computed: {
     ...mapState("role", ["roleList"]),
+    ...mapState("dictionaries", ["dictionaryList"]),
   },
   methods: {
+    getTotalUser(value) {
+      this.totalUser = value;
+    },
+    handleChangeDic(e) {
+      this.opSelected = e;
+      this.dicSelected = this.dictionaryList.filter((u, i) => u.id == e);
+      this.keyDic += 1;
+    },
+    handleChangeRole(e) {
+      this.role_id = e;
+      this.keyChild += 1;
+    },
     reload() {
       this.keyChild += 1;
+    },
+    async reloadDic() {
+      await this.getDictionaryTypeList();
+      await this.handleChangeDic(this.opSelected);
+      this.dialogVisible = false;
     },
     async getRoleList() {
       await this.$store.dispatch("role/getRoleList");
       await this.getRoleOptions();
     },
+    async getDictionaryTypeList() {
+      await this.$store.dispatch("dictionaries/getDictionaryList", {
+        limit: 10,
+        page: 1,
+      });
+      await this.getDicOptions();
+    },
     getRoleOptions() {
       this.options = this.roleList.map((item, index) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+    },
+    getDicOptions() {
+      if (!this.dicSelected) {
+        this.dicSelected = this.dictionaryList;
+      }
+      this.dictionaris = this.dictionaryList.map((item, index) => {
         return {
           value: item.id,
           label: item.name,
@@ -437,5 +521,10 @@ export default {
       height: 40px !important;
     }
   }
+}
+.figure {
+  color: teal;
+  font-weight: 500;
+  font-size: 15px;
 }
 </style>

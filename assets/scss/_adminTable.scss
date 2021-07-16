@@ -85,3 +85,10 @@
 //     padding: 10px;
 //   }
 // }
+.v-application ul,
+.v-application ol {
+  padding-left: 0px !important;
+}
+ul.el-pager {
+  padding-left: 0px !important;
+}

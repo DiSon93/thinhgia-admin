@@ -38,6 +38,7 @@ export default {
     // { src: "@/plugins/vue-select.js",  ssr: false},
     { src: "@/plugins/element-ui.js", mode: "client"},
     { src: "@/plugins/CKEditor.js", mode: "client"},
+
     // { src: "@/plugins/vue-lazyloading.js", mode: "client"},
   ],
 
@@ -69,6 +70,14 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: 'https://thinhgiacore.demo.fit/api', 
+    requestInterceptor: (config, { store }) => {
+      config.headers.common['access-token'] = store.state.user.headers.access_token
+      config.headers.common['token-type'] = store.state.user.headers.token_type
+      config.headers.common['client'] = store.state.user.headers.client
+      config.headers.common['expiry'] = store.state.user.headers.expiry
+      config.headers.common['uid'] = store.state.user.headers.uid
+      return config
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

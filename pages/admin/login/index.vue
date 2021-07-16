@@ -1,8 +1,13 @@
 <template>
   <div class="login">
     <div class="login_form">
-      <div class="login_title">KhobatdongsanViet</div>
-      <div class="note">Sign in and start managing your candidates!</div>
+      <div class="logo">
+        <img src="@image/icons/logogroup.svg" alt="" />
+        <div class="login_header">
+          <div class="login_title">KHOBATDONGSANVIET.COM</div>
+          <div class="note">KÊNH GIAO DỊCH BẤT ĐỘNG SẢN</div>
+        </div>
+      </div>
       <el-form
         :model="ruleForm"
         status-icon
@@ -142,29 +147,42 @@ export default {
     margin: 0 auto;
     background-color: #f6fbf9;
     border-radius: 20px;
-    .login_title {
-      font-family: Lexend Deca;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 60px;
-      line-height: 75px;
-      letter-spacing: 0.1px;
-      text-align: center;
-      color: #224957;
+    .logo {
+      display: flex;
+      margin-bottom: 30px;
+      img {
+        margin-right: 5px;
+      }
+      .login_header {
+      }
+      .login_title {
+        margin-top: 25px;
+
+        font-family: Lexend Deca;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 26px;
+        line-height: 35px;
+        letter-spacing: -0.5px;
+        text-align: left;
+        color: #242d4a;
+      }
+      .note {
+        font-family: Lexend Deca;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 30px;
+        margin-bottom: 25px;
+        letter-spacing: -0.5px;
+        text-align: left;
+        color: #d4b59c;
+      }
     }
-    .note {
-      font-family: Lexend Deca;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 20px;
-      line-height: 30px;
-      margin-bottom: 25px;
-      text-align: center;
-      color: #224957;
-    }
+
     .el-button {
       width: 100%;
-      background: #84c7ae;
+      background: #fdc251;
       border: 1.53407px solid rgba(0, 0, 0, 0.1);
       box-sizing: border-box;
       border-radius: 15.3407px;
@@ -183,7 +201,7 @@ export default {
         line-height: 28px;
         text-decoration: none;
         text-align: center;
-        color: #84c7ae;
+        color: #a36e08;
         float: right;
       }
     }

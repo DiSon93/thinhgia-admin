@@ -1,6 +1,4 @@
 import axiosClient from "~/utils/axiosClient";
-//xài nuxt auth thử đi
-//Thôi tạm fix cái này đã
 
 const currentUser = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : "";
 
@@ -14,9 +12,6 @@ export default {
         setUser(state, data) {
             state.currentUser = data;
         },
-        // setCountries(state, data) {
-        //     state.countries = data;
-        // }
         setError (state, data){
            state.error = data
         }
@@ -31,9 +26,6 @@ export default {
                 }).catch(e => {
                     commit('setError', e);
                     reject(e);
-                    console.log(e);
-                    console.log("thất bại")
-
                 })
             })
         },

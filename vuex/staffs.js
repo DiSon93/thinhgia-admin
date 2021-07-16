@@ -75,7 +75,7 @@ export default {
         },
         getUserListPerPage: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/users?limit=${data.rowPerPage}&page=${data.page}`, method: "GET" }).then(response => {
+                axiosClient({ url: `/admin/users?limit=${data.rowPerPage}&page=${data.page}&role_id=${data.role_id}`, method: "GET" }).then(response => {
                     commit('getUserList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
@@ -84,6 +84,10 @@ export default {
                 })
             })
         },
+        // async getUserListPerPage ({ commit }, data) {
+        //     const ip = await this.$axios.$get(`/admin/users?limit=${data.rowPerPage}&page=${data.page}`)
+        //     commit('getUserList', ip)
+        //   },
         blockUser: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/users/block/${data._id}`, method: "POST", data: data }).then(response => {

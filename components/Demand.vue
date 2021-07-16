@@ -2,7 +2,7 @@
   <div id="demand_table">
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="demands"
       sort-by="calories"
       class="elevation-1"
       :mobile-breakpoint="0"
@@ -92,7 +92,10 @@
             <div>{{ row.item.customer }}</div>
             <div class="side">{{ row.item.side }}</div>
           </td>
-          <td>{{ row.item.area }}</td>
+          <td>
+            {{ row.item.wards }}<span class="highlight">||</span> {{ row.item.district
+            }}<span class="highlight">||</span> {{ row.item.province }}
+          </td>
           <td>{{ row.item.price }}</td>
           <td>{{ row.item.floor }}</td>
           <td>{{ row.item.bedroom }}</td>
@@ -100,22 +103,23 @@
           <td>{{ row.item.staff }}</td>
           <td>{{ row.item.type_estate }}</td>
           <td>{{ row.item.type_house }}</td>
-          <td>{{ row.item.square }}</td>
+          <td>{{ row.item.square }} <span>&#13217;</span></td>
           <td>{{ row.item.proble }}</td>
-
+          <td>{{ row.item.discription }}</td>
           <td>
             <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
             <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
           </td>
         </tr>
       </template>
-      <template v-slot:no-data>
+      <!-- <template v-slot:no-data>
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
-      </template>
+      </template> -->
     </v-data-table>
   </div>
 </template>
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   data: () => ({
     dialog: false,
@@ -139,9 +143,10 @@ export default {
       { text: "LOẠI NHÀ", value: "type_house", width: "160px" },
       { text: "DIỆN TÍCH", value: "square", width: "140px" },
       { text: "BĐS PHÙ HỢP", value: "proble", width: "160px" },
+      { text: "MÔ TẢ", value: "discription", width: "260px" },
       { text: "Actions", value: "actions", sortable: false, width: "100px" },
     ],
-    desserts: [],
+    demands: [],
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -160,6 +165,7 @@ export default {
   }),
 
   computed: {
+    ...mapState("demand", ["demandList"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
@@ -175,74 +181,105 @@ export default {
   },
 
   created() {
-    this.initialize();
+    this.getDemandList();
   },
 
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          id: 3243,
-          customer: "Anh An",
-          area: "Phường 2, Nguyễn An Ninh, Vũng Tàu",
-          price: "1 tỷ - 5 tỷ",
-          floor: "4",
-          bedroom: "2",
-          direction: "Nam",
-          staff: "Đào Duy Anh",
-          type_estate: "Nhà mặt tiền",
-          type_house: "Nhà cấp 4",
-          square: "120m2",
-          proble: "1BĐS",
+    async getDemandList() {
+      try {
+        await this.$store.dispatch("demand/getDemandList", {
+          limit: 10,
+          page: 1,
+          resolved: true,
+        });
+        await this.initializeList();
+      } catch {}
+    },
+    initializeList() {
+      console.log("array", this.demandList[0].descriptions);
+      // this.demands = [
+      //   {
+      //     id: 3243,
+      //     customer: "Anh An",
+      //     area: "Phường 2, Nguyễn An Ninh, Vũng Tàu",
+      //     price: "1 tỷ - 5 tỷ",
+      //     floor: "4",
+      //     bedroom: "2",
+      //     direction: "Nam",
+      //     staff: "Đào Duy Anh",
+      //     type_estate: "Nhà mặt tiền",
+      //     type_house: "Nhà cấp 4",
+      //     square: "120m2",
+      //     proble: "1BĐS",
+      //     side: "Mua",
+      //   },
+      //   {
+      //     id: 1234,
+      //     customer: "Anh Vân",
+      //     area: "Phường 2, Nguyễn Lý Thông, Vũng Tàu",
+      //     price: "2 tỷ - 9 tỷ",
+      //     floor: "9",
+      //     bedroom: "2",
+      //     direction: "Bắc",
+      //     staff: "Đào Duy Từ",
+      //     type_estate: "Nhà mặt tiền",
+      //     type_house: "Nhà cấp 3",
+      //     square: "178m2",
+      //     proble: "0BĐS",
+      //     side: "Mua",
+      //   },
+      //   {
+      //     id: 3435,
+      //     customer: "Anh Tân",
+      //     area: "Phường 1, Nguyễn Trung Trực, Vũng Tàu",
+      //     price: "4 tỷ - 5 tỷ",
+      //     floor: "7",
+      //     bedroom: "2",
+      //     direction: "Tây",
+      //     staff: "Đào Thiên Lâm",
+      //     type_estate: "Nhà mặt tiền",
+      //     type_house: "Nhà cấp 4",
+      //     square: "120m2",
+      //     proble: "1BĐS",
+      //     side: "Mua",
+      //   },
+      // ];
+      this.demands = this.demandList.map((item, index) => {
+        return {
+          id: item.id,
+          customer: item.customer,
+          wards: item.wards[0].name,
+          district: item.district.name,
+          province: item.province.name,
+          price: `${item.price_min} tỷ - ${item.price_max} tỷ`,
+          floor: item.floor_number_min,
+          bedroom: item.bedroom_number_min,
+          direction: item.house_orientation,
+          staff: item.user?.name,
+          type_estate: item.house_orientations[0].name,
+          type_house: item.house_type,
+          square: item.land_area_min,
+          proble: `${item.purpose} BĐS`,
           side: "Mua",
-        },
-        {
-          id: 1234,
-          customer: "Anh Vân",
-          area: "Phường 2, Nguyễn Lý Thông, Vũng Tàu",
-          price: "2 tỷ - 9 tỷ",
-          floor: "9",
-          bedroom: "2",
-          direction: "Bắc",
-          staff: "Đào Duy Từ",
-          type_estate: "Nhà mặt tiền",
-          type_house: "Nhà cấp 3",
-          square: "178m2",
-          proble: "0BĐS",
-          side: "Mua",
-        },
-        {
-          id: 3435,
-          customer: "Anh Tân",
-          area: "Phường 1, Nguyễn Trung Trực, Vũng Tàu",
-          price: "4 tỷ - 5 tỷ",
-          floor: "7",
-          bedroom: "2",
-          direction: "Tây",
-          staff: "Đào Thiên Lâm",
-          type_estate: "Nhà mặt tiền",
-          type_house: "Nhà cấp 4",
-          square: "120m2",
-          proble: "1BĐS",
-          side: "Mua",
-        },
-      ];
+          discription: item.descriptions,
+        };
+      });
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.demands.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.demands.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      this.demands.splice(this.editedIndex, 1);
       this.closeDelete();
     },
 
@@ -264,12 +301,13 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.demands[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem);
+        this.demands.push(this.editedItem);
       }
       this.close();
     },
   },
 };
 </script>
+<style lang="scss" scoped></style>

@@ -1,11 +1,12 @@
 <template>
-  <div id="admin_table" v-loading="loading">
+  <div id="admin_table" v-loading="loading || loading2">
     <v-data-table
       :headers="headers"
       :items="users"
       sort-by="calories"
       class="elevation-1"
       :mobile-breakpoint="0"
+      :items-per-page="100"
       hide-default-footer
     >
       <!-- @pagination="paginate" -->
@@ -159,7 +160,8 @@
     >
       <UpdateUser
         :userId="selectedUser.id"
-        v-on:close-modals="updateUserModal"
+        v-on:close-modals="centerDialogVisible = false"
+        v-on:update-modals="getUserListPerPage()"
         :key="childKey"
       />
       <!-- <span slot="footer" class="dialog-footer" style="float: right">
@@ -181,21 +183,24 @@
 import { mapState, mapMutations, mapActions } from "vuex";
 import UpdateUser from "@component/Form/UpdateUser.vue";
 export default {
+  props: ["select_role"],
   components: {
     UpdateUser,
   },
   data: () => ({
     currentPage2: 1,
+    loading2: false,
     dialog: false,
     dialogDelete: false,
     centerDialogVisible: false,
+    rowsPerPageItems: 15,
     childKey: 0,
     page: 1,
     rowPerPage: 10,
     headers: [
       {
         text: "#",
-        value: "id",
+        value: "index",
         width: "58px",
       },
       {
@@ -287,7 +292,9 @@ export default {
       await this.$store.dispatch("staffs/getUserListPerPage", {
         page: this.page,
         rowPerPage: this.rowPerPage,
+        role_id: this.select_role,
       });
+      await this.$emit("getTotal", this.total);
       await this.initializeUserList();
       this.$store.commit("staffs/setLoading");
     },
@@ -304,7 +311,7 @@ export default {
           cmnd_date: item.issued_on,
           status: item.is_block == 0 ? "Đang hoạt động" : "Khóa",
           position: item.role.name,
-          image: item.avatar_image?.main,
+          image: item.avatar_image?.thumbnail,
         };
       });
     },
@@ -332,7 +339,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$store.commit("staffs/setLoading");
+          this.loading2 = true;
           this.deleteUserInSystem();
         })
         .catch(() => {
@@ -367,7 +374,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$store.commit("staffs/setLoading");
+          this.loading2 = true;
           this.blockUserInSystem();
         })
         .catch(() => {
@@ -386,10 +393,11 @@ export default {
         if (!this.errorMessage) {
           await this.getUserListPerPage();
           setTimeout(this.openNotificationBlock(), 1000);
-          this.$store.commit("staffs/setLoading");
+          this.loading2 = false;
         }
       } catch {
         this.showErrorNotification();
+        this.loading2 = false;
       }
     },
     async deleteUserInSystem() {
@@ -398,10 +406,11 @@ export default {
         if (!this.errorMessage) {
           await this.getUserListPerPage();
           setTimeout(this.openNotificationDelete(), 1000);
-          this.$store.commit("staffs/setLoading");
+          this.loading2 = false;
         }
       } catch {
         this.showErrorNotification();
+        this.loading2 = false;
       }
     },
     async resetPassWordUser() {
@@ -416,24 +425,6 @@ export default {
         this.showErrorNotification();
       }
     },
-
-    updateUserModal() {
-      this.centerDialogVisible = false;
-      this.getUserListPerPage();
-    },
-
-    // getItemPerPage(val) {
-    //   this.rowPerPage = val;
-    //   this.getUserListPerPage();
-    // },
-
-    // async paginate(val) {
-    //   console.log(val);
-    //   this.$store.commit("staffs/setLoading");
-    //   this.page = val.page;
-    //   await this.getUserListPerPage();
-    //   this.$store.commit("staffs/setLoading");
-    // },
 
     openNotificationBlock() {
       this.$notify({
@@ -466,19 +457,27 @@ export default {
       });
     },
 
+    //PAGINATION
+
+    getItemPerPage(val) {
+      this.rowPerPage = val;
+      this.getUserListPerPage();
+    },
+
     async handleSizeChange(val) {
-      console.log(`${val} items per page`);
-      this.loading = true;
+      this.loading2 = true;
+      if (this.page > 1) {
+        return (this.page = 1);
+      }
       this.rowPerPage = val;
       await this.getUserListPerPage();
-      this.loading = false;
+      this.loading2 = false;
     },
     async handleCurrentChange(val) {
-      console.log(`current page: ${val}`);
-      this.loading = true;
+      this.loading2 = true;
       this.page = val;
       await this.getUserListPerPage();
-      this.loading = false;
+      this.loading2 = false;
     },
     editItem(item) {
       this.editedIndex = this.users.indexOf(item);

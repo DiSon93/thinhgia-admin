@@ -1,17 +1,25 @@
 #navtab_admin {
-    .tabs{
+    .tabs {
         .nav-tab.nav-fill.nav {
             border-bottom: none !important;
-            .nav-item{
-                a.nav-link{
+            .nav-item {
+                a.nav-link {
                     font-size: 12px;
-                    color: red
-
+                    color: red;
                 }
-                &:hover{
+                &:hover {
                     border: none;
                 }
             }
-          }
+        }
     }
-  }
+}
+
+.v-bottom-navigation {
+    display: none !important;
+}
+@media screen and (max-width: 600px) {
+    .v-bottom-navigation {
+        display: block !important;
+    }
+}

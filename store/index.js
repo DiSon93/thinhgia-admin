@@ -3,6 +3,8 @@ import customers from '~/vuex/customers';
 import staffs from '../vuex/staffs';
 import global from '../vuex/global';
 import role from '../vuex/role';
+import dictionaries from '../vuex/dictionaries';
+import demand from '~/vuex/demand';
 
 export default {
     modules:{
@@ -11,6 +13,8 @@ export default {
         staffs,
         global,
         role,
+        dictionaries,
+        demand,
     }
 
 }

@@ -1,9 +1,9 @@
 <template>
-  <div id="dictionary_table">
+  <div id="dictionary_table" v-loading="loading">
     <!-- <v-card> -->
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="dictionaries"
       sort-by="calories"
       class="elevation-1"
       width="100vw"
@@ -83,35 +83,65 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <!-- <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-      </template> -->
+
       <template v-slot:item="row">
         <tr>
-          <td>{{ row.item.id }}</td>
+          <td>{{ row.item.index }}</td>
           <td>{{ row.item.valid }}</td>
           <td>{{ row.item.create_date }}</td>
           <td>{{ row.item.update_date }}</td>
           <td>
-            <v-btn text color="error" class="btn_select"> Chọn </v-btn>
+            <el-dropdown @command="handleCommand" trigger="click">
+              <el-button
+                type="danger"
+                plain
+                class="el-dropdown-link btn_select"
+                @click="user_info(row.item)"
+              >
+                Chọn
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="edit">
+                  <v-icon>mdi-pen-plus</v-icon> Sửa
+                </el-dropdown-item>
+                <el-dropdown-item command="delete">
+                  <v-icon>mdi-trash-can</v-icon> Xóa
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </td>
         </tr>
       </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
-      </template>
     </v-data-table>
     <!-- </v-card> -->
+    <el-dialog :visible.sync="dialogVisible" width="30%" destroy-on-close>
+      <UpdateDictionaries
+        :key="keyChild"
+        :select_dic="selectedItem"
+        v-on:close-modals="dialogVisible = false"
+        v-on:close-update-modals="reloadDic"
+      />
+    </el-dialog>
   </div>
 </template>
 <script>
+import { mapState, mapMutations, mapActions } from "vuex";
+import UpdateDictionaries from "@component/Form/UpdateDictionaries";
 export default {
+  props: ["select_dic"],
+  components: {
+    UpdateDictionaries,
+  },
   data: () => ({
     dialog: false,
+    loading: false,
     dialogDelete: false,
+    keyChild: 1,
+    selectedDictionary: "",
+    dialogVisible: false,
+    selectedItem: {},
     headers: [
-      { text: "#", value: "id", width: "58px" },
+      { text: "#", value: "index", width: "58px" },
       {
         text: "GIÁ TRỊ",
         align: "start",
@@ -124,7 +154,7 @@ export default {
       ,
       { text: "SỬA/XÓA", value: "actions", sortable: false, width: "100px" },
     ],
-    desserts: [],
+    dictionaries: [],
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -143,62 +173,124 @@ export default {
   }),
 
   computed: {
+    ...mapState("dictionaries", ["dictionaryList"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
   },
 
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
-  },
-
-  created() {
-    this.initialize();
+  mounted() {
+    this.initializeDicList();
   },
 
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          id: 23,
-          valid: "Căn hộ- Chung cư",
-          create_date: "10/09/2021",
-          update_date: "02/01/2022",
-        },
-        {
-          id: 13,
-          valid: "Nhà ở riêng lẻ",
-          create_date: "12/01/2020",
-          update_date: "29/01/2022",
-        },
-        {
-          id: 87,
-          valid: "Nhà mặt tiền",
-          create_date: "24/08/2020",
-          update_date: "29/09/2022",
-        },
-      ];
+    user_info(item) {
+      this.selectedItem = item;
+    },
+    reloadDic() {
+      this.loading = true;
+      this.$emit("close-update");
+      this.dialogVisible = false;
+    },
+    // async getDictionaryList() {
+    //   this.loading = true;
+    //   await this.$store.dispatch("dictionaries/getDictionaryList", {
+    //     limit: 100,
+    //     page: 1,
+    //   });
+    //   await this.initializeDicList();
+    //   this.loading = false;
+    // },
+    initializeDicList() {
+      this.loading = true;
+      if (!this.select_dic) {
+        this.selectedDictionary = this.dictionaryList[0];
+      } else {
+        this.selectedDictionary = this.select_dic;
+      }
+      this.dictionaries = this.selectedDictionary.dictionaries?.map((item, index) => {
+        return {
+          index: index + 1,
+          valid: item.name,
+          create_date: item.created_at,
+          update_date: item.updated_at,
+          id: item.id,
+          dictionary_type_id: item.dictionary_type_id,
+        };
+      });
+      this.loading = false;
+    },
+    async handleCommand(command) {
+      if (command == "edit") {
+        this.keyChild += 1;
+        this.dialogVisible = true;
+      }
+      if (command == "delete") {
+        this.confirmDeleteDictionary();
+      }
     },
 
+    confirmDeleteDictionary() {
+      this.$confirm(`Are you sure to delete this dictionary. Continue?`, "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.loading = true;
+          this.deleteDictionaryInSystem();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Delete canceled",
+          });
+        });
+    },
+    async deleteDictionaryInSystem() {
+      try {
+        await this.$store.dispatch(
+          "dictionaries/deleteDictionaries",
+          this.selectedItem.id
+        );
+        // if (!this.errorMessage) {
+        this.$emit("close-update");
+        setTimeout(this.openNotificationDelete(), 1000);
+        this.loading = false;
+        // }
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
+    },
+
+    openNotificationDelete() {
+      this.$notify({
+        title: "Success",
+        message: "Delete dictionary successfull!!!",
+        type: "success",
+      });
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.dictionaries.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.dictionaries.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      this.dictionaries.splice(this.editedIndex, 1);
       this.closeDelete();
     },
 
@@ -220,9 +312,9 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.dictionaries[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem);
+        this.dictionaries.push(this.editedItem);
       }
       this.close();
     },
@@ -255,9 +347,13 @@ export default {
     border-radius: 50%;
     margin: 10px 0;
   }
-  .btn_select {
+  .btn_select.el-button {
     text-transform: capitalize;
     font-size: 13px;
+    // color: red;
+    font-weight: 500;
+    padding: 8px 10px;
+    border: none;
   }
 }
 </style>

@@ -121,7 +121,7 @@ export default {
       rules: {
         name: [
           { required: true, message: "Please input name", trigger: "blur" },
-          { min: 3, max: 20, message: "Length should be 3 to 5", trigger: "blur" },
+          { min: 2, max: 30, message: "Length should be 2 to 30", trigger: "blur" },
         ],
         email: [
           {
@@ -217,6 +217,7 @@ export default {
         });
         if (!this.errorMessage) {
           this.loadingChild = false;
+          this.$emit("update-modals");
           this.cancelModal();
           this.openNotificationUpdate();
         }

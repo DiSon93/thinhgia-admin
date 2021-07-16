@@ -14,7 +14,7 @@
         <div id="select_amount"></div>
         <div class="option_button">
           <v-btn class="mx-2 add_btn" fab dark small color="warning">
-            <v-icon dark small> mdi-plus </v-icon>
+            <v-icon dark small @click="$router.push('/form/demand')"> mdi-plus </v-icon>
           </v-btn>
           <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
         </div>
@@ -67,14 +67,6 @@ export default {
   data() {
     return {
       isActive: false,
-      // options: [
-      //   {
-      //     title: "Chưa giải quyết",
-      //   },
-      //   {
-      //     title: "Giải quyết",
-      //   },
-      // ],
       options: [
         {
           value: "Chưa giải quyết",
