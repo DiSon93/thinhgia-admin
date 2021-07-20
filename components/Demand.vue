@@ -1,11 +1,13 @@
 <template>
-  <div id="demand_table">
+  <div id="demand_table" v-loading="loading">
     <v-data-table
       :headers="headers"
       :items="demands"
       sort-by="calories"
       class="elevation-1"
       :mobile-breakpoint="0"
+      :items-per-page="100"
+      hide-default-footer
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -74,7 +76,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                <!-- <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn> -->
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
@@ -93,22 +95,57 @@
             <div class="side">{{ row.item.side }}</div>
           </td>
           <td>
-            {{ row.item.wards }}<span class="highlight">||</span> {{ row.item.district
+            {{
+              row.item.wards
+                .map((u) => `${u.name}, `)
+                .join("")
+                .slice(0, -2)
+            }}<span class="highlight">||</span> {{ row.item.district
             }}<span class="highlight">||</span> {{ row.item.province }}
           </td>
-          <td>{{ row.item.price }}</td>
-          <td>{{ row.item.floor }}</td>
-          <td>{{ row.item.bedroom }}</td>
-          <td>{{ row.item.direction }}</td>
+          <td>{{ row.item.price_min }} tỷ - {{ row.item.price_max }} tỷ</td>
+          <td>
+            {{ row.item.floor }}
+          </td>
+          <td>
+            {{ row.item.bedroom }}
+          </td>
+          <td>
+            <el-tag
+              type="success"
+              style="margin: 2px"
+              v-for="item in row.item.direction"
+              :key="item.id"
+            >
+              {{ item.name }}
+            </el-tag>
+            <!-- {{ row.item.direction.map((u) => `${u.name} `).join(" ") }} -->
+          </td>
           <td>{{ row.item.staff }}</td>
           <td>{{ row.item.type_estate }}</td>
           <td>{{ row.item.type_house }}</td>
           <td>{{ row.item.square }} <span>&#13217;</span></td>
-          <td>{{ row.item.proble }}</td>
+          <td>{{ row.item.proble }} BĐS</td>
           <td>{{ row.item.discription }}</td>
           <td>
-            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            <!-- <el-tooltip class="item" effect="dark" content="Sửa" placement="top"> -->
+            <v-icon small class="mr-2" @click="updateDemandCustomer(row.item)">
+              mdi-pencil
+            </v-icon>
+            <!-- </el-tooltip> -->
+            <!-- <el-tooltip
+              class="item"
+              effect="dark"
+              content="Chuyển trạng thái"
+              placement="top"
+            > -->
+            <v-icon small class="mr-2" @click="convertStatus(row.item)">
+              mdi-rotate-3d-variant
+            </v-icon>
+            <!-- </el-tooltip> -->
+            <!-- <el-tooltip class="item" effect="dark" content="Xóa" placement="top"> -->
+            <v-icon small @click="deleteItem(row.item)"> mdi-delete </v-icon>
+            <!-- </el-tooltip> -->
           </td>
         </tr>
       </template>
@@ -116,35 +153,107 @@
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
       </template> -->
     </v-data-table>
+    <div class="block_pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-sizes="[10, 15, 20, 25]"
+        :page-size="10"
+        layout="sizes, prev, pager, next"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
+
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
+  props: ["selected_op"],
   data: () => ({
     dialog: false,
     dialogDelete: false,
+    huong: "",
+    loading: false,
+    currentPage: 1,
+    page: 1,
+    rowPerPage: 10,
     headers: [
-      { text: "#", value: "id", width: "50px" },
+      {
+        text: "#",
+        value: "id",
+        width: "50px",
+      },
       {
         text: "KHÁCH HÀNG",
         align: "start",
         sortable: false,
         value: "customer",
+        width: "180px",
+      },
+      {
+        text: "KHU VỰC",
+        value: "area",
+        width: "300px",
+      },
+      {
+        text: "KHOẢNG GIÁ",
+        value: "price",
         width: "140px",
       },
-      { text: "KHU VỰC", value: "area", width: "260px" },
-      { text: "KHOẢNG GIÁ", value: "price", width: "140px" },
-      { text: "SỐ LẦU", value: "floor", width: "100px" },
-      { text: "SỐ PN", value: "bedroom", width: "100px" },
-      { text: "HƯỚNG", value: "direction", width: "100px" },
-      { text: "NHÂN VIÊN", value: "staff", width: "160px" },
-      { text: "LOẠI BĐS", value: "type_estate", width: "160px" },
-      { text: "LOẠI NHÀ", value: "type_house", width: "160px" },
-      { text: "DIỆN TÍCH", value: "square", width: "140px" },
-      { text: "BĐS PHÙ HỢP", value: "proble", width: "160px" },
-      { text: "MÔ TẢ", value: "discription", width: "260px" },
-      { text: "Actions", value: "actions", sortable: false, width: "100px" },
+      {
+        text: "SỐ LẦU",
+        value: "floor",
+        width: "100px",
+      },
+      {
+        text: "SỐ PN",
+        value: "bedroom",
+        width: "100px",
+      },
+      {
+        text: "HƯỚNG",
+        value: "direction",
+        width: "150px",
+      },
+      {
+        text: "NHÂN VIÊN",
+        value: "staff",
+        width: "160px",
+      },
+      {
+        text: "LOẠI BĐS",
+        value: "type_estate",
+        width: "160px",
+      },
+      {
+        text: "LOẠI NHÀ",
+        value: "type_house",
+        width: "160px",
+      },
+      {
+        text: "DIỆN TÍCH",
+        value: "square",
+        width: "140px",
+      },
+      {
+        text: "BĐS PHÙ HỢP",
+        value: "proble",
+        width: "160px",
+      },
+      {
+        text: "MÔ TẢ",
+        value: "discription",
+        width: "260px",
+      },
+      {
+        text: "SỬA-CHUYỂN HƯỚNG-XÓA",
+        value: "actions",
+        sortable: false,
+        width: "185px",
+      },
     ],
     demands: [],
     editedIndex: -1,
@@ -165,7 +274,7 @@ export default {
   }),
 
   computed: {
-    ...mapState("demand", ["demandList"]),
+    ...mapState("demand", ["demandList", "total"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
@@ -186,84 +295,88 @@ export default {
 
   methods: {
     async getDemandList() {
+      this.loading = true;
       try {
         await this.$store.dispatch("demand/getDemandList", {
-          limit: 10,
-          page: 1,
-          resolved: true,
+          limit: this.rowPerPage,
+          page: this.page,
+          resolved: this.selected_op,
         });
         await this.initializeList();
-      } catch {}
+        this.loading = false;
+      } catch {
+        this.loading = false;
+      }
     },
     initializeList() {
-      console.log("array", this.demandList[0].descriptions);
-      // this.demands = [
-      //   {
-      //     id: 3243,
-      //     customer: "Anh An",
-      //     area: "Phường 2, Nguyễn An Ninh, Vũng Tàu",
-      //     price: "1 tỷ - 5 tỷ",
-      //     floor: "4",
-      //     bedroom: "2",
-      //     direction: "Nam",
-      //     staff: "Đào Duy Anh",
-      //     type_estate: "Nhà mặt tiền",
-      //     type_house: "Nhà cấp 4",
-      //     square: "120m2",
-      //     proble: "1BĐS",
-      //     side: "Mua",
-      //   },
-      //   {
-      //     id: 1234,
-      //     customer: "Anh Vân",
-      //     area: "Phường 2, Nguyễn Lý Thông, Vũng Tàu",
-      //     price: "2 tỷ - 9 tỷ",
-      //     floor: "9",
-      //     bedroom: "2",
-      //     direction: "Bắc",
-      //     staff: "Đào Duy Từ",
-      //     type_estate: "Nhà mặt tiền",
-      //     type_house: "Nhà cấp 3",
-      //     square: "178m2",
-      //     proble: "0BĐS",
-      //     side: "Mua",
-      //   },
-      //   {
-      //     id: 3435,
-      //     customer: "Anh Tân",
-      //     area: "Phường 1, Nguyễn Trung Trực, Vũng Tàu",
-      //     price: "4 tỷ - 5 tỷ",
-      //     floor: "7",
-      //     bedroom: "2",
-      //     direction: "Tây",
-      //     staff: "Đào Thiên Lâm",
-      //     type_estate: "Nhà mặt tiền",
-      //     type_house: "Nhà cấp 4",
-      //     square: "120m2",
-      //     proble: "1BĐS",
-      //     side: "Mua",
-      //   },
-      // ];
       this.demands = this.demandList.map((item, index) => {
         return {
           id: item.id,
-          customer: item.customer,
-          wards: item.wards[0].name,
+          customer: item.customer?.name,
+          customer_id: item.customer_id,
+          wards: item.wards,
+          wards_id: item.wards.map((u) => u.id),
           district: item.district.name,
+          dictrict_id: item.district_id,
           province: item.province.name,
-          price: `${item.price_min} tỷ - ${item.price_max} tỷ`,
+          province_id: item.province_id,
+          price_min: item.price_min,
+          price_max: item.price_max,
           floor: item.floor_number_min,
           bedroom: item.bedroom_number_min,
-          direction: item.house_orientation,
+          direction: item.house_orientations,
+          direction_id: item.house_orientations.map((u) => u.id),
           staff: item.user?.name,
-          type_estate: item.house_orientations[0].name,
-          type_house: item.house_type,
+          user_id: item.user_id,
+          type_estate: item.real_estate_type_dict?.name,
+          type_estate_id: item.real_estate_type_dict?.id,
+          type_house: item.house_type_dict?.name,
+          type_house_id: item.house_type_dict?.id,
           square: item.land_area_min,
-          proble: `${item.purpose} BĐS`,
-          side: "Mua",
+          proble: item.purpose,
+          side: item.purpose == 0 ? "Mua" : "Thuê",
           discription: item.descriptions,
         };
       });
+    },
+
+    updateDemandCustomer(val) {
+      this.$store.commit("demand/selectedDemand", { ...val, resolved: this.selected_op });
+      this.$router.push("/form/demand/update");
+    },
+
+    convertStatus(item) {
+      this.$confirm(`Are you sure to convert this demand. Continue?`, "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.loading = true;
+          this.convertStatusIntoSystem(item);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Delete canceled",
+          });
+        });
+    },
+
+    async convertStatusIntoSystem(item) {
+      this.loading = true;
+      try {
+        await this.$store.dispatch("demand/convertDemandOfCustomer", {
+          id: item.id,
+          resolved: this.selected_op == 1 ? 0 : 1,
+        });
+        await this.getDemandList();
+        setTimeout(this.openNotificationSuccessConvert(), 1000);
+        this.loading = false;
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
     },
 
     editItem(item) {
@@ -273,14 +386,71 @@ export default {
     },
 
     deleteItem(item) {
-      this.editedIndex = this.demands.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
+      this.$confirm(`Are you sure to delete this demand. Continue?`, "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.loading = true;
+          this.deleteDemandInSystem(item);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Delete canceled",
+          });
+        });
+    },
+    async deleteDemandInSystem(item) {
+      this.loading = true;
+      try {
+        await this.$store.dispatch("demand/deleteDemandIntoSystem", item.id);
+        await this.getDemandList();
+        setTimeout(this.openNotificationSuccess(), 1000);
+        this.loading = false;
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
     },
 
-    deleteItemConfirm() {
-      this.demands.splice(this.editedIndex, 1);
-      this.closeDelete();
+    openNotificationSuccess() {
+      this.$notify({
+        title: "Success",
+        message: "Delete demand successfull!!!",
+        type: "success",
+      });
+    },
+    openNotificationSuccessConvert() {
+      this.$notify({
+        title: "Success",
+        message: "Convert demand successfull!!!",
+        type: "success",
+      });
+    },
+
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
+
+    async handleSizeChange(val) {
+      this.loading = true;
+      if (this.page > 1) {
+        return (this.page = 1);
+      }
+      this.rowPerPage = val;
+      await this.getDemandList();
+      this.loading = false;
+    },
+    async handleCurrentChange(val) {
+      this.loading = true;
+      this.page = val;
+      await this.getDemandList();
+      this.loading = false;
     },
 
     close() {
@@ -310,4 +480,13 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+
+<style lang="scss" scoped>
+.block_pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+.v-application .elevation-1 {
+  box-shadow: none !important;
+}
+</style>

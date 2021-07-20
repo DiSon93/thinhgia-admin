@@ -16,7 +16,10 @@ export default {
         },
         getWardList(state, data) {
             state.wardList = data;
-        }
+        },
+        setNoWardList(state) {
+            state.wardList = [];
+        },
     },
     actions: {
         getDictrictList: ({ commit }, province_id) => {
@@ -32,7 +35,6 @@ export default {
         getProvinceList: ({ commit }) => {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: '/admin/global/list-provinces', method: "GET"}).then(response => {
-                    console.log(response.data.results)
                     commit('getProvinceList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
@@ -45,7 +47,6 @@ export default {
                 axiosClient({ url: `/admin/global/list-wards/${district_id}`, method: "GET"}).then(response => {
                     commit('getWardList', response.data.results);
                     resolve(response.data);
-                    console.log(response)
                 }).catch(e => {
                     reject(e);
                 })

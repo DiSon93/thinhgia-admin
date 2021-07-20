@@ -17,8 +17,9 @@ axiosClient.interceptors.request.use((config) => {
 
     return config;
 })
-
-axiosClient.interceptors.response.use((response) => {
+const user = localStorage.getItem("user");
+if(user){
+  axiosClient.interceptors.response.use((response) => {
     return response;
   }, (error) => {
 
@@ -37,5 +38,7 @@ axiosClient.interceptors.response.use((response) => {
       } else
         return Promise.reject(error);
   });
+}
+
 
 export default axiosClient;

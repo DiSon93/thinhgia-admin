@@ -1,0 +1,44 @@
+.createCustomer {
+    .el-input__inner {
+        background: #f8f8f8;
+        border: 1px solid #d1d1d1;
+        box-sizing: border-box;
+        border-radius: 16px;
+    }
+    margin-top: -30px;
+    .el-select{
+      width: 100%;
+    }
+}
+#huy_createUser.el-button {
+    border: 1px solid #fbad18;
+    box-sizing: border-box;
+    border-radius: 15px;
+    color: #fbad18;
+    margin-top: 20px;
+}
+#new_createUser.el-button {
+    background: #fbad18;
+    border: 1px solid #fbad18;
+    box-sizing: border-box;
+    color: #fff;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+.avatar_img.el-icon-user-solid {
+    width: 100px !important;
+    &:before {
+      font-size: 80px!important;
+      color: rgba(0, 0, 255, 0.699)
+    }
+  }
+  .el-dialog__body{
+    //   padding: 5px 25px 30px!important;
+  }
+
+  .el-dialog.el-dialog--center{
+      margin-top: 10vh!important;
+  }
+  .el-dialog__wrapper{
+    //  overflow: hidden;
+  }

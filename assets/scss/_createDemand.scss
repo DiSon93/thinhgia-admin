@@ -5,6 +5,7 @@
         height: 30px;
         margin-top: 5px;
     }
+
     .el-select__tags {
         margin-top: 2px;
     }
@@ -19,4 +20,11 @@
     #input_price {
         background-color: #e5e5e5;
     }
+}
+.el-checkbox__input.is-checked .el-checkbox__inner{
+    background-color: orange!important;
+    border-color: orange!important;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label{
+    color: orange!important;
 }

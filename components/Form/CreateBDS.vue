@@ -85,6 +85,7 @@
                 v-model="value04"
                 placeholder="Chọn huyện/TP"
                 @change="chooseDistrict"
+                no-data-text="Vui lòng chọn tỉnh"
               >
                 <el-option
                   v-for="item in dictrictList"
@@ -100,7 +101,11 @@
             </v-col>
             <v-col cols="4">
               <div class="form_label">Phường/Xã <span style="color: red">*</span></div>
-              <el-select v-model="value05" placeholder="Chọn phường/xã">
+              <el-select
+                v-model="value05"
+                placeholder="Chọn phường/xã"
+                no-data-text="Vui lòng chọn huyện"
+              >
                 <el-option
                   v-for="item in wardList"
                   :key="item.id"
@@ -600,6 +605,8 @@ export default {
 
     chooseProvince() {
       this.value04 = "";
+      this.value05 = "";
+      this.$store.commit("global/setNoWardList");
       this.$store.dispatch("global/getDictrictList", this.value03);
     },
     chooseDistrict() {

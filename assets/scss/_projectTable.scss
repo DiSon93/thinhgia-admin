@@ -31,12 +31,22 @@ tr td:nth-child(2){
 
     
    }
-tr td:nth-child(7) .v-icon.mdi-pencil{
-  color: green;
-}
-tr td:nth-child(7) .v-icon.mdi-delete{
-  color: red;
-}
+   tr td:nth-child(7) .v-icon.mdi-pencil{
+    color: green;
+    border-radius: 50%;
+    padding: 5px;
+    &:hover{
+    background: rgba(115, 226, 115, 0.24);
+    }
+  }
+  tr td:nth-child(7) .v-icon.mdi-delete{
+    color: red;
+    border-radius: 50%;
+    padding: 5px;
+    &:hover{
+    background: rgba(241, 139, 139, 0.164);
+    }
+  }
 }
 table{
   border-collapse: unset!important;

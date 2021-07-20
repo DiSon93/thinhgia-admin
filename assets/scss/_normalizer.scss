@@ -18,3 +18,22 @@
         }
     }
 }
+#search {
+    margin-left: 100px;
+    width: 280px;
+    .el-input .el-input__inner {
+        border-radius: 15px !important;
+        height: 28px;
+    }
+    .el-input__prefix {
+        height: 28px;
+        .el-input__icon {
+            line-height: 28px !important;
+        }
+    }
+}
+@media screen and (max-width: 800px) {
+    #search {
+        margin-left: 10px;
+    }
+}

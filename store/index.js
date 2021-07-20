@@ -5,6 +5,7 @@ import global from '../vuex/global';
 import role from '../vuex/role';
 import dictionaries from '../vuex/dictionaries';
 import demand from '~/vuex/demand';
+import projects from '~/vuex/projects';
 
 export default {
     modules:{
@@ -15,6 +16,7 @@ export default {
         role,
         dictionaries,
         demand,
+        projects,
     }
 
 }

@@ -10,27 +10,45 @@
     <div class="header_box">
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Khách hàng</button>
-        <v-btn depressed color="primary" id="social_network"> 3/20 </v-btn>
+        <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
         <div id="select_amount"></div>
-        <b-input-group class="search">
-          <b-input-group-prepend is-text>
-            <b-icon icon="search"></b-icon>
-          </b-input-group-prepend>
-          <b-form-input
+        <div id="search">
+          <el-input
             placeholder="Tìm kiếm tất cả thông tin"
-            type="search"
-          ></b-form-input>
-        </b-input-group>
+            prefix-icon="el-icon-search"
+            v-model="input"
+          >
+          </el-input>
+        </div>
         <div class="option_button">
-          <v-btn class="mx-2 add_btn" fab dark small color="warning">
+          <v-btn
+            class="mx-2 add_btn"
+            fab
+            dark
+            small
+            color="warning"
+            @click="centerDialogVisible = true"
+          >
             <v-icon dark small> mdi-plus </v-icon>
           </v-btn>
           <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
           <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
         </div>
       </v-row>
+      <el-dialog
+        title="Tạo khách hàng mới"
+        :visible.sync="centerDialogVisible"
+        width="40%"
+        center
+        destroy-on-close
+      >
+        <CreateCustomer
+          v-on:close-modals="centerDialogVisible = false"
+          v-on:reload-page="reload"
+        />
+      </el-dialog>
       <v-row class="data_table">
-        <CustomerTable />
+        <CustomerTable :key="keyChild" :searchKey="input" />
       </v-row>
     </div>
   </v-lazy>
@@ -38,14 +56,40 @@
 
 <script>
 import CustomerTable from "@component/CustomerTable";
+import CreateCustomer from "@component/Form/CreateCustomer";
+import { mapState } from "vuex";
 export default {
   components: {
     CustomerTable,
+    CreateCustomer,
   },
   data() {
     return {
+      keyChild: 0,
       isActive: false,
+      centerDialogVisible: false,
+      textContent: "",
+      input: "",
     };
+  },
+  watch: {
+    input: function (val) {
+      this.keyChild += 1;
+    },
+  },
+  computed: {
+    ...mapState("customers", ["total"]),
+  },
+  methods: {
+    reload() {
+      this.keyChild += 1;
+    },
+    searchKey(e) {
+      // if (e.key != "noBackspace" && e.key != "Backspace") {
+      this.textContent += `${e.key}`;
+      console.log(e);
+      // }
+    },
   },
 };
 </script>
@@ -117,36 +161,6 @@ export default {
     }
   }
 
-  .search {
-    margin-left: 378px;
-    position: relative;
-    .bi-search {
-      position: absolute;
-      top: 5px;
-      left: 16px;
-      font-weight: 700;
-      z-index: 9999;
-      font-size: 16px;
-    }
-    .form-control {
-      position: absolute;
-      font-size: 12px;
-      top: -26px;
-      padding-left: 45px;
-      height: 26px;
-      letter-spacing: 0.5px;
-      width: 295px;
-      border-radius: 15px;
-      border: 1px solid rgba(96, 96, 96, 0.2);
-      border-left: none;
-    }
-    .input-group-text {
-      position: absolute;
-      top: -26px;
-      border: none;
-      background-color: transparent;
-    }
-  }
   .option_button {
     position: absolute;
     right: 30px;
@@ -196,6 +210,7 @@ export default {
     }
   }
 }
+
 .data_table {
   margin-top: 60px;
   padding: 0 30px;
@@ -206,7 +221,7 @@ export default {
   }
 }
 @media screen and (max-width: 600px) {
-  .search {
+  #search {
     display: none;
   }
   .option_button {

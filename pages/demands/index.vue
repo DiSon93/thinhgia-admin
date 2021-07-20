@@ -10,7 +10,7 @@
     <div class="header_box">
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Nhu cầu</button>
-        <v-btn depressed color="primary" id="social_network"> 3 </v-btn>
+        <v-btn depressed color="primary" id="social_network"> {{total}} </v-btn>
         <div id="select_amount"></div>
         <div class="option_button">
           <v-btn class="mx-2 add_btn" fab dark small color="warning">
@@ -21,11 +21,7 @@
       </v-row>
       <v-row id="pagination_select">
         <v-col cols="4">
-          <v-select
-            :options="['Hiển thị 10', 'Hiển thị 20', 'Hiển thị 50', 'Hiển thị 100']"
-            class="option"
-            placeholder="Hiển thị 10"
-          ></v-select>
+         Tổng cộng: <span class="highlight">{{ total }}</span> 
         </v-col>
         <v-col cols="4" align="center"> 1 / 1 </v-col>
         <v-col cols="4" align="right" class="option_right">
@@ -37,7 +33,11 @@
                   <span> {{ option.title }}</span>
                 </template>
               </v-select> -->
-              <el-select v-model="value" placeholder="Chưa giải quyết">
+              <el-select
+                v-model="value"
+                placeholder="Chưa giải quyết"
+                @change="handleChange($event)"
+              >
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -52,13 +52,14 @@
         </v-col>
       </v-row>
       <v-row class="data_table">
-        <Demand />
+        <Demand :selected_op="resolved" :key="keyChild" />
       </v-row>
     </div>
   </v-lazy>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Demand from "@component/Demand";
 export default {
   components: {
@@ -67,18 +68,29 @@ export default {
   data() {
     return {
       isActive: false,
+      keyChild: 0,
+      resolved: 0,
       options: [
         {
-          value: "Chưa giải quyết",
+          value: "0",
           label: "Chưa giải quyết",
         },
         {
-          value: "Giải quyết",
+          value: "1",
           label: "Giải quyết",
         },
       ],
-      value: "Chưa giải quyết",
+      value: "0",
     };
+  },
+  computed: {
+    ...mapState('demand', ['total'])
+  },
+  methods: {
+    handleChange(e) {
+      this.resolved = e;
+      this.keyChild += 1;
+    },
   },
 };
 </script>
@@ -201,5 +213,10 @@ export default {
   .solution_option {
     right: -15px !important;
   }
+}
+.highlight{
+      color: teal;
+    font-weight: 500;
+    font-size: 15px;
 }
 </style>

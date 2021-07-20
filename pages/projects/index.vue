@@ -11,12 +11,19 @@
       <v-row align="center" d-flex>
         <v-col cols="8" sm="4" class="app_bar">
           <button class="homepage" disabled>Dự án</button>
-          <v-btn depressed color="primary" id="social_network"> 16 </v-btn>
+          <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
         </v-col>
         <v-col cols="4" sm="4" align="center" class="app_bar"> 1 / 1 </v-col>
         <v-col cols="12" sm="4" class="app_bar">
           <div class="option_button">
-            <v-btn class="mx-2 add_btn" fab dark small color="warning">
+            <v-btn
+              class="mx-2 add_btn"
+              fab
+              dark
+              small
+              color="warning"
+              @click="$router.push('/form/projects')"
+            >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
             <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
@@ -31,6 +38,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import ProjectTable from "@component/ProjectTable";
 export default {
   components: {
@@ -40,6 +48,9 @@ export default {
     return {
       isActive: false,
     };
+  },
+  computed: {
+    ...mapState("projects", ["total"]),
   },
 };
 </script>

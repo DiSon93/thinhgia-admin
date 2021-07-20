@@ -146,8 +146,9 @@ export default {
   beforeCreate() {
     if (!this.$store.state.auth.currentUser) {
       this.$router.push("/admin/login");
+    } else {
+      this.$store.dispatch("role/getRoleList");
     }
-    this.$store.dispatch("role/getRoleList");
   },
   beforeMount() {
     this.drawer = this.isWidth;

@@ -146,8 +146,8 @@
       <el-input v-model="value14" id="input_price"></el-input>
     </div>
     <div class="save">
-      <el-button id="soft_save" @click="adddDemandOffCustomer(0)">Lưu nháp</el-button>
-      <el-button id="save" @click="adddDemandOffCustomer(1)">Lưu</el-button>
+      <el-button id="soft_save" @click="updateDemandOffCustomer(0)">Lưu nháp</el-button>
+      <el-button id="save" @click="updateDemandOffCustomer(1)">Lưu</el-button>
     </div>
   </div>
 </template>
@@ -157,7 +157,6 @@ import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
-      // radio: "0",
       checked01: true,
       checked02: false,
       value01: "",
@@ -199,6 +198,7 @@ export default {
     this.getStaffList();
     this.getProvinceList();
     this.getDictionaryList();
+    this.getUpdateList();
   },
   computed: {
     ...mapState("global", ["dictrictList"]),
@@ -206,17 +206,40 @@ export default {
     ...mapState("global", ["wardList"]),
     ...mapState("staffs", ["staffList"]),
     ...mapState("dictionaries", ["dictionaryList"]),
+    ...mapState("demand", ["selected"]),
     ...mapState("customers", ["customerList"]),
   },
   methods: {
     ...mapActions("customers", ["getCustomerList"]),
     ...mapActions("staffs", ["getStaffList"]),
     ...mapActions("global", ["getProvinceList"]),
-    async adddDemandOffCustomer(e) {
+    async getUpdateList() {
+      console.log("selected", this.selected.ward_id);
+      this.value01 = this.selected.province_id;
+      await this.$store.dispatch("global/getDictrictList", this.value01);
+      this.value02 = this.selected.dictrict_id;
+      await this.$store.dispatch("global/getWardList", this.value02);
+      this.value03 = this.selected.wards_id;
+      this.value04 = this.selected.type_estate_id;
+      this.value05 = this.selected.type_house_id;
+      this.value06 = this.selected.price_min;
+      this.value07 = this.selected.price_max;
+      this.value08 = this.selected.user_id;
+      this.value09 = this.selected.customer_id;
+      this.value10 = this.selected.direction_id;
+      this.value11 = this.selected.bedroom;
+      this.value12 = this.selected.floor;
+      this.value13 = this.selected.square;
+      this.value14 = this.selected.discription;
+      this.checked01 = this.selected.side == "Mua" ? true : false;
+      this.checked02 = this.selected.side == "Thuê" ? true : false;
+    },
+
+    async updateDemandOffCustomer(e) {
       this.loading = true;
       try {
-        await this.$store.dispatch("demand/createDemandList", {
-          is_save: e,
+        await this.$store.dispatch("demand/updateDemandOfCustomer", {
+          id: this.selected.id,
           user_id: this.value08,
           customer_id: this.value09,
           province_id: this.value01,
@@ -291,7 +314,7 @@ export default {
     openNotificationSuccess() {
       this.$notify({
         title: "Success",
-        message: "Create demand of customers successfull!!!",
+        message: "Update demand of customers successfull!!!",
         type: "success",
       });
     },
