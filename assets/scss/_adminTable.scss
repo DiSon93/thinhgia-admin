@@ -71,7 +71,9 @@
     margin-right: 4px;
   }
 }
-
+.el-dropdown-menu .el-dropdown-menu__item{
+  font-weight: 500;
+}
 .el-dropdown-menu .el-dropdown-menu__item:hover {
   .v-icon{
     color: #409EFF;

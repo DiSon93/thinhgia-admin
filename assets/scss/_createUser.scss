@@ -5,6 +5,9 @@
         box-sizing: border-box;
         border-radius: 16px;
     }
+    .el-select{
+        width: 100%!important;
+    }
 }
 #huy_createUser.el-button {
     border: 1px solid #fbad18;

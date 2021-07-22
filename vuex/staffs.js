@@ -39,7 +39,7 @@ export default {
             state.errorMessage = null;
         },
         showError(state, data) {
-            state.errorMessage = true;
+            state.errorMessage = data;
             state.loading = false;
         },
         deleteUser(state, data) {

@@ -214,7 +214,6 @@ export default {
     ...mapActions("staffs", ["getStaffList"]),
     ...mapActions("global", ["getProvinceList"]),
     async getUpdateList() {
-      console.log("selected", this.selected.ward_id);
       this.value01 = this.selected.province_id;
       await this.$store.dispatch("global/getDictrictList", this.value01);
       this.value02 = this.selected.dictrict_id;

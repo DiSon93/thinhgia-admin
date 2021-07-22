@@ -19,7 +19,9 @@
         </v-col>
         <v-col cols="4" sm="6" class="app_bar">
           <div class="option_button">
-            <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
+            <v-btn class="account" fab @click="centerDialogVisible02 = true"
+              ><v-icon dark small>mdi-account</v-icon></v-btn
+            >
             <v-btn class="notifiaction" fab
               ><img src="@image/icons/bell-badge-noti.jpg" alt=""
             /></v-btn>
@@ -157,6 +159,24 @@
         <DefineRealEstate />
       </v-row>
       <v-row class="data_table" v-if="isUser"> </v-row>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        width="25%"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible03"
+        width="25%"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
+      </el-dialog>
     </div>
   </v-lazy>
 </template>
@@ -168,6 +188,9 @@ import DefineRealEstate from "@component/DefineRealEstate";
 import CreateUser from "@component/Form/CreateUser";
 import CreateDictionaries from "@component/Form/CreateDictionaries";
 import { mapState, mapActions } from "vuex";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+
 export default {
   components: {
     AdminTable,
@@ -175,6 +198,8 @@ export default {
     DefineRealEstate,
     CreateUser,
     CreateDictionaries,
+    UserDetail,
+    ChangePassword,
   },
   data() {
     return {
@@ -186,6 +211,8 @@ export default {
       isRealEstate: false,
       toggle_exclusive: [],
       centerDialogVisible: false,
+      centerDialogVisible02: false,
+      centerDialogVisible03: false,
       dialogVisible: false,
       dicSelected: "",
       opSelected: 1,
@@ -276,6 +303,10 @@ export default {
           label: item.name,
         };
       });
+    },
+    handleChangePassword() {
+      this.centerDialogVisible02 = false;
+      this.centerDialogVisible03 = true;
     },
     user: function () {
       this.isUser = true;

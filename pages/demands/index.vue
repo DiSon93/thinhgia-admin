@@ -10,18 +10,22 @@
     <div class="header_box">
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Nhu cầu</button>
-        <v-btn depressed color="primary" id="social_network"> {{total}} </v-btn>
+        <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
         <div id="select_amount"></div>
         <div class="option_button">
           <v-btn class="mx-2 add_btn" fab dark small color="warning">
             <v-icon dark small @click="$router.push('/form/demand')"> mdi-plus </v-icon>
           </v-btn>
-          <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
+          <v-btn class="account" fab
+            ><v-icon dark small @click="centerDialogVisible02 = true"
+              >mdi-account</v-icon
+            ></v-btn
+          >
         </div>
       </v-row>
       <v-row id="pagination_select">
         <v-col cols="4">
-         Tổng cộng: <span class="highlight">{{ total }}</span> 
+          Tổng cộng: <span class="highlight">{{ total }}</span>
         </v-col>
         <v-col cols="4" align="center"> 1 / 1 </v-col>
         <v-col cols="4" align="right" class="option_right">
@@ -54,22 +58,47 @@
       <v-row class="data_table">
         <Demand :selected_op="resolved" :key="keyChild" />
       </v-row>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        width="25%"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible03"
+        width="25%"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
+      </el-dialog>
     </div>
   </v-lazy>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 import Demand from "@component/Demand";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+
 export default {
   components: {
     Demand,
+    UserDetail,
+    ChangePassword,
   },
   data() {
     return {
       isActive: false,
       keyChild: 0,
       resolved: 0,
+      centerDialogVisible02: false,
+      centerDialogVisible03: false,
       options: [
         {
           value: "0",
@@ -84,12 +113,16 @@ export default {
     };
   },
   computed: {
-    ...mapState('demand', ['total'])
+    ...mapState("demand", ["total"]),
   },
   methods: {
     handleChange(e) {
       this.resolved = e;
       this.keyChild += 1;
+    },
+    handleChangePassword() {
+      this.centerDialogVisible02 = false;
+      this.centerDialogVisible03 = true;
     },
   },
 };
@@ -214,9 +247,9 @@ export default {
     right: -15px !important;
   }
 }
-.highlight{
-      color: teal;
-    font-weight: 500;
-    font-size: 15px;
+.highlight {
+  color: teal;
+  font-weight: 500;
+  font-size: 15px;
 }
 </style>

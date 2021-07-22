@@ -27,7 +27,6 @@ export default {
          },
          selectedProject(state, data){
           state.selectedProject = data;
-          console.log(data);
          },
          updateNewProject(state, data){
              state.updateProject = data;

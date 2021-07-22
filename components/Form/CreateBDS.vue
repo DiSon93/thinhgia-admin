@@ -305,7 +305,7 @@
               :config="editorConfig"
             ></ckeditor> -->
             <editor
-              api-key="wuz940zk6opb46xuo1sh5a3mpfvh401sgp3zgt8iiw80hp20"
+              api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
               :init="{
                 menubar: true,
                 resize: true,

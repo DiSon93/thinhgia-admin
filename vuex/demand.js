@@ -62,11 +62,9 @@ export default {
         updateDemandOfCustomer: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/needs/${data.id}?is_save=`, method: "PATCH", data: data }).then(response => {
-                    console.log(response.data.results.data)
                     commit('deleteDemands', response.data.results.data);
                     resolve(response.data);
                 }).catch(e => {
-                    console.log(e.response)
                     reject(e);
                 })
             })
@@ -74,11 +72,9 @@ export default {
         convertDemandOfCustomer: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/needs/update-resolve/${data.id}?resolved=${data.resolved}`, method: "PATCH"}).then(response => {
-                    console.log(response.data.results.data)
                     commit('convertDemands', response.data.results.data);
                     resolve(response.data);
                 }).catch(e => {
-                    console.log(e.response)
                     reject(e);
                 })
             })

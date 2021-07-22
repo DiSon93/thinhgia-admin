@@ -8,21 +8,29 @@ export default {
         addCustomer: null,
         updateCustomer: null,
         total: null,
+        errorMessage: null,
     },
     mutations: {
         getCustomerList(state, data) {
             state.customerList = data;
+            state.errorMessage = null
         },
         getCustomerListPerPage(state, data){
           state.customers = data.data;
           state.total = data.total;
+          state.errorMessage = null
         },
         addCustomerList(state, data){
             state.addCustomer = data;
+            state.errorMessage = null
         },
         updateCustomerList(state, data){
             state.updateCustomer = data;
-        }
+            state.errorMessage = null
+        },
+        showError(state, data) {
+            state.errorMessage = data;
+        },
     },
     actions: {
         getCustomerList: ({ commit }) => {
@@ -31,6 +39,7 @@ export default {
                     commit('getCustomerList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showError', e.response.data);
                     reject(e);
                 })
             })
@@ -41,6 +50,7 @@ export default {
                     commit('getCustomerListPerPage', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showError', e.response.data);
                     reject(e);
                 })
             })
@@ -51,6 +61,7 @@ export default {
                     commit('addCustomerList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showError', e.response.data);
                     reject(e);
                 })
             })
@@ -61,6 +72,7 @@ export default {
                     commit('updateCustomerList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showError', e.response.data);
                     reject(e);
                 })
             })

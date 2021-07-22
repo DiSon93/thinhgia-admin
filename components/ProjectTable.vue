@@ -3,97 +3,22 @@
     <v-data-table
       :headers="headers"
       :items="projects"
-      sort-by="calories"
       class="elevation-1"
       :mobile-breakpoint="0"
       :items-per-page="100"
       hide-default-footer
     >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>My CRUD</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Item
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.id"
-                        label="Dessert name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.customer"
-                        label="Calories"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.area"
-                        label="Fat (g)"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.price" label="Carbs (g)">
-                        <button type="">Thêm giá</button>
-                      </v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.floor"
-                        label="Protein (g)"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-toolbar>
-      </template>
-      <!-- <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-      </template> -->
       <template v-slot:item="row">
         <tr>
           <td>{{ row.item.id }}</td>
-          <td>{{ row.item.name }}</td>
+          <td>{{ row.item.name.toUpperCase() }}</td>
           <td class="d-flex image_item">
-            <div v-for="img in row.item.picture" :key="img.id">
-              <img :src="img.src" alt="" class="project_picture" />
+            <div v-for="img in row.item.images.slice(0, 4)" :key="img.id">
+              <img :src="img.thumbnail" alt="" class="project_picture" />
             </div>
+            <span v-if="row.item.images.length > 4" class="more_picture">
+              +{{ row.item.images.length - 4 }}</span
+            >
           </td>
           <td>{{ row.item.estate }} BĐS</td>
           <td>
@@ -142,7 +67,7 @@ export default {
         align: "start",
         sortable: false,
         value: "name",
-        width: "500px",
+        width: "400px",
       },
       { text: "ẢNH", value: "picture", width: "150px" },
       { text: "BĐS", value: "estate", width: "140px" },
@@ -151,37 +76,10 @@ export default {
       { text: "ACTIONS", value: "actions", sortable: false, width: "100px" },
     ],
     projects: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-    defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
   }),
 
   computed: {
     ...mapState("projects", ["projectList", "total"]),
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
   },
 
   created() {
@@ -242,12 +140,6 @@ export default {
       this.$router.push("/form/projects/update");
     },
 
-    // deleteItem(item) {
-    //   this.editedIndex = this.projects.indexOf(item);
-    //   this.editedItem = Object.assign({}, item);
-    //   this.dialogDelete = true;
-    // },
-
     deleteItem(item) {
       this.$confirm(`Are you sure to delete this project. Continue?`, "Warning", {
         confirmButtonText: "OK",
@@ -267,7 +159,6 @@ export default {
     },
 
     async deleteProjectInSystem(item) {
-      this.loading = true;
       try {
         await this.$store.dispatch("projects/deleteProjectIntoSystem", item.id);
         await this.getProjectListPerPage();
@@ -309,31 +200,6 @@ export default {
       await this.getProjectListPerPage();
       this.loading = false;
     },
-
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.projects[this.editedIndex], this.editedItem);
-      } else {
-        this.projects.push(this.editedItem);
-      }
-      this.close();
-    },
   },
 };
 </script>
@@ -344,7 +210,18 @@ export default {
 .image_item {
   align-items: center;
   justify-content: center;
+  .more_picture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.295);
+    font-weight: 700;
+    color: #fff;
+    line-height: 30px;
+    margin-left: -5px;
+  }
   .project_picture {
+    opacity: 0.6;
     width: 30px;
     height: 30px;
     border-radius: 50%;

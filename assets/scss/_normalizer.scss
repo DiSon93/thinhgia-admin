@@ -32,6 +32,57 @@
         }
     }
 }
+.header_box .select_box {
+    .el-input__inner {
+        height: 28px;
+        width: 120px;
+        border-radius: 15px;
+    }
+    .el-input__prefix {
+        height: 28px;
+        top: 5px;
+    }
+    .el-input__icon {
+        line-height: 28px !important;
+    }
+}
+.el-select-dropdown__item {
+    .search_label {
+        margin-top: 4px;
+        background-color: rgba(247, 175, 125, 0.288);
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+}
+.theme--light.v-navigation-drawer {
+    background: #f8f8f8;
+}
+
+body .el-table th.gutter {
+    display: table-cell !important;
+}
+
+#user_detail_dialog .el-dialog {
+    border-radius: 20px;
+}
+#user_changePass_dialog .el-dialog {
+    border-radius: 20px;
+    .el-dialog__title {
+        font-weight: bold;
+        float: left;
+    }
+    .el-input .el-input__inner {
+        background: #eff5f9;
+        border: 1px solid #dfdfdf;
+        box-sizing: border-box;
+        border-radius: 20px;
+    }
+}
+
 @media screen and (max-width: 800px) {
     #search {
         margin-left: 10px;

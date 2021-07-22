@@ -31,7 +31,9 @@
           >
             <v-icon dark small> mdi-plus </v-icon>
           </v-btn>
-          <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
+          <v-btn class="account" fab @click="centerDialogVisible02 = true"
+            ><v-icon dark small>mdi-account</v-icon></v-btn
+          >
           <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
         </div>
       </v-row>
@@ -41,11 +43,30 @@
         width="40%"
         center
         destroy-on-close
+        id="createCustomers"
       >
         <CreateCustomer
           v-on:close-modals="centerDialogVisible = false"
           v-on:reload-page="reload"
         />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        width="25%"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible03"
+        width="25%"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
       </el-dialog>
       <v-row class="data_table">
         <CustomerTable :key="keyChild" :searchKey="input" />
@@ -58,16 +79,23 @@
 import CustomerTable from "@component/CustomerTable";
 import CreateCustomer from "@component/Form/CreateCustomer";
 import { mapState } from "vuex";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+
 export default {
   components: {
     CustomerTable,
     CreateCustomer,
+    UserDetail,
+    ChangePassword,
   },
   data() {
     return {
       keyChild: 0,
       isActive: false,
       centerDialogVisible: false,
+      centerDialogVisible02: false,
+      centerDialogVisible03: false,
       textContent: "",
       input: "",
     };
@@ -89,6 +117,10 @@ export default {
       this.textContent += `${e.key}`;
       console.log(e);
       // }
+    },
+    handleChangePassword() {
+      this.centerDialogVisible02 = false;
+      this.centerDialogVisible03 = true;
     },
   },
 };

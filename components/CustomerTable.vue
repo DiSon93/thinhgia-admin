@@ -12,7 +12,13 @@
         <tr>
           <td>{{ row.item.id }}</td>
           <td>
-            <img :src="row.item.picture" alt="" id="customer_img" />
+            <img
+              v-if="row.item.picture"
+              :src="row.item.picture"
+              alt=""
+              id="customer_img"
+            />
+            <img v-else src="@image/icons/user.svg" alt="" id="customer_img" />
           </td>
           <td>{{ row.item.name }}</td>
           <td>{{ row.item.birthday }}</td>
@@ -48,6 +54,7 @@
       width="40%"
       center
       destroy-on-close
+      id="createCustomers"
     >
       <UpdateCustomer
         :customerDetail="selectedCustomer"
@@ -78,7 +85,7 @@ export default {
       centerDialogVisible: false,
       childKey: 0,
       headers: [
-        { text: "#", value: "id", width: "50px" },
+        { text: "#", value: "id", width: "58px" },
         {
           text: "Ảnh",
           align: "start",
@@ -151,13 +158,13 @@ export default {
         return (this.page = 1);
       }
       this.rowPerPage = val;
-      await this.getDemandList();
+      await this.getCustomerListPerPage();
       this.loading = false;
     },
     async handleCurrentChange(val) {
       this.loading = true;
       this.page = val;
-      await this.getDemandList();
+      await this.getCustomerListPerPage();
       this.loading = false;
     },
   },

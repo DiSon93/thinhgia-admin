@@ -9,6 +9,7 @@
     .el-select{
       width: 100%;
     }
+   
 }
 #huy_createUser.el-button {
     border: 1px solid #fbad18;
@@ -35,10 +36,10 @@
   .el-dialog__body{
     //   padding: 5px 25px 30px!important;
   }
+#createCustomers  .el-dialog.el-dialog--center{
+  margin-top: 10vh!important;
+}
 
-  .el-dialog.el-dialog--center{
-      margin-top: 10vh!important;
-  }
   .el-dialog__wrapper{
     //  overflow: hidden;
   }

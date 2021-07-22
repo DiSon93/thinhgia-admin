@@ -12,7 +12,21 @@
         <button class="homepage" disabled>Bất động sản</button>
         <v-btn depressed color="primary" id="social_network"> 1652 </v-btn>
         <div class="select_box">
-          <SelectBox />
+          <el-select v-model="value" placeholder="Select">
+            <el-option
+              v-for="item in search"
+              :key="item.value"
+              :label="item.price"
+              :value="item.value"
+            >
+              <span style="float: left" class="search_label">{{ item.label }}</span>
+              <span
+                style="float: right; color: #8492a6; font-size: 13px"
+                class="prices"
+                >{{ item.price }}</span
+              >
+            </el-option>
+          </el-select>
         </div>
         <b-input-group class="search">
           <b-input-group-prepend is-text>
@@ -27,7 +41,9 @@
           <v-btn class="mx-2 add_btn" fab dark small color="warning">
             <v-icon dark small> mdi-plus </v-icon>
           </v-btn>
-          <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
+          <v-btn class="account" fab @click="centerDialogVisible02 = true"
+            ><v-icon dark small>mdi-account</v-icon></v-btn
+          >
           <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
 
           <v-btn class="setting" fab><v-icon dark small>mdi-cog</v-icon></v-btn>
@@ -37,6 +53,24 @@
       <v-row class="data_table">
         <EstateTable />
       </v-row>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        width="25%"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible03"
+        width="25%"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
+      </el-dialog>
     </div>
   </v-lazy>
 </template>
@@ -44,12 +78,15 @@
 <script>
 import RealEstateTable from "@component/RealEstateTable.vue";
 import EstateTable from "@component/EstateTable.vue";
-import SelectBox from "@component/SelectBox.vue";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+
 export default {
   components: {
     RealEstateTable,
     EstateTable,
-    SelectBox,
+    UserDetail,
+    ChangePassword,
   },
   data() {
     return {
@@ -57,24 +94,8 @@ export default {
       drawer: true,
       fixed: false,
       isActive: false,
-      options: [
-        {
-          title: "Tất cả",
-          number: ".",
-        },
-        {
-          title: "2 tỷ",
-          number: 0,
-        },
-        {
-          title: "10 tỷ ",
-          number: 1,
-        },
-        {
-          title: "2-3 tỷ",
-          number: 2,
-        },
-      ],
+      centerDialogVisible02: false,
+      centerDialogVisible03: false,
       desserts: [
         {
           id: 2971,
@@ -129,7 +150,46 @@ export default {
           calories: 518,
         },
       ],
+      search: [
+        {
+          value: "1",
+          label: "1",
+          price: "1 tỷ",
+        },
+        {
+          value: "2",
+          label: "2",
+          price: "2 tỷ",
+        },
+        {
+          value: "5",
+          label: "5",
+          price: "5 tỷ",
+        },
+        {
+          value: "10",
+          label: "10",
+          price: "10 tỷ",
+        },
+        {
+          value: "15",
+          label: "X",
+          price: "2 - 3 tỷ",
+        },
+        {
+          value: "0",
+          label: "0",
+          price: "Tất cả",
+        },
+      ],
+      value: "0",
     };
+  },
+  methods: {
+    handleChangePassword() {
+      this.centerDialogVisible02 = false;
+      this.centerDialogVisible03 = true;
+    },
   },
 };
 </script>

@@ -91,10 +91,25 @@
             <el-input v-model="ruleForm.address"></el-input>
           </el-form-item>
         </v-col>
-        <v-col cols="6">
+        <!-- <v-col cols="6">
           <div>Phân quyền</div>
           <el-form-item prop="role_id">
             <el-input v-model="ruleForm.role_id"></el-input>
+          </el-form-item>
+        </v-col> -->
+        <v-col cols="6">
+          <div>Phân quyền</div>
+          <el-form-item prop="role_id">
+            <!-- <el-input v-model="ruleForm.staff"></el-input> -->
+            <el-select v-model="ruleForm.role_id" placeholder="Chọn phân quyền">
+              <el-option
+                v-for="item in roleList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </v-col>
       </v-row>
@@ -111,6 +126,14 @@ import { showErrorMessage, showSuccessMessage } from "../../utils/notification";
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
+    var checkNumber = (rule, value, callback) => {
+      var regex = /^[0-9]*$/;
+      if (!value.match(regex)) {
+        callback(new Error("Please input digits"));
+      } else {
+        callback();
+      }
+    };
     return {
       token: "",
       dropzoneOptions: null,
@@ -137,9 +160,20 @@ export default {
         ],
         email: [
           {
-            type: "email",
             required: true,
             message: "Please input email",
+            trigger: "change",
+          },
+          {
+            type: "email",
+            message: "Please input email address",
+            trigger: "submit",
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: "Please input password",
             trigger: "change",
           },
         ],
@@ -148,6 +182,12 @@ export default {
             required: true,
             message: "Please input number",
             trigger: "change",
+          },
+          { validator: checkNumber, trigger: "blur" },
+          {
+            min: 7,
+            message: "The phone must be at least 7 characters.",
+            trigger: "blur",
           },
         ],
         birth_day: [
@@ -163,6 +203,12 @@ export default {
             message: "Please select at least one activity type",
             trigger: "change",
           },
+          { validator: checkNumber, trigger: "blur" },
+          {
+            max: 9,
+            message: "Indentity Card must be not longer than 9",
+            trigger: "blur",
+          },
         ],
         issued_on: [
           { required: true, message: "Please input activity form", trigger: "change" },
@@ -175,7 +221,7 @@ export default {
           },
         ],
         role_id: [
-          { required: true, message: "Please input activity form", trigger: "blur" },
+          { required: true, message: "Please select role of user", trigger: "blur" },
         ],
       },
     };
@@ -196,6 +242,7 @@ export default {
   computed: {
     ...mapState("staffs", ["errorMessage", "loading"]),
     ...mapState("auth", ["currentUser"]),
+    ...mapState("role", ["roleList"]),
   },
   methods: {
     onFileAdded(e) {},
@@ -222,22 +269,38 @@ export default {
           avatar: this.avatar_id,
         });
 
-        if (!this.errorMessage) {
-          this.loadingChild = false;
-          this.cancelModal();
-          setTimeout(this.openNotificationCreate(), 2000);
-          setTimeout(this.$store.commit("staffs/setLoading"), 5000);
-          this.$emit("reload-page");
-        }
+        // if (!this.errorMessage) {
+        this.loadingChild = false;
+        this.cancelModal();
+        setTimeout(this.openNotificationCreate(), 2000);
+        setTimeout(this.$store.commit("staffs/setLoading"), 5000);
+        this.$emit("reload-page");
+        // }
       } catch {
         this.loadingChild = false;
         this.showErrorMessage();
       }
     },
     showErrorMessage() {
+      let message = "Create user failure!!!";
+      if (this.errorMessage?.email) {
+        message = this.errorMessage?.email[0];
+      }
+      if (this.errorMessage?.identity_card) {
+        message = this.errorMessage?.identity_card[0];
+      }
+      if (this.errorMessage?.name) {
+        message = this.errorMessage?.name[0];
+      }
+      if (this.errorMessage?.phone) {
+        message = this.errorMessage?.phone[0];
+      }
+      if (this.errorMessage?.password) {
+        message = this.errorMessage?.password[0];
+      }
       this.$notify.error({
         title: "Error",
-        message: "Create user failure!!!",
+        message,
       });
     },
     cancelModal() {

@@ -89,11 +89,11 @@
             <div class="tieude">
               <div class="form_label">Mô tả</div>
               <editor
-                api-key="wuz940zk6opb46xuo1sh5a3mpfvh401sgp3zgt8iiw80hp20"
+                api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
                 v-model="value09"
                 :init="{
                   menubar: true,
-                  selector: '#myTextarea',
+                  selector: 'textarea#local-upload',
                   resize: true,
                   fontsize_formats:
                     '8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt',
@@ -108,8 +108,9 @@
            bullist numlist outdent indent | removeformat | help',
                   images_upload_url: 'postAcceptor.php',
                   automatic_uploads: false,
+                  file_picker_types: 'image',
                   images_reuse_filename: true,
-                  images_file_types: 'jpg,svg,webp',
+                  images_file_types: 'jpg,svg,webp,png,gif',
                 }"
               />
             </div>
@@ -121,10 +122,11 @@
             <div class="tieude">
               <div class="form_label">Mô tả</div>
               <editor
-                api-key="wuz940zk6opb46xuo1sh5a3mpfvh401sgp3zgt8iiw80hp20"
+                api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
                 v-model="value10"
                 :init="{
                   menubar: true,
+                  selector: 'textarea#local-upload',
                   resize: true,
                   fontsize_formats:
                     '8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt',
@@ -139,8 +141,9 @@
            bullist numlist outdent indent | removeformat | help',
                   images_upload_url: 'postAcceptor.php',
                   automatic_uploads: false,
+                  file_picker_types: 'image',
                   images_reuse_filename: true,
-                  images_file_types: 'jpg,svg,webp',
+                  images_file_types: 'jpg,svg,webp,png,gif',
                 }"
               />
             </div>
@@ -160,7 +163,6 @@
                 drag
                 multiple
                 name="file[]"
-                :on-success="handleAvatarSuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :on-change="handleChange"
@@ -171,22 +173,34 @@
               >
                 <i slot="default" class="el-icon-picture"></i>
 
-                <div slot="tip" slot-scope="{ file }">
+                <!-- <div slot="tip" slot-scope="{ file }">
                   <img
                     class="el-upload-list__item-thumbnail"
                     :src="file.thumbnail"
                     alt=""
                   />
-                </div>
+                </div> -->
               </el-upload>
-              <el-button
-                size="small"
-                type="success"
-                @click="submitUpload"
-                :loading="loading_btn"
-                v-if="btn_upload"
-                >Upload to server</el-button
-              >
+              <el-collapse-transition>
+                <el-button
+                  size="small"
+                  type="warning"
+                  @click="submitUpload"
+                  :loading="loading_btn"
+                  v-if="btn_upload"
+                  >Upload to server</el-button
+                >
+              </el-collapse-transition>
+              <el-collapse-transition>
+                <el-alert
+                  title="Upload success"
+                  type="success"
+                  show-icon
+                  v-if="showAlert"
+                >
+                </el-alert>
+              </el-collapse-transition>
+
               <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt="" />
               </el-dialog>
@@ -200,10 +214,11 @@
 
               <div class="form_label">Mô tả</div>
               <editor
-                api-key="wuz940zk6opb46xuo1sh5a3mpfvh401sgp3zgt8iiw80hp20"
+                api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
                 v-model="value14"
                 :init="{
                   menubar: true,
+                  selector: 'textarea#local-upload',
                   resize: true,
                   fontsize_formats:
                     '8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt',
@@ -218,8 +233,9 @@
            bullist numlist outdent indent | removeformat | help',
                   images_upload_url: 'postAcceptor.php',
                   automatic_uploads: false,
+                  file_picker_types: 'image',
                   images_reuse_filename: true,
-                  images_file_types: 'jpg,svg,webp',
+                  images_file_types: 'jpg,svg,webp,png,gif',
                 }"
               />
             </div>
@@ -231,10 +247,11 @@
             <div class="tieude">
               <div class="form_label">Mô tả</div>
               <editor
-                api-key="wuz940zk6opb46xuo1sh5a3mpfvh401sgp3zgt8iiw80hp20"
+                api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
                 v-model="value12"
                 :init="{
                   menubar: true,
+                  selector: 'textarea#local-upload',
                   resize: true,
                   fontsize_formats:
                     '8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt',
@@ -250,7 +267,8 @@
                   images_upload_url: 'postAcceptor.php',
                   automatic_uploads: false,
                   images_reuse_filename: true,
-                  images_file_types: 'jpg,svg,webp',
+                  file_picker_types: 'image',
+                  images_file_types: 'jpg,svg,webp,png,gif',
                 }"
               />
             </div>
@@ -301,9 +319,9 @@ export default {
       disabled: false,
       attacment: null,
       form: new FormData(),
-      image_value: "",
       loading_btn: false,
       btn_upload: false,
+      showAlert: false,
     };
   },
   mounted() {
@@ -317,7 +335,7 @@ export default {
     ...mapState("global", ["dictrictList"]),
     ...mapState("global", ["provinceList"]),
     ...mapState("global", ["wardList"]),
-    ...mapState("projects", ["selectedProject"]),
+    ...mapState("projects", ["selectedProject", "deleteImage"]),
     ...mapState("dictionaries", ["dictionaryList"]),
     ...mapState("auth", ["currentUser"]),
   },
@@ -351,8 +369,10 @@ export default {
       this.value12 = this.selectedProject.ground;
       this.value13 = this.selectedProject.title;
       this.value14 = this.selectedProject.descriptions;
-      this.image_id = this.selectedProject.image_id;
-      this.fileList = this.selectedProject.images;
+      this.image_id = this.selectedProject.image_id.split(",");
+      this.fileList = this.selectedProject.images.map((item, index) => {
+        return { ...item, url: item.thumbnail };
+      });
     },
     async getDictionaryTypeList() {
       try {
@@ -367,8 +387,6 @@ export default {
 
     async updateNewProject() {
       this.loading = true;
-      var myContent = tinymce.activeEditor.getContent();
-      console.log(myContent);
       try {
         await this.$store.dispatch("projects/updateNewProject", {
           province_id: this.value01,
@@ -397,15 +415,14 @@ export default {
     },
 
     handleRemove(file, fileList) {
-      console.log("file", file);
-      console.log("fileList", fileList);
-      let index = this.fileList
-        .map((e) => {
-          return e.name;
-        })
-        .indexOf(file.name);
-      console.log(index);
-      this.$store.dispatch("projects/deleteImageInProject", this.image_id[index]);
+      if (file.id) {
+        console.log("before", this.image_id);
+        this.$store.dispatch("projects/deleteImageInProject", file.id);
+        this.image_id = this.image_id.filter((u) => {
+          return u != file.id;
+        });
+        console.log("after", this.image_id);
+      }
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -414,16 +431,9 @@ export default {
     handleDownload(file) {
       console.log(file);
     },
-    handleAvatarSuccess(res, file) {
-      this.image_id.push(res.results[0].id);
-      this.image_value = this.image_id
-        .map((item) => {
-          return `${item}`;
-        })
-        .join(",");
-      console.log("image_value", this.image_value);
-    },
+
     handleChange(list, fileList) {
+      this.showAlert = false;
       this.btn_upload = true;
       this.fileList = fileList;
     },
@@ -443,29 +453,34 @@ export default {
 
     submitUpload() {
       this.loading_btn = true;
+      this.fileList = this.fileList.filter((u) => {
+        return u.id != undefined;
+      });
       let { uploadFiles } = this.$refs.upload;
+      let selectedUpload = uploadFiles.filter((u, i) => u.id == undefined);
       const img_arr = [];
       let form = new FormData();
-      uploadFiles.forEach((item) => {
+      selectedUpload.forEach((item) => {
         form.append("file[]", item.raw);
       });
       axiosClient
         .post("/admin/projects/image", form)
         .then((response) => {
-          console.log(response);
-          this.img_arr = response.data.results;
-          this.image_id = this.img_arr.map((u) => u.id);
-          console.log("img", this.image_id);
-          this.image_value = this.image_id
-            .map((item) => {
-              return `${item}`;
-            })
-            .join(",");
-          console.log("image_value", this.image_value);
+          this.img_arr = response.data.results.map((item) => {
+            return { ...item, url: item.thumbnail };
+          });
+          this.fileList = this.fileList.concat(this.img_arr);
+          console.log(this.fileList);
+          this.image_id = this.image_id.concat(this.img_arr.map((u) => u.id));
+          console.log(this.image_id);
           this.loading_btn = false;
+          this.btn_upload = false;
+          this.showAlert = true;
         })
         .catch((e) => {
           console.log(e);
+          this.loading_btn = false;
+          this.showErrorNotification();
         });
     },
   },

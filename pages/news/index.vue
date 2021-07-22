@@ -18,7 +18,9 @@
             <v-btn class="mx-2 add_btn" fab dark small color="warning">
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
-            <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
+            <v-btn class="account" fab @click="centerDialogVisible02 = true"
+              ><v-icon dark small>mdi-account</v-icon></v-btn
+            >
           </div>
         </v-col>
       </v-row>
@@ -156,16 +158,49 @@
           </div>
         </v-col>
       </v-row>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        width="25%"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible03"
+        width="25%"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
+      </el-dialog>
     </div>
   </v-lazy>
 </template>
 
 <script>
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+
 export default {
+  components: {
+    UserDetail,
+    ChangePassword,
+  },
   data() {
     return {
       isActive: false,
+      centerDialogVisible02: false,
+      centerDialogVisible03: false,
     };
+  },
+  methods: {
+    handleChangePassword() {
+      this.centerDialogVisible02 = false;
+      this.centerDialogVisible03 = true;
+    },
   },
 };
 </script>

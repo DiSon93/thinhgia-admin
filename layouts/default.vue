@@ -47,13 +47,20 @@
           <v-btn color="warning" dark id="createBDS" @click="$router.push('/form/house')"
             ><img src="@image/icons/Vector.svg" />Tạo BĐS
           </v-btn>
-          <el-dropdown class="account" @command="handleCommand">
-            <el-button type="info" circle icon="el-icon-user-solid"> </el-button>
-            <el-dropdown-menu slot="dropdown">
+          <!-- <el-dropdown class="account" @command="handleCommand"> -->
+          <el-button
+            type="info"
+            circle
+            icon="el-icon-user-solid"
+            @click="centerDialogVisible02 = true"
+            class="account"
+          >
+          </el-button>
+          <!-- <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>Thông tin tài khoản</el-dropdown-item>
               <el-dropdown-item divided command="logout">Log out</el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown>
+          </el-dropdown> -->
           <!-- <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn> -->
           <v-btn class="notifiaction" fab
             ><img src="@image/icons/bell-badge-noti.jpg" alt=""
@@ -70,6 +77,24 @@
 
       <v-container class="main_content" fluid>
         <nuxt />
+        <el-dialog
+          :visible.sync="centerDialogVisible02"
+          width="25%"
+          center
+          id="user_detail_dialog"
+        >
+          <UserDetail v-on:close-modals="handleChangePassword" />
+        </el-dialog>
+        <el-dialog
+          :visible.sync="centerDialogVisible"
+          width="25%"
+          center
+          id="user_changePass_dialog"
+          title="Đổi mật khẩu"
+          destroy-on-close
+        >
+          <ChangePassword v-on:close-modals="centerDialogVisible = false" />
+        </el-dialog>
       </v-container>
     </v-main>
     <v-bottom-navigation v-model="value" background-color="teal" shift>
@@ -88,9 +113,14 @@
 <script>
 import SelectBox from "@component/SelectBox.vue";
 import { mapState } from "vuex";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+
 export default {
   components: {
     SelectBox,
+    UserDetail,
+    ChangePassword,
   },
   data() {
     return {
@@ -100,6 +130,8 @@ export default {
       drawer: true,
       fixed: false,
       value: "recent",
+      centerDialogVisible02: false,
+      centerDialogVisible: false,
       items: [
         {
           icon: "mdi-home-edit",
@@ -189,6 +221,10 @@ export default {
       window.localStorage.clear();
       window.location.reload(true);
       window.location.replace("/admin/login");
+    },
+    handleChangePassword() {
+      this.centerDialogVisible02 = false;
+      this.centerDialogVisible = true;
     },
   },
 };
@@ -292,13 +328,11 @@ export default {
       height: 15px;
     }
   }
-  .account {
+  .account.el-button {
     position: absolute;
     right: 70px;
     bottom: -1px;
-    .el-button {
-      padding: 4px;
-    }
+    padding: 4px;
 
     // &:hover {
     //   border: 1px solid blue;

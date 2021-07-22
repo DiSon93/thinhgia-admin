@@ -31,7 +31,7 @@
             </v-col>
             <v-col cols="6">
               <div>Số Fax</div>
-              <el-form-item prop="phone">
+              <el-form-item prop="fax">
                 <el-input v-model="ruleForm.fax"></el-input>
               </el-form-item>
             </v-col>
@@ -111,6 +111,14 @@ import { showErrorMessage, showSuccessMessage } from "../../utils/notification";
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
+    var checkNumber = (rule, value, callback) => {
+      var regex = /^[0-9]*$/;
+      if (!value.match(regex)) {
+        callback(new Error("Please input digits"));
+      } else {
+        callback();
+      }
+    };
     return {
       token: "",
       dropzoneOptions: null,
@@ -138,9 +146,13 @@ export default {
         ],
         email: [
           {
-            type: "email",
             required: true,
             message: "Please input email",
+            trigger: "submit",
+          },
+          {
+            type: "email",
+            message: "Please input email address",
             trigger: "submit",
           },
         ],
@@ -148,12 +160,14 @@ export default {
           {
             required: true,
             message: "Please input phone",
-            trigger: "submit",
+            trigger: "change",
           },
-          // {
-          //   message: "Please input number",
-          //   trigger: "change",
-          // },
+          { validator: checkNumber, trigger: "blur" },
+          {
+            min: 7,
+            message: "The phone must be at least 7 characters.",
+            trigger: "blur",
+          },
         ],
         fax: [
           {
@@ -161,10 +175,7 @@ export default {
             message: "Please input fax",
             trigger: "submit",
           },
-          // {
-          //   message: "Please input number",
-          //   trigger: "change",
-          // },
+          { validator: checkNumber, trigger: "blur" },
         ],
         birth_day: [
           {
@@ -176,15 +187,15 @@ export default {
         identity_card: [
           {
             required: true,
-            // type: "numner",
             message: "Please select at least one activity type",
             trigger: "submit",
           },
-          // {
-          //   type: "numner",
-          //   message: "Please input number",
-          //   trigger: "change",
-          // },
+          { validator: checkNumber, trigger: "blur" },
+          {
+            max: 9,
+            message: "Indentity Card must be not longer than 9",
+            trigger: "blur",
+          },
         ],
         user_id: [
           { required: true, message: "Please select staff name", trigger: "change" },
@@ -214,8 +225,9 @@ export default {
     this.getStaffList();
   },
   computed: {
-    ...mapState("staffs", ["errorMessage", "loading", "staffList"]),
+    ...mapState("staffs", ["staffList"]),
     ...mapState("auth", ["currentUser"]),
+    ...mapState("customers", ["errorMessage"]),
   },
   methods: {
     ...mapActions("staffs", ["getStaffList"]),
@@ -238,21 +250,38 @@ export default {
           avatar: this.avatar_id ? this.avatar_id : 0,
         });
 
-        if (!this.errorMessage) {
-          this.loadingChild = false;
-          this.cancelModal();
-          setTimeout(this.openNotificationCreate(), 1000);
-          this.$emit("reload-page");
-        }
+        // if (!this.errorMessage) {
+        this.loadingChild = false;
+        this.cancelModal();
+        setTimeout(this.openNotificationCreate(), 1000);
+        this.$emit("reload-page");
+        // }
       } catch {
         this.loadingChild = false;
         this.showErrorMessage();
       }
     },
     showErrorMessage() {
+      let message = "Create customer failure!!!";
+      console.log(this.errorMessage);
+      if (this.errorMessage?.email) {
+        message = this.errorMessage?.email[0];
+      }
+      if (this.errorMessage?.identity_card) {
+        message = this.errorMessage?.identity_card[0];
+      }
+      if (this.errorMessage?.name) {
+        message = this.errorMessage?.name[0];
+      }
+      if (this.errorMessage?.phone) {
+        message = this.errorMessage?.phone[0];
+      }
+      if (this.errorMessage?.password) {
+        message = this.errorMessage?.password[0];
+      }
       this.$notify.error({
         title: "Error",
-        message: "Create customer failure!!!",
+        message,
       });
     },
     cancelModal() {
