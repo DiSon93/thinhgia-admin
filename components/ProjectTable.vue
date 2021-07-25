@@ -20,7 +20,14 @@
               +{{ row.item.images.length - 4 }}</span
             >
           </td>
-          <td>{{ row.item.estate }} BĐS</td>
+          <td>
+            <el-button
+              type="warning"
+              plain
+              @click="showRealEstateDetail(row.item.real_estates)"
+              >{{ row.item.estate }} BĐS</el-button
+            >
+          </td>
           <td>
             {{ row.item.create_date }}
             <div>{{ row.item.create_time }}</div>
@@ -36,6 +43,33 @@
         </tr>
       </template>
     </v-data-table>
+    <el-dialog title="BĐS" :visible.sync="dialogTableVisible" class="suitableEstate">
+      <el-table :data="gridData">
+        <el-table-column property="id" label="#" width="50"></el-table-column>
+        <el-table-column property="name" label="KHÁCH HÀNG" width="150"></el-table-column>
+        <el-table-column
+          property="address"
+          label="THÔNG TIN"
+          width="250"
+        ></el-table-column>
+        <el-table-column property="create_date" label="NGÀY TẠO" width="150">
+          <templates slot-scope="scope">
+            {{ scope.row.create_date }}
+            <div>{{ scope.row.create_time }}</div>
+          </templates>
+        </el-table-column>
+        <el-table-column label="ACTION">
+          <template>
+            <el-button class="views" icon="el-icon-view" type="warning" plain>
+              Xem</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">Hủy</el-button>
+      </span>
+    </el-dialog>
     <div class="block_pagination">
       <el-pagination
         @size-change="handleSizeChange"
@@ -60,6 +94,8 @@ export default {
     currentPage: 1,
     rowPerPage: 10,
     page: 1,
+    gridData: [],
+    dialogTableVisible: false,
     headers: [
       { text: "#", value: "id", width: "80px" },
       {
@@ -101,6 +137,7 @@ export default {
       }
     },
     initializeList() {
+      console.log("page2", this.projectList);
       this.projects = this.projectList.map((item, index) => {
         return {
           id: item.id,
@@ -112,6 +149,7 @@ export default {
             { id: 4, src: require("@/assets/images/layouts/house4.png") },
           ],
           estate: item.real_estates.length,
+          real_estates: item.real_estates,
           create_date: item.created_at.slice(0, 10),
           create_time: item.created_at.slice(11, 19),
           update_date: item.updated_at.slice(0, 10),
@@ -123,7 +161,6 @@ export default {
           type: item.type,
           progress: item.progress,
           investor: item.investor,
-          name: item.name,
           location: item.location,
           utilities: item.utilities,
           ground: item.ground,
@@ -199,6 +236,20 @@ export default {
       this.page = val;
       await this.getProjectListPerPage();
       this.loading = false;
+    },
+    showRealEstateDetail(item) {
+      this.dialogTableVisible = true;
+      console.log("item", item);
+      this.gridData = item.map((u, i) => {
+        return {
+          id: u.id,
+          name: u.customer_id,
+          address: `${u.ward_id}/${u.district_id}/${u.province_id}`,
+          date: u.created_at,
+          create_date: u.created_at.slice(0, 10),
+          create_time: u.created_at.slice(11, 19),
+        };
+      });
     },
   },
 };

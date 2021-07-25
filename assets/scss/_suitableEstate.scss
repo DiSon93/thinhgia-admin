@@ -1,0 +1,17 @@
+.suitableEstate {
+    tr td {
+        text-align: center;
+    }
+    .dialog-footer {
+        .el-button {
+            margin-top: -30px;
+            border: 1px solid #fbad18;
+            box-sizing: border-box;
+            border-radius: 15px;
+            color: #fbad18;
+        }
+    }
+    .views.el-button{
+        padding: 10px 12px;
+    }
+}

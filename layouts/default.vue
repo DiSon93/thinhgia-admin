@@ -223,8 +223,10 @@ export default {
       window.location.replace("/admin/login");
     },
     handleChangePassword() {
-      this.centerDialogVisible02 = false;
       this.centerDialogVisible = true;
+      setTimeout(() => {
+        this.centerDialogVisible02 = false;
+      }, 100);
     },
   },
 };

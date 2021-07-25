@@ -1,29 +1,39 @@
 <template>
-  <div class="detail">
+  <div class="detail" v-if="showDetail">
     <div class="detail_first">
       <div class="detail_title d-flex">
         <div class="header_detail d-flex">
-          <span class="staff_number">Nhân viên 32:</span>
-          <span class="time">11/10/2021 10:09:39</span>
-          <v-btn class="sua"> <v-icon> mdi-pencil </v-icon>Sửa</v-btn>
+          <span class="staff_number">Nhân viên {{ showDetail.staff.id }}:</span>
+          <span class="time" v-if="showDetail"
+            >{{ showDetail.created_at.slice(0, 10) }}
+            {{ showDetail.created_at.slice(11, 19) }}</span
+          >
+          <v-btn
+            class="sua"
+            @click="$router.push(`/form/house/update/${$route.params.id}`)"
+          >
+            <v-icon> mdi-pencil </v-icon>Sửa</v-btn
+          >
           <v-btn class="chiase"> <v-icon>mdi-share</v-icon> Chia sẻ</v-btn>
         </div>
         <el-button type="danger" icon="el-icon-close" circle size="mini"></el-button>
       </div>
       <div class="contents d-flex">
         <div>
-          <div class="address">604 Nguyễn Hữu Cảnh</div>
+          <div class="address">{{ showDetail.street_name }}</div>
           <div>
             <v-btn id="congdong">Cộng Đồng</v-btn>
             <v-btn id="web">Web</v-btn>
           </div>
           <div class="sell_estate">
-            BÁN CHUNG CƯ SEAVIEW 2 100.5 M2 TẦNG TRUNG NHÀ ĐỂ LẠI NỘI THẤT
+            {{ showDetail.title.toUpperCase() }}
           </div>
         </div>
         <div class="sell_price">
-          <div class="sell">BÁN</div>
-          <div class="price">1.73TỶ</div>
+          <div class="sell">{{ showDetail.purpose == 0 ? "BÁN" : "CHO THUÊ" }}</div>
+          <div class="price">
+            {{ showDetail.price }} {{ showDetail.unit_price == "ty" ? "TỶ" : "TRIỆU" }}
+          </div>
         </div>
       </div>
     </div>
@@ -57,91 +67,93 @@
     <v-row class="more_info">
       <v-col cols="3">
         <div class="hightlight">#</div>
-        <div>5764</div>
+        <div>{{ showDetail.id }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Tiêu đề</div>
-        <div>BÁN CHUNG CƯ SEAVIEW 2 100M5 TẦNG TRUNG NHÀ ĐỂ LẠI NỘI THẤT</div>
+        <div>{{ showDetail.title }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Số nhà</div>
-        <div>604</div>
+        <div>{{ showDetail.street_name.split(",")[0] }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Đường</div>
-        <div>Nguyễn Hữu Cảnh</div>
+        <div>{{ showDetail.street_name.split(",")[1] }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Loại nhà</div>
-        <div>Nhà cao tầng</div>
+        <div>{{ showDetail.house_type_dict.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Só lầu</div>
-        <div>Nguyễn Hữu Cảnh</div>
+        <div>{{ showDetail.floor_number }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Loại BĐS</div>
-        <div>Căn hộ - Chung cư</div>
+        <div>{{ showDetail.real_estate_type_dict.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Pháp lý</div>
-        <div>Số Đỏ</div>
+        <div>{{ showDetail.ownership_dict.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Nở hậu</div>
-        <div>Không</div>
+        <div>{{ showDetail.end_open == 0 ? "Không" : "Có" }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Diện tích</div>
-        <div>100.5m2</div>
-      </v-col>
-      <v-col cols="3">
-        <div class="hightlight">Ngang</div>
-        <div>0m</div>
+        <div>{{ showDetail.length * showDetail.width }}m2</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Dài</div>
-        <div>0m</div>
+        <div>{{ showDetail.length }}m</div>
+      </v-col>
+      <v-col cols="3">
+        <div class="hightlight">Ngang</div>
+        <div>{{ showDetail.width }}m</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Mục đích</div>
-        <div>Bán</div>
+        <div>{{ showDetail.purpose == 0 ? "Bán" : "Cho thuê" }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Nhân viên</div>
-        <div>Nguyễn Thị Thanh</div>
+        <div>{{ showDetail.staff.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Giá</div>
-        <div>1.73 tỷ</div>
+        <div>
+          {{ showDetail.price }} {{ showDetail.unit_price == "ty" ? "tỷ" : "triệu" }}
+        </div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Hướng</div>
-        <div>Đông</div>
+        <div>{{ showDetail.house_orientation_dict.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Phường</div>
-        <div>Phường Nguyễn An Ninh</div>
+        <div>{{ showDetail.ward.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Dự án</div>
-        <div>Không có</div>
+        <div>{{ showDetail.project ? "Có" : "Không có" }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Khách hàng</div>
-        <div>Đông</div>
+        <div>{{ showDetail.customer.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Hướng ban công</div>
-        <div>Đông Nam</div>
+        <div>{{ showDetail.directions_dict.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Số phòng ngủ</div>
-        <div>2</div>
+        <div>{{ showDetail.bedroom_number }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Huyện</div>
-        <div>Vũng Tàu</div>
+        <div>{{ showDetail.district.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Block/Khu</div>
@@ -149,87 +161,56 @@
       </v-col>
       <v-col cols="3">
         <div class="hightlight">SĐT</div>
-        <div>01223443543</div>
+        <div>{{ showDetail.customer.phone }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Đã chia sẻ</div>
-        <div>Có</div>
+        <div>{{ showDetail.share_public == 1 ? "Có" : "Không" }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Loại đường</div>
-        <div>Mặt tiền đường</div>
+        <div>{{ showDetail.street_type_dict.name }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Phí môi giới</div>
-        <div>1</div>
+        <div>{{ showDetail.brokerage_amount }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Đã đưa lên Web</div>
-        <div>Có</div>
+        <div>{{ showDetail.share_web == 1 ? "Có" : "Không" }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Đường rộng (m)</div>
-        <div>0m</div>
+        <div>{{ showDetail.width_street }}m</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Tỷ lệ môi giới</div>
-        <div>17</div>
+        <div>{{ showDetail.brokerage_rate }}</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Đăng ký ngày</div>
-        <div>11/06/2021 10:09:39</div>
+        <div>
+          {{ showDetail.created_at.slice(0, 10) }}
+          {{ showDetail.created_at.slice(11, 19) }}
+        </div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">Diện tích sàn</div>
-        <div>100.5m2</div>
+        <div>{{ showDetail.land_area }}m2</div>
       </v-col>
       <v-col cols="3">
         <div class="hightlight">NGÀY CẬP NHẬT</div>
-        <div>08/07/2021 11:07:43</div>
+        <div>
+          {{ showDetail.updated_at.slice(0, 10) }}
+          {{ showDetail.updated_at.slice(11, 19) }}
+        </div>
       </v-col>
     </v-row>
     <el-divider></el-divider>
 
     <div class="description">
       <div class="description_title">Mô tả</div>
-      <div>
-        Cần bán căn hộ 2 phòng ngủ OSC đã trang bị đầy đủ nội thất đầy đủ, tầng trung view
-        biển rất mát mẻ, cạnh biển Bãi Sau chỉ 800m, thích hợp nghỉ dưỡng, đi bộ ra biển.
-      </div>
-      <div>
-        <span class="hightlight">-Địa chỉ:</span>
-        <span> Chung cư OSC Land, Võ Thị Sáu, Phường Thắng Tam, Vũng Tàu</span>
-      </div>
-      <div>
-        <span class="hightlight">-Diện tích:</span> <span>58m2 rộng rãi, thoáng mát</span>
-      </div>
-      <div>
-        <span class="hightlight">-Kết cấu:</span>
-        <span>Gồm 2 phòng ngủ rộng rãi, 1 WC, bếp và phòng khách, đã sửa nội thất. </span>
-      </div>
-      <div>
-        <span class="hightlight">-Hướng cửa:</span>
-        <span>
-          là hướng Đông Bắc thoáng mát, view hướng Tây Nam nhà rất mát không bị nắng nóng
-          vào phòng.</span
-        >
-      </div>
-      <div>
-        <span class="hightlight">-Pháp lý:</span>
-        <span>Sổ hồng chính chủ vay ngân hàng lên đến 70%</span>
-      </div>
-      <div>
-        <span class="hightlight">-Hiện trạng:</span>
-        <span>Để lại nội thất</span>
-      </div>
-      <div>
-        <span class="hightlight">-Giá:</span>
-        <span>1.6 Tỷ bớt lộc cho khách thiện chí mua nhanh</span>
-      </div>
-      <div>
-        <span class="hightlight">-Mã tin:</span>
-        <span>5764</span>
-      </div>
+      <div v-html="showDetail.descriptions"></div>
     </div>
     <div class="img_info">
       <div class="img_title">
@@ -237,11 +218,12 @@
         <v-btn> <img src="@image/icons/taixuong.svg" alt="" /> Tải xuống</v-btn>
       </div>
       <div class="img_main">
-        <img src="@image/layouts/detail_img_1.svg" alt="" />
-        <img src="@image/layouts/detail_img_2.svg" alt="" />
-        <img src="@image/layouts/detail_img_3.svg" alt="" />
-        <img src="@image/layouts/detail_img_4.svg" alt="" />
-        <img src="@image/layouts/detail_img_3.svg" alt="" />
+        <img
+          v-for="item in showDetail.image_private"
+          :key="item.id"
+          :src="item.thumbnail"
+          alt=""
+        />
       </div>
     </div>
 
@@ -290,6 +272,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -326,12 +309,27 @@ export default {
       ],
     };
   },
+  created() {
+    this.getRealEstateDetail();
+  },
+  computed: {
+    ...mapState("realEstate", ["showDetail"]),
+  },
   methods: {
     handleEdit(index, row) {
       console.log(index, row);
     },
     handleDelete(index, row) {
       console.log(index, row);
+    },
+    async getRealEstateDetail() {
+      try {
+        await this.$store.dispatch(
+          "realEstate/showDetailRealEstate",
+          this.$route.params.id
+        );
+        console.log("detail", this.showDetail);
+      } catch {}
     },
   },
 };
@@ -510,6 +508,7 @@ export default {
         width: 100px;
         height: 100px;
         margin: 0 5px;
+        border-radius: 10px;
       }
       display: flex;
       overflow-x: auto;

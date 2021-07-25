@@ -69,7 +69,16 @@
           </v-col>
           <v-col cols="3">
             <div class="label">Tiến độ</div>
-            <el-input v-model="value06"></el-input>
+            <!-- <el-input v-model="value06"></el-input> -->
+            <el-select v-model="value06" placeholder="Chọn tiến độ">
+              <el-option
+                v-for="item in proccessType"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </v-col>
           <v-col cols="3">
             <div class="label">Chủ đầu tư</div>
@@ -111,6 +120,7 @@
                   file_picker_types: 'image',
                   images_reuse_filename: true,
                   images_file_types: 'jpg,svg,webp,png,gif',
+                  content_style: 'p { margin: 0; }',
                 }"
               />
             </div>
@@ -144,6 +154,7 @@
                   file_picker_types: 'image',
                   images_reuse_filename: true,
                   images_file_types: 'jpg,svg,webp,png,gif',
+                  content_style: 'p { margin: 0; }',
                 }"
               />
             </div>
@@ -166,10 +177,10 @@
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :on-change="handleChange"
+                :on-success="handleAvatarSuccess"
                 :headers="headers"
                 :file-list="fileList"
                 ref="upload"
-                :auto-upload="false"
               >
                 <i slot="default" class="el-icon-picture"></i>
 
@@ -181,25 +192,6 @@
                   />
                 </div> -->
               </el-upload>
-              <el-collapse-transition>
-                <el-button
-                  size="small"
-                  type="warning"
-                  @click="submitUpload"
-                  :loading="loading_btn"
-                  v-if="btn_upload"
-                  >Upload to server</el-button
-                >
-              </el-collapse-transition>
-              <el-collapse-transition>
-                <el-alert
-                  title="Upload success"
-                  type="success"
-                  show-icon
-                  v-if="showAlert"
-                >
-                </el-alert>
-              </el-collapse-transition>
 
               <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt="" />
@@ -236,6 +228,7 @@
                   file_picker_types: 'image',
                   images_reuse_filename: true,
                   images_file_types: 'jpg,svg,webp,png,gif',
+                  content_style: 'p { margin: 0; }',
                 }"
               />
             </div>
@@ -269,6 +262,7 @@
                   images_reuse_filename: true,
                   file_picker_types: 'image',
                   images_file_types: 'jpg,svg,webp,png,gif',
+                  content_style: 'p { margin: 0; }',
                 }"
               />
             </div>
@@ -312,6 +306,7 @@ export default {
       headers: null,
       token: "",
       projectType: [],
+      proccessType: [],
       images: "",
       dialogVisible: false,
       loading: false,
@@ -319,9 +314,6 @@ export default {
       disabled: false,
       attacment: null,
       form: new FormData(),
-      loading_btn: false,
-      btn_upload: false,
-      showAlert: false,
     };
   },
   mounted() {
@@ -382,6 +374,8 @@ export default {
         });
         let projects = this.dictionaryList.filter((item, index) => item.id == 7);
         this.projectType = projects[0].dictionaries;
+        let proccess = this.dictionaryList.filter((item, index) => item.id == 8);
+        this.proccessType = proccess[0].dictionaries;
       } catch {}
     },
 
@@ -415,14 +409,34 @@ export default {
     },
 
     handleRemove(file, fileList) {
-      if (file.id) {
-        console.log("before", this.image_id);
+      // if (file.id) {
+      // console.log("before", this.image_id);
+      console.log("file", file);
+      if (!file.id) {
+        this.$store.dispatch(
+          "projects/deleteImageInProject",
+          file.response.results[0].id
+        );
+        this.image_id = this.image_id.filter((u) => {
+          return u != file.response.results[0].id;
+        });
+        this.fileList = this.fileList.filter((u) => {
+          return u.response?.results[0].id != file.response.results[0].id;
+        });
+        console.log("fileList", this.fileList);
+      } else {
         this.$store.dispatch("projects/deleteImageInProject", file.id);
         this.image_id = this.image_id.filter((u) => {
           return u != file.id;
         });
-        console.log("after", this.image_id);
+        this.fileList = this.fileList.filter((u) => {
+          return u.id != file.id;
+        });
       }
+
+      // console.log("after", this.image_id);
+      // console.log("fileLisst", this.fileList);
+      // }
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -431,10 +445,15 @@ export default {
     handleDownload(file) {
       console.log(file);
     },
+    handleAvatarSuccess(res, file) {
+      this.image_id.push(res.results[0].id);
+      this.fileList.push(res.results);
+      // console.log("successList", this.fileList);
 
+      // console.log("image_id", this.image_id);
+      // console.log("file", file);
+    },
     handleChange(list, fileList) {
-      this.showAlert = false;
-      this.btn_upload = true;
       this.fileList = fileList;
     },
     showErrorNotification() {
@@ -451,38 +470,41 @@ export default {
       });
     },
 
-    submitUpload() {
-      this.loading_btn = true;
-      this.fileList = this.fileList.filter((u) => {
-        return u.id != undefined;
-      });
-      let { uploadFiles } = this.$refs.upload;
-      let selectedUpload = uploadFiles.filter((u, i) => u.id == undefined);
-      const img_arr = [];
-      let form = new FormData();
-      selectedUpload.forEach((item) => {
-        form.append("file[]", item.raw);
-      });
-      axiosClient
-        .post("/admin/projects/image", form)
-        .then((response) => {
-          this.img_arr = response.data.results.map((item) => {
-            return { ...item, url: item.thumbnail };
-          });
-          this.fileList = this.fileList.concat(this.img_arr);
-          console.log(this.fileList);
-          this.image_id = this.image_id.concat(this.img_arr.map((u) => u.id));
-          console.log(this.image_id);
-          this.loading_btn = false;
-          this.btn_upload = false;
-          this.showAlert = true;
-        })
-        .catch((e) => {
-          console.log(e);
-          this.loading_btn = false;
-          this.showErrorNotification();
-        });
-    },
+    // submitUpload() {
+    //   this.loading_btn = true;
+    //   this.showErr = false;
+    //   this.fileList = this.fileList.filter((u) => {
+    //     return u.id != undefined;
+    //   });
+    //   let { uploadFiles } = this.$refs.upload;
+    //   let selectedUpload = uploadFiles.filter((u, i) => u.id == undefined);
+    //   const img_arr = [];
+    //   let form = new FormData();
+    //   selectedUpload.forEach((item) => {
+    //     form.append("file[]", item.raw);
+    //   });
+    //   axiosClient
+    //     .post("/admin/projects/image", form)
+    //     .then((response) => {
+    //       this.img_arr = response.data.results.map((item) => {
+    //         return { ...item, url: item.thumbnail };
+    //       });
+    //       setTimeout(() => {
+    //         this.fileList = this.fileList.concat(this.img_arr);
+    //       }, 1000);
+    //       // console.log(this.fileList);
+    //       this.image_id = this.image_id.concat(this.img_arr.map((u) => u.id));
+    //       // console.log(this.image_id);
+    //       this.loading_btn = false;
+    //       this.btn_upload = false;
+    //       this.showAlert = true;
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //       this.loading_btn = false;
+    //       this.showErrorNotification();
+    //     });
+    // },
   },
 };
 </script>

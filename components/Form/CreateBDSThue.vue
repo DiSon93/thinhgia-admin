@@ -17,16 +17,16 @@
             <div class="form_label">Nhân viên</div>
             <el-select v-model="value" placeholder="Chọn nhân viên" id="staff">
               <el-option
-                v-for="item in options"
-                :key="item.value"
+                v-for="item in staffList"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
                 style="height: 44px; padding-top: 4px"
               >
                 <span style="line-height: 18px">
                   <div style="font-weight: 500">{{ item.name }}</div>
                   <div class="sdt" style="font-size: 13px">
-                    <i>{{ item.sdt }}</i>
+                    <i>{{ item.phone }}</i>
                   </div>
                 </span>
               </el-option>
@@ -35,10 +35,10 @@
             <div class="d-flex">
               <el-select v-model="value02" placeholder="Chọn khách hàng">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
+                  v-for="item in customerList"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -50,12 +50,16 @@
           <v-row class="address">
             <v-col cols="4">
               <div class="form_label">Tỉnh <span style="color: red">*</span></div>
-              <el-select v-model="value03" placeholder="Chọn tỉnh">
+              <el-select
+                v-model="value03"
+                placeholder="Chọn tỉnh"
+                @change="chooseProvince"
+              >
                 <el-option
-                  v-for="item in provinces"
-                  :key="item.value"
+                  v-for="item in provinceList"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -67,22 +71,27 @@
                 @change="shownmore = true"
               >
                 <el-option
-                  v-for="item in projects"
-                  :key="item.value"
+                  v-for="item in allProject"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
             </v-col>
             <v-col cols="4">
               <div class="form_label">Huyện/TP <span style="color: red">*</span></div>
-              <el-select v-model="value04" placeholder="Chọn huyện/TP">
+              <el-select
+                v-model="value04"
+                placeholder="Chọn huyện/TP"
+                @change="chooseDistrict"
+                no-data-text="Vui lòng chọn tỉnh"
+              >
                 <el-option
-                  v-for="item in districts"
-                  :key="item.value"
+                  v-for="item in dictrictList"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -92,12 +101,16 @@
             </v-col>
             <v-col cols="4">
               <div class="form_label">Phường/Xã <span style="color: red">*</span></div>
-              <el-select v-model="value05" placeholder="Chọn phường/xã">
+              <el-select
+                v-model="value05"
+                placeholder="Chọn phường/xã"
+                no-data-text="Vui lòng chọn huyện"
+              >
                 <el-option
-                  v-for="item in towns"
-                  :key="item.value"
+                  v-for="item in wardList"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -123,10 +136,10 @@
             <div class="form_label">Loại Bất Động Sản</div>
             <el-select v-model="value10" placeholder="Chọn loại BĐS">
               <el-option
-                v-for="item in estate"
-                :key="item.value"
+                v-for="item in estates"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -135,10 +148,10 @@
             <div class="form_label">Loại nhà đất</div>
             <el-select v-model="value11" placeholder="Chọn loại nhà">
               <el-option
-                v-for="item in house"
-                :key="item.value"
+                v-for="item in houses"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -148,9 +161,9 @@
             <el-select v-model="value12" placeholder="Chọn pháp lý">
               <el-option
                 v-for="item in laws"
-                :key="item.value"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -178,9 +191,9 @@
             <el-select v-model="value15" placeholder="Chọn loại đường">
               <el-option
                 v-for="item in roads"
-                :key="item.value"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -202,9 +215,9 @@
             <el-select v-model="value17" placeholder="Chọn hướng">
               <el-option
                 v-for="item in directions"
-                :key="item.value"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -245,9 +258,9 @@
               <el-select v-model="value24" placeholder="Chọn hướng">
                 <el-option
                   v-for="item in directions"
-                  :key="item.value"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -263,9 +276,9 @@
               <el-select v-model="value26" placeholder="Chọn hướng">
                 <el-option
                   v-for="item in directions"
-                  :key="item.value"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -293,6 +306,7 @@
             ></ckeditor> -->
             <editor
               api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
+              v-model="value30"
               :init="{
                 menubar: true,
                 resize: true,
@@ -413,6 +427,7 @@
         <el-checkbox v-model="checked02">Không</el-checkbox>
       </div>
       <div class="luunhap">
+        <el-button id="soft_save">Lưu nháp</el-button>
         <el-button id="save">Lưu</el-button>
       </div>
     </div>
@@ -422,7 +437,7 @@
 <script>
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "@tinymce/tinymce-vue";
-
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   components: {
     editor: Editor,
@@ -441,121 +456,6 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
-      options: [
-        {
-          value: "1",
-          name: "Phạm Văn Sơn",
-          sdt: "01278564",
-        },
-        {
-          value: "2",
-          name: "Phạm Văn Minh",
-          sdt: "09765264",
-        },
-        {
-          value: "3",
-          name: "Lê Minh Chí",
-          sdt: "012875564",
-        },
-        {
-          value: "4",
-          name: "Phạm Văn Đồng",
-          sdt: "01278564",
-        },
-        {
-          value: "5",
-          name: "Phạm Văn Sơn",
-          sdt: "01278564",
-        },
-        {
-          value: "6",
-          name: "Phạm Văn Linh",
-          sdt: "012226864",
-        },
-        {
-          value: "7",
-          name: "Phạm Văn Lộc",
-          sdt: "012226864",
-        },
-      ],
-      provinces: [
-        {
-          value: "1",
-          name: "Bà Rịa-Vũng Tàu",
-        },
-        {
-          value: "2",
-          name: "TP Hồ Chí Minh",
-        },
-        {
-          value: "3",
-          name: "Hà Nội",
-        },
-        {
-          value: "4",
-          name: "Đà Nẵng",
-        },
-        {
-          value: "5",
-          name: "Quảng Nam",
-        },
-      ],
-      districts: [
-        {
-          value: "1",
-          name: "An Ninh",
-        },
-        {
-          value: "2",
-          name: "An Lạc",
-        },
-        {
-          value: "3",
-          name: "An Hòa",
-        },
-        {
-          value: "4",
-          name: "An Sinh",
-        },
-        {
-          value: "5",
-          name: "An Tuân",
-        },
-      ],
-      towns: [
-        {
-          value: "1",
-          name: "Bình Tân",
-        },
-        {
-          value: "2",
-          name: "Bình Hòa",
-        },
-        {
-          value: "3",
-          name: "Bình An",
-        },
-        {
-          value: "4",
-          name: "Bình Thành",
-        },
-        {
-          value: "5",
-          name: "Bình Tuân",
-        },
-        {
-          value: "6",
-          name: "Bình Minh",
-        },
-        {
-          value: "7",
-          name: "Bình Thạnh",
-        },
-        {
-          value: "8",
-          name: "Bình Đại",
-        },
-      ],
       projects: [
         {
           value: "1",
@@ -574,6 +474,13 @@ export default {
           name: "Mai Chiến Thủy",
         },
       ],
+      directions: [],
+      estates: [],
+      houses: [],
+      units: [],
+      widths: [],
+      roads: [],
+      laws: [],
       value: "",
       value02: "",
       value03: "",
@@ -582,9 +489,44 @@ export default {
       value06: "",
       value07: "",
       value08: "",
+      value09: "",
+      value10: "",
+      value11: "",
+      value12: "",
+      value13: "",
+      value14: "",
+      value15: "",
+      value16: "",
+      value17: "",
+      value18: "",
+      value19: "",
+      value20: "",
+      value21: "",
+      value22: "",
+      value23: "",
+      value24: "",
+      value25: "",
+      value26: "",
+      value27: "",
+      value28: "",
+      value29: "",
+      value30: "",
     };
   },
   methods: {
+    ...mapActions("customers", ["getCustomerList"]),
+    ...mapActions("staffs", ["getStaffList"]),
+    ...mapActions("global", ["getProvinceList"]),
+    chooseProvince() {
+      this.value04 = "";
+      this.value05 = "";
+      this.$store.commit("global/setNoWardList");
+      this.$store.dispatch("global/getDictrictList", this.value03);
+    },
+    chooseDistrict() {
+      this.value05 = "";
+      this.$store.dispatch("global/getWardList", this.value04);
+    },
     handleRemove(file) {
       console.log(file);
     },
@@ -595,6 +537,72 @@ export default {
     handleDownload(file) {
       console.log(file);
     },
+    async getDictionaryList() {
+      await this.$store.dispatch("dictionaries/getDictionaryList", {
+        limit: 10,
+        page: 1,
+      });
+      await this.getDicOptions();
+    },
+    getDicOptions() {
+      const directionList = this.dictionaryList.filter((u, i) => u.id == 6);
+      this.directions = directionList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+      const estateList = this.dictionaryList.filter((u, i) => u.id == 1);
+      this.estates = estateList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+      const houseList = this.dictionaryList.filter((u, i) => u.id == 2);
+      this.houses = houseList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+      const lawList = this.dictionaryList.filter((u, i) => u.id == 5);
+      this.laws = lawList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+      const roadList = this.dictionaryList.filter((u, i) => u.id == 3);
+      this.roads = roadList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+    },
+    async getProjectList() {
+      await this.$store.dispatch("projects/getAllProjectList", {
+        page: 1,
+      });
+    },
+  },
+  mounted() {
+    this.getCustomerList();
+    this.getStaffList();
+    this.getDictionaryList();
+    this.getProvinceList();
+    this.getProjectList();
+  },
+
+  computed: {
+    ...mapState("staffs", ["staffList"]),
+    ...mapState("global", ["dictrictList"]),
+    ...mapState("global", ["provinceList"]),
+    ...mapState("global", ["wardList"]),
+    ...mapState("customers", ["customerList"]),
+    ...mapState("dictionaries", ["dictionaryList"]),
+    ...mapState("projects", ["allProject"]),
   },
 };
 </script>
@@ -774,7 +782,7 @@ export default {
   box-sizing: border-box;
   border-radius: 4px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   #soft_save.el-button {
     background: #ffffff;
     border: 1px solid #cdcdcd;

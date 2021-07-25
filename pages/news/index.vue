@@ -15,7 +15,14 @@
         </v-col>
         <v-col cols="4" sm="6" class="app_bar">
           <div class="option_button">
-            <v-btn class="mx-2 add_btn" fab dark small color="warning">
+            <v-btn
+              class="mx-2 add_btn"
+              fab
+              dark
+              small
+              color="warning"
+              @click="$router.push('/form/blog')"
+            >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
             <v-btn class="account" fab @click="centerDialogVisible02 = true"
@@ -28,6 +35,7 @@
         <v-col cols="12" class="content_items">
           <div class="content">
             <div class="d-flex img_fix">
+              <!-- <v-parallax height="200" :src="getImageUrl('house1.png')"></v-parallax> -->
               <img src="@image/layouts/house1.png" alt="" />
               <v-btn class="mx-2" icon color="cyan">
                 <v-icon dark> mdi-pencil </v-icon>
@@ -198,8 +206,10 @@ export default {
   },
   methods: {
     handleChangePassword() {
-      this.centerDialogVisible02 = false;
       this.centerDialogVisible03 = true;
+      setTimeout(() => {
+        this.centerDialogVisible02 = false;
+      }, 100);
     },
   },
 };
@@ -274,11 +284,12 @@ export default {
   padding: 20px 20px;
 }
 .content_items {
+  padding: 2px 12px;
   h5 {
     font-size: 16px;
   }
   .content {
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: #fff;
     padding: 20px 34px;
     box-shadow: 0 0 20px 1px hsl(0deg 0% 65% / 20%);

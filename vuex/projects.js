@@ -4,6 +4,7 @@ export default {
     namespaced: true,
     state: {
        projectList: [],
+       allProject: [],
        total: 0,
        addProject: null,
        deleteProject: null,
@@ -15,6 +16,9 @@ export default {
         getProjectList(state, data){
            state.projectList = data.data;
            state.total = data.total;
+        },
+        getAllProjectList(state, data){
+             state.allProject = data
         },
         createProject(state, data){
            state.addProject = data;
@@ -37,6 +41,16 @@ export default {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/projects?limit=${data.limit}&page=${data.page}`, method: "GET"}).then(response => {
                     commit('getProjectList', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    reject(e);
+                })
+            })
+        },
+        getAllProjectList: ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/projects?page=${data.page}`, method: "GET"}).then(response => {
+                    commit('getAllProjectList', response.data);
                     resolve(response.data);
                 }).catch(e => {
                     reject(e);

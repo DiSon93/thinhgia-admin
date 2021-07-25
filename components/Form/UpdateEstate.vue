@@ -326,7 +326,6 @@
                 automatic_uploads: false,
                 images_reuse_filename: true,
                 images_file_types: 'jpg,svg,webp',
-                content_style: 'p { margin: 0; }',
               }"
             />
           </div>
@@ -348,13 +347,31 @@
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemovePrivate"
               :on-change="handleChangePrivate"
-              :on-success="handleAvatarSuccessPrivate"
               :headers="headers"
               :file-list="fileList_private"
               ref="uploadPrivate"
+              :auto-upload="false"
             >
               <i slot="default" class="el-icon-picture"></i>
             </el-upload>
+            <el-collapse-transition>
+              <el-button
+                size="small"
+                type="warning"
+                @click="submitUploadPrivate"
+                :loading="loading_btn"
+                v-if="btn_upload"
+                >Upload to server</el-button
+              >
+            </el-collapse-transition>
+            <el-collapse-transition>
+              <el-alert title="Upload success" type="success" show-icon v-if="showAlert">
+              </el-alert>
+            </el-collapse-transition>
+            <el-collapse-transition>
+              <el-alert title="Please upload!!!" type="error" show-icon v-if="showErr">
+              </el-alert>
+            </el-collapse-transition>
 
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt="" />
@@ -375,13 +392,36 @@
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemovePublic"
               :on-change="handleChangePublic"
-              :on-success="handleAvatarSuccessPublic"
               :headers="headers"
               :file-list="fileList_public"
               ref="uploadPublic"
+              :auto-upload="false"
             >
               <i slot="default" class="el-icon-picture"></i>
             </el-upload>
+            <el-collapse-transition>
+              <el-button
+                size="small"
+                type="warning"
+                @click="submitUploadPublic"
+                :loading="loading_btn02"
+                v-if="btn_upload02"
+                >Upload to server</el-button
+              >
+            </el-collapse-transition>
+            <el-collapse-transition>
+              <el-alert
+                title="Upload success"
+                type="success"
+                show-icon
+                v-if="showAlert02"
+              >
+              </el-alert>
+            </el-collapse-transition>
+            <el-collapse-transition>
+              <el-alert title="Please upload!!!" type="error" show-icon v-if="showErr02">
+              </el-alert>
+            </el-collapse-transition>
 
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt="" />
@@ -397,8 +437,8 @@
         <el-checkbox v-model="checked02" @change="checked01 = false">Không</el-checkbox>
       </div>
       <div class="luunhap">
-        <el-button id="soft_save" @click="createNewEstate(0)">Lưu nháp</el-button>
-        <el-button id="save" @click="createNewEstate(1)">Lưu</el-button>
+        <el-button id="soft_save">Lưu nháp</el-button>
+        <el-button id="save" @click="createNewEstate">Lưu</el-button>
       </div>
     </div>
   </div>
@@ -410,6 +450,7 @@ import Editor from "@tinymce/tinymce-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 import axiosClient from "~/utils/axiosClient";
 export default {
+  props: ["estateId"],
   components: {
     editor: Editor,
   },
@@ -504,19 +545,32 @@ export default {
       value28: "",
       value29: "",
       value30: "",
+      loading_btn: false,
+      btn_upload: false,
+      showAlert: false,
+      showErr: false,
+      loading_btn02: false,
+      btn_upload02: false,
+      showAlert02: false,
+      showErr02: false,
       img_val_private: "",
       img_val_public: "",
       fileList_private: [],
       fileList_public: [],
       image_id_private: [],
       image_id_public: [],
+      purpose: "",
+      is_save: "",
     };
+  },
+  created() {
+    this.getRealEstateDetail();
   },
   mounted() {
     this.getCustomerList();
-    this.getStaffList();
     this.getDictionaryList();
     this.getProvinceList();
+    this.getStaffList();
     this.getProjectList();
     this.token = `bearer ${this.currentUser.results.access_token}`;
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
@@ -531,6 +585,7 @@ export default {
     ...mapState("dictionaries", ["dictionaryList"]),
     ...mapState("projects", ["allProject"]),
     ...mapState("auth", ["currentUser"]),
+    ...mapState("realEstate", ["detailEstate"]),
   },
   methods: {
     ...mapActions("customers", ["getCustomerList"]),
@@ -553,6 +608,58 @@ export default {
         page: 1,
       });
       await this.getDicOptions();
+    },
+    async getRealEstateDetail() {
+      try {
+        await this.$store.dispatch("realEstate/getRealEstateDetail", this.estateId);
+        console.log("detail", this.detailEstate);
+        await this.getUpdateDetail();
+      } catch {}
+    },
+    async getUpdateDetail() {
+      //   await this.$store.dispatch("staffs/getStaffList");
+      this.value = this.detailEstate.user_id;
+      this.value02 = this.detailEstate.customer_id;
+      this.value03 = this.detailEstate.province_id;
+      await this.$store.dispatch("global/getDictrictList", this.value03);
+      this.value04 = this.detailEstate.district_id;
+      await this.$store.dispatch("global/getWardList", this.value04);
+      this.value05 = this.detailEstate.ward_id;
+      this.value06 = this.detailEstate.project_id;
+      this.value07 = this.detailEstate.street_name;
+      this.value10 = this.detailEstate.real_estate_type;
+      this.value11 = this.detailEstate.house_type;
+      this.value12 = this.detailEstate.ownership;
+      this.value13 = this.detailEstate.price;
+      this.value14 = this.detailEstate.unit_price;
+      this.value15 = this.detailEstate.street_type;
+      this.value16 = this.detailEstate.width_street;
+      this.value17 = this.detailEstate.house_orientation;
+      this.value18 = this.detailEstate.brokerage_rate;
+      this.value19 = this.detailEstate.brokerage_amount;
+      this.value20 = this.detailEstate.land_area;
+      this.value21 = this.detailEstate.width;
+      this.value22 = this.detailEstate.length;
+      this.value23 = this.detailEstate.floor_area;
+      this.value24 = this.detailEstate.end_open;
+      this.value25 = this.detailEstate.floor_number;
+      this.value26 = this.detailEstate.directions;
+      this.value27 = this.detailEstate.bedroom_number;
+      this.value28 = this.detailEstate.bathroom_number;
+      this.value29 = this.detailEstate.title;
+      this.value20 = this.detailEstate.descriptions;
+      //   this.image_private_id: this.detailEstate.image_private_id,
+      //   image_public_id: this.img_val_public,
+      this.checked01 = this.detailEstate.share_public == 0 ? false : true;
+      this.checked02 = this.detailEstate.share_public == 0 ? true : false;
+      this.purpose = this.detailEstate.purpose;
+      this.is_save = this.detailEstate.is_save;
+      (this.fileList_private = this.detailEstate.image_private.map((item) => {
+        return { ...item, url: item.thumbnail };
+      })),
+        (this.fileList_public = this.detailEstate.image_public.map((item) => {
+          return { ...item, url: item.thumbnail };
+        }));
     },
     getDicOptions() {
       const directionList = this.dictionaryList.filter((u, i) => u.id == 6);
@@ -598,47 +705,31 @@ export default {
     },
     handleRemovePrivate(file, fileList) {
       // console.log("before", this.image_id);
-      // if (file.id) {
-      //   this.$store.dispatch("realEstate/deleteImageInProject", file.id);
-      //   this.image_id_private = this.image_id_private.filter((u) => {
-      //     return u != file.id;
-      //   });
-      //   this.img_val_private = this.image_id_private.map((item) => `${item}`).join(",");
-      //   this.fileList_private = this.fileList_private.filter((u) => {
-      //     return u.id != file.id;
-      //   });
-      // }
-      if (file.response) {
-        this.$store.dispatch(
-          "projects/deleteImageInProject",
-          file.response.results[0].id
-        );
+      if (file.id) {
+        this.$store.dispatch("realEstate/deleteImageInProject", file.id);
         this.image_id_private = this.image_id_private.filter((u) => {
-          return u != file.response.results[0].id;
+          return u != file.id;
         });
         this.img_val_private = this.image_id_private.map((item) => `${item}`).join(",");
+        this.fileList_private = this.fileList_private.filter((u) => {
+          return u.id != file.id;
+        });
+        // console.log("after", this.image_id);
       }
     },
     handleRemovePublic(file, fileList) {
       // console.log("before", this.image_id);
-      if (file.response) {
-        this.$store.dispatch(
-          "projects/deleteImageInProject",
-          file.response.results[0].id
-        );
+      if (file.id) {
+        this.$store.dispatch("realEstate/deleteImageInProject", file.id);
         this.image_id_public = this.image_id_public.filter((u) => {
-          return u != file.response.results[0].id;
+          return u != file.id;
         });
         this.img_val_public = this.image_id_public.map((item) => `${item}`).join(",");
+        this.fileList_public = this.fileList_public.filter((u) => {
+          return u.id != file.id;
+        });
+        // console.log("after", this.image_id);
       }
-    },
-    handleAvatarSuccessPrivate(res, file) {
-      this.image_id_private.push(res.results[0].id);
-      this.img_val_private = this.image_id_private.map((item) => `${item}`).join(",");
-    },
-    handleAvatarSuccessPublic(res, file) {
-      this.image_id_public.push(res.results[0].id);
-      this.img_val_public = this.image_id_public.map((item) => `${item}`).join(",");
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -646,17 +737,29 @@ export default {
     },
 
     handleChangePrivate(list, fileList) {
+      this.showAlert = false;
+      this.btn_upload = true;
       this.fileList_private = fileList;
     },
     handleChangePublic(list, fileList) {
+      this.showAlert02 = false;
+      this.btn_upload02 = true;
       this.fileList_public = fileList;
     },
 
-    async createNewEstate(e) {
+    async createNewEstate() {
+      if (this.btn_upload) {
+        this.showErr = true;
+        return;
+      }
+      if (this.btn_upload02) {
+        this.showErr02 = true;
+        return;
+      }
       this.loading = true;
       try {
         await this.$store.dispatch("realEstate/createNewRealEstate", {
-          user_id: this.value,
+          user_id: this.value01,
           customer_id: this.value02,
           province_id: this.value03,
           district_id: this.value04,
@@ -678,17 +781,17 @@ export default {
           length: this.value22,
           floor_area: this.value23,
           end_open: this.value24,
-          floor_number: parseInt(this.value25),
+          floor_number: this.value25,
           directions: this.value26,
           bedroom_number: this.value27,
           bathroom_number: this.value28,
           title: this.value29,
-          descriptions: this.value30,
+          descriptions: this.value20,
           image_private_id: this.img_val_private,
           image_public_id: this.img_val_public,
           share_public: this.checked01 ? 1 : 0,
-          purpose: this.purpose,
-          is_save: e,
+          purpose: 0,
+          is_save: 1,
         });
         this.loading = false;
         setTimeout(this.openNotificationSuccess(), 1000);
@@ -699,82 +802,81 @@ export default {
       }
     },
 
-    // submitUploadPrivate() {
-    //   this.loading_btn = true;
-    //   this.showErr = false;
-    //   this.fileList_private = this.fileList_private.filter((u) => {
-    //     return u.id != undefined;
-    //   });
-    //   let { uploadFiles } = this.$refs.uploadPrivate;
-    //   console.log("uploadFile", uploadFiles);
-    //   const img_arr = [];
-    //   let form = new FormData();
-    //   uploadFiles.forEach((item) => {
-    //     form.append("file[]", item.raw);
-    //   });
-    //   axiosClient
-    //     .post("/admin/real-estates/image", form)
-    //     .then((response) => {
-    //       this.img_arr = response.data.results.map((item) => {
-    //         return { ...item, url: item.thumbnail };
-    //       });
-    //       setTimeout(() => {
-    //         this.fileList_private = this.fileList_private.concat(this.img_arr);
-    //       }, 1000);
-    //       // this.fileList = this.fileList.concat(this.img_arr);
-    //       this.image_id_private = this.image_id_private.concat(
-    //         this.img_arr.map((u) => u.id)
-    //       );
-    //       this.img_val_private = this.image_id_private.map((item) => `${item}`).join(",");
-    //       console.log("img_val_prviate", this.img_val_prviate);
-    //       this.loading_btn = false;
-    //       this.btn_upload = false;
-    //       this.showAlert = true;
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //       this.loading_btn = false;
-    //       this.showErrorNotification();
-    //     });
-    // },
-    // submitUploadPublic() {
-    //   this.loading_btn02 = true;
-    //   this.showErr02 = false;
-    //   this.fileList_public = this.fileList_public.filter((u) => {
-    //     return u.id != undefined;
-    //   });
-    //   let { uploadFiles } = this.$refs.uploadPublic;
-    //   const img_arr = [];
-    //   let form = new FormData();
-    //   uploadFiles.forEach((item) => {
-    //     form.append("file[]", item.raw);
-    //   });
-    //   axiosClient
-    //     .post("/admin/real-estates/image", form)
-    //     .then((response) => {
-    //       this.img_arr = response.data.results.map((item) => {
-    //         return { ...item, url: item.thumbnail };
-    //       });
-    //       console.log(this.img_arr);
-    //       setTimeout(() => {
-    //         this.fileList_public = this.fileList_public.concat(this.img_arr);
-    //       }, 1000);
-    //       // this.fileList = this.fileList.concat(this.img_arr);
-    //       this.image_id_public = this.image_id_public.concat(
-    //         this.img_arr.map((u) => u.id)
-    //       );
-    //       this.img_val_public = this.image_id_public.map((item) => `${item}`).join(",");
-    //       // console.log("img_id", this.image_id);
-    //       this.loading_btn02 = false;
-    //       this.btn_upload02 = false;
-    //       this.showAlert02 = true;
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //       this.loading_btn02 = false;
-    //       this.showErrorNotification();
-    //     });
-    // },
+    submitUploadPrivate() {
+      this.loading_btn = true;
+      this.showErr = false;
+      this.fileList_private = this.fileList_private.filter((u) => {
+        return u.id != undefined;
+      });
+      let { uploadFiles } = this.$refs.uploadPrivate;
+      console.log("uploadFile", uploadFiles);
+      const img_arr = [];
+      let form = new FormData();
+      uploadFiles.forEach((item) => {
+        form.append("file[]", item.raw);
+      });
+      axiosClient
+        .post("/admin/real-estates/image", form)
+        .then((response) => {
+          this.img_arr = response.data.results.map((item) => {
+            return { ...item, url: item.thumbnail };
+          });
+          setTimeout(() => {
+            this.fileList_private = this.fileList_private.concat(this.img_arr);
+          }, 1000);
+          // this.fileList = this.fileList.concat(this.img_arr);
+          this.image_id_private = this.image_id_private.concat(
+            this.img_arr.map((u) => u.id)
+          );
+          this.img_val_private = this.image_id_private.map((item) => `${item}`).join(",");
+          console.log("img_val_prviate", this.img_val_prviate);
+          this.loading_btn = false;
+          this.btn_upload = false;
+          this.showAlert = true;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.loading_btn = false;
+          this.showErrorNotification();
+        });
+    },
+    submitUploadPublic() {
+      this.loading_btn02 = true;
+      this.showErr02 = false;
+      this.fileList_public = this.fileList_public.filter((u) => {
+        return u.id != undefined;
+      });
+      let { uploadFiles } = this.$refs.uploadPublic;
+      const img_arr = [];
+      let form = new FormData();
+      uploadFiles.forEach((item) => {
+        form.append("file[]", item.raw);
+      });
+      axiosClient
+        .post("/admin/real-estates/image", form)
+        .then((response) => {
+          this.img_arr = response.data.results.map((item) => {
+            return { ...item, url: item.thumbnail };
+          });
+          setTimeout(() => {
+            this.fileList_public = this.fileList_public.concat(this.img_arr);
+          }, 1000);
+          // this.fileList = this.fileList.concat(this.img_arr);
+          this.image_id_public = this.image_id_public.concat(
+            this.img_arr.map((u) => u.id)
+          );
+          this.img_val_public = this.image_id_public.map((item) => `${item}`).join(",");
+          // console.log("img_id", this.image_id);
+          this.loading_btn02 = false;
+          this.btn_upload02 = false;
+          this.showAlert02 = true;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.loading_btn02 = false;
+          this.showErrorNotification();
+        });
+    },
     openNotificationSuccess() {
       this.$notify({
         title: "Success",

@@ -83,8 +83,10 @@ export default {
   },
   methods: {
     handleChangePassword() {
-      this.centerDialogVisible02 = false;
       this.centerDialogVisible03 = true;
+      setTimeout(() => {
+        this.centerDialogVisible02 = false;
+      }, 100);
     },
   },
 };

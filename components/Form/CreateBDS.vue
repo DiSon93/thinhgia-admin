@@ -1,6 +1,6 @@
 <template>
-  <div class="createBDS">
-    <!-- <div class="header_form">
+  <div class="createBDS" v-loading="loading">
+    <div class="header_form">
       <div class="header_left d-flex">
         <div class="create_title">Tạo bất động sản</div>
         <v-btn-toggle v-model="text" tile group>
@@ -9,7 +9,7 @@
         </v-btn-toggle>
       </div>
       <el-button type="danger" icon="el-icon-close" circle size="mini"></el-button>
-    </div> -->
+    </div>
     <div class="form_content">
       <v-row class="content_01">
         <v-col cols="3">
@@ -35,10 +35,10 @@
             <div class="d-flex">
               <el-select v-model="value02" placeholder="Chọn khách hàng">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
+                  v-for="item in customerList"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -71,10 +71,10 @@
                 @change="shownmore = true"
               >
                 <el-option
-                  v-for="item in projects"
-                  :key="item.value"
+                  v-for="item in allProject"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -136,10 +136,10 @@
             <div class="form_label">Loại Bất Động Sản</div>
             <el-select v-model="value10" placeholder="Chọn loại BĐS">
               <el-option
-                v-for="item in estate"
-                :key="item.value"
+                v-for="item in estates"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -148,10 +148,10 @@
             <div class="form_label">Loại nhà đất</div>
             <el-select v-model="value11" placeholder="Chọn loại nhà">
               <el-option
-                v-for="item in house"
-                :key="item.value"
+                v-for="item in houses"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -161,9 +161,9 @@
             <el-select v-model="value12" placeholder="Chọn pháp lý">
               <el-option
                 v-for="item in laws"
-                :key="item.value"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -191,16 +191,17 @@
             <el-select v-model="value15" placeholder="Chọn loại đường">
               <el-option
                 v-for="item in roads"
-                :key="item.value"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
           </div>
           <div class="estate_item">
             <div class="form_label">Đường rộng</div>
-            <el-select v-model="value16" placeholder="0m">
+            <el-input v-model="value16" id="input_estate" placeholder="0m"></el-input>
+            <!-- <el-select v-model="value16" placeholder="0m">
               <el-option
                 v-for="item in widths"
                 :key="item.value"
@@ -208,16 +209,16 @@
                 :value="item.value"
               >
               </el-option>
-            </el-select>
+            </el-select> -->
           </div>
           <div class="estate_item">
             <div class="form_label">Hướng</div>
             <el-select v-model="value17" placeholder="Chọn hướng">
               <el-option
                 v-for="item in directions"
-                :key="item.value"
+                :key="item.id"
                 :label="item.name"
-                :value="item.value"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -257,7 +258,7 @@
               <div class="form_label">Nở hậu</div>
               <el-select v-model="value24" placeholder="Chọn hướng">
                 <el-option
-                  v-for="item in directions"
+                  v-for="item in nohau"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value"
@@ -276,9 +277,9 @@
               <el-select v-model="value26" placeholder="Chọn hướng">
                 <el-option
                   v-for="item in directions"
-                  :key="item.value"
+                  :key="item.id"
                   :label="item.name"
-                  :value="item.value"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -306,6 +307,7 @@
             ></ckeditor> -->
             <editor
               api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
+              v-model="value30"
               :init="{
                 menubar: true,
                 resize: true,
@@ -336,39 +338,41 @@
             <div class="title_upload">Hình ảnh nội bộ</div>
             <i>Kéo và thả nhiều tệp để tải lên</i>
             <el-upload
-              action="#"
+              v-if="headers"
+              action="https://thinhgiacore.demo.fit/api/admin/projects/image"
               list-type="picture-card"
-              :auto-upload="false"
               drag
               multiple
+              name="file[]"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemovePrivate"
+              :on-change="handleChangePrivate"
+              :headers="headers"
+              :file-list="fileList_private"
+              ref="uploadPrivate"
+              :auto-upload="false"
             >
               <i slot="default" class="el-icon-picture"></i>
-              <div slot="file" slot-scope="{ file }">
-                <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(file)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleDownload(file)"
-                  >
-                    <i class="el-icon-download"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
-                </span>
-              </div>
             </el-upload>
+            <el-collapse-transition>
+              <el-button
+                size="small"
+                type="warning"
+                @click="submitUploadPrivate"
+                :loading="loading_btn"
+                v-if="btn_upload"
+                >Upload to server</el-button
+              >
+            </el-collapse-transition>
+            <el-collapse-transition>
+              <el-alert title="Upload success" type="success" show-icon v-if="showAlert">
+              </el-alert>
+            </el-collapse-transition>
+            <el-collapse-transition>
+              <el-alert title="Please upload!!!" type="error" show-icon v-if="showErr">
+              </el-alert>
+            </el-collapse-transition>
+
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt="" />
             </el-dialog>
@@ -379,39 +383,46 @@
             <div class="title_upload">Hình ảnh công khai</div>
             <i>Kéo và thả nhiều tệp để tải lên</i>
             <el-upload
-              action="#"
+              v-if="headers"
+              action="https://thinhgiacore.demo.fit/api/admin/projects/image"
               list-type="picture-card"
-              :auto-upload="false"
               drag
               multiple
+              name="file[]"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemovePublic"
+              :on-change="handleChangePublic"
+              :headers="headers"
+              :file-list="fileList_public"
+              ref="uploadPublic"
+              :auto-upload="false"
             >
               <i slot="default" class="el-icon-picture"></i>
-              <div slot="file" slot-scope="{ file }">
-                <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(file)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleDownload(file)"
-                  >
-                    <i class="el-icon-download"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
-                </span>
-              </div>
             </el-upload>
+            <el-collapse-transition>
+              <el-button
+                size="small"
+                type="warning"
+                @click="submitUploadPublic"
+                :loading="loading_btn02"
+                v-if="btn_upload02"
+                >Upload to server</el-button
+              >
+            </el-collapse-transition>
+            <el-collapse-transition>
+              <el-alert
+                title="Upload success"
+                type="success"
+                show-icon
+                v-if="showAlert02"
+              >
+              </el-alert>
+            </el-collapse-transition>
+            <el-collapse-transition>
+              <el-alert title="Please upload!!!" type="error" show-icon v-if="showErr02">
+              </el-alert>
+            </el-collapse-transition>
+
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt="" />
             </el-dialog>
@@ -422,12 +433,12 @@
         <div class="share_title">
           Bạn có muốn chia sẻ sản phẩm ra cộng đồng sau khi tạo không?
         </div>
-        <el-checkbox v-model="checked01">Có</el-checkbox>
-        <el-checkbox v-model="checked02">Không</el-checkbox>
+        <el-checkbox v-model="checked01" @change="checked02 = false">Có</el-checkbox>
+        <el-checkbox v-model="checked02" @change="checked01 = false">Không</el-checkbox>
       </div>
       <div class="luunhap">
         <el-button id="soft_save">Lưu nháp</el-button>
-        <el-button id="save">Lưu</el-button>
+        <el-button id="save" @click="createNewEstate">Lưu</el-button>
       </div>
     </div>
   </div>
@@ -437,6 +448,7 @@
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "@tinymce/tinymce-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
+import axiosClient from "~/utils/axiosClient";
 export default {
   components: {
     editor: Editor,
@@ -446,7 +458,10 @@ export default {
       text: "center",
       shownmore: false,
       checked01: false,
+      loading: false,
       checked02: false,
+      headers: null,
+      token: "",
       editor: ClassicEditor,
       editorData: "<p>Content of the editor.</p>",
       editorConfig: {
@@ -455,121 +470,6 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
-      options: [
-        {
-          value: "1",
-          name: "Phạm Văn Sơn",
-          phone: "01278564",
-        },
-        {
-          value: "2",
-          name: "Phạm Văn Minh",
-          phone: "09765264",
-        },
-        {
-          value: "3",
-          name: "Lê Minh Chí",
-          phone: "012875564",
-        },
-        {
-          value: "4",
-          name: "Phạm Văn Đồng",
-          phone: "01278564",
-        },
-        {
-          value: "5",
-          name: "Phạm Văn Sơn",
-          phone: "01278564",
-        },
-        {
-          value: "6",
-          name: "Phạm Văn Linh",
-          phone: "012226864",
-        },
-        {
-          value: "7",
-          name: "Phạm Văn Lộc",
-          phone: "012226864",
-        },
-      ],
-      provinces: [
-        {
-          value: "1",
-          name: "Bà Rịa-Vũng Tàu",
-        },
-        {
-          value: "2",
-          name: "TP Hồ Chí Minh",
-        },
-        {
-          value: "3",
-          name: "Hà Nội",
-        },
-        {
-          value: "4",
-          name: "Đà Nẵng",
-        },
-        {
-          value: "5",
-          name: "Quảng Nam",
-        },
-      ],
-      districts: [
-        {
-          value: "1",
-          name: "An Ninh",
-        },
-        {
-          value: "2",
-          name: "An Lạc",
-        },
-        {
-          value: "3",
-          name: "An Hòa",
-        },
-        {
-          value: "4",
-          name: "An Sinh",
-        },
-        {
-          value: "5",
-          name: "An Tuân",
-        },
-      ],
-      towns: [
-        {
-          value: "1",
-          name: "Bình Tân",
-        },
-        {
-          value: "2",
-          name: "Bình Hòa",
-        },
-        {
-          value: "3",
-          name: "Bình An",
-        },
-        {
-          value: "4",
-          name: "Bình Thành",
-        },
-        {
-          value: "5",
-          name: "Bình Tuân",
-        },
-        {
-          value: "6",
-          name: "Bình Minh",
-        },
-        {
-          value: "7",
-          name: "Bình Thạnh",
-        },
-        {
-          value: "8",
-          name: "Bình Đại",
-        },
-      ],
       projects: [
         {
           value: "1",
@@ -588,6 +488,32 @@ export default {
           name: "Mai Chiến Thủy",
         },
       ],
+      directions: [],
+      estates: [],
+      houses: [],
+      units: [
+        {
+          value: "trieu",
+          name: "Triệu",
+        },
+        {
+          value: "ty",
+          name: "Tỷ",
+        },
+      ],
+      nohau: [
+        {
+          value: 0,
+          name: "Không",
+        },
+        {
+          value: 1,
+          name: "Có",
+        },
+      ],
+      widths: [],
+      roads: [],
+      laws: [],
       value: "",
       value02: "",
       value03: "",
@@ -596,13 +522,68 @@ export default {
       value06: "",
       value07: "",
       value08: "",
+      value09: "",
+      value10: "",
+      value11: "",
+      value12: "",
+      value13: "",
+      value14: "",
+      value15: "",
+      value16: "",
+      value17: "",
+      value18: "",
+      value19: "",
+      value20: "",
+      value21: "",
+      value22: "",
+      value23: "",
+      value24: "",
+      value25: "",
+      value26: "",
+      value27: "",
+      value28: "",
+      value29: "",
+      value30: "",
+      loading_btn: false,
+      btn_upload: false,
+      showAlert: false,
+      showErr: false,
+      loading_btn02: false,
+      btn_upload02: false,
+      showAlert02: false,
+      showErr02: false,
+      img_val_private: "",
+      img_val_public: "",
+      fileList_private: [],
+      fileList_public: [],
+      image_id_private: [],
+      image_id_public: [],
     };
+  },
+  mounted() {
+    this.getCustomerList();
+    this.getStaffList();
+    this.getDictionaryList();
+    this.getProvinceList();
+    this.getProjectList();
+    this.token = `bearer ${this.currentUser.results.access_token}`;
+    this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
+  },
+
+  computed: {
+    ...mapState("staffs", ["staffList"]),
+    ...mapState("global", ["dictrictList"]),
+    ...mapState("global", ["provinceList"]),
+    ...mapState("global", ["wardList"]),
+    ...mapState("customers", ["customerList"]),
+    ...mapState("dictionaries", ["dictionaryList"]),
+    ...mapState("projects", ["allProject"]),
+    ...mapState("auth", ["currentUser"]),
   },
   methods: {
     ...mapActions("customers", ["getCustomerList"]),
     ...mapActions("staffs", ["getStaffList"]),
     ...mapActions("global", ["getProvinceList"]),
-
     chooseProvince() {
       this.value04 = "";
       this.value05 = "";
@@ -613,31 +594,243 @@ export default {
       this.value05 = "";
       this.$store.dispatch("global/getWardList", this.value04);
     },
-    handleRemove(file) {
-      console.log(file);
+
+    async getDictionaryList() {
+      await this.$store.dispatch("dictionaries/getDictionaryList", {
+        limit: 10,
+        page: 1,
+      });
+      await this.getDicOptions();
+    },
+    getDicOptions() {
+      const directionList = this.dictionaryList.filter((u, i) => u.id == 6);
+      this.directions = directionList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+      const estateList = this.dictionaryList.filter((u, i) => u.id == 1);
+      this.estates = estateList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+      const houseList = this.dictionaryList.filter((u, i) => u.id == 2);
+      this.houses = houseList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+      const lawList = this.dictionaryList.filter((u, i) => u.id == 5);
+      this.laws = lawList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+      const roadList = this.dictionaryList.filter((u, i) => u.id == 3);
+      this.roads = roadList[0].dictionaries.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+        };
+      });
+    },
+    async getProjectList() {
+      await this.$store.dispatch("projects/getAllProjectList", {
+        page: 1,
+      });
+    },
+    handleRemovePrivate(file, fileList) {
+      // console.log("before", this.image_id);
+      if (file.id) {
+        this.$store.dispatch("realEstate/deleteImageInProject", file.id);
+        this.image_id_private = this.image_id_private.filter((u) => {
+          return u != file.id;
+        });
+        this.img_val_private = this.image_id_private.map((item) => `${item}`).join(",");
+        this.fileList_private = this.fileList_private.filter((u) => {
+          return u.id != file.id;
+        });
+        // console.log("after", this.image_id);
+      }
+    },
+    handleRemovePublic(file, fileList) {
+      // console.log("before", this.image_id);
+      if (file.id) {
+        this.$store.dispatch("realEstate/deleteImageInProject", file.id);
+        this.image_id_public = this.image_id_public.filter((u) => {
+          return u != file.id;
+        });
+        this.img_val_public = this.image_id_public.map((item) => `${item}`).join(",");
+        this.fileList_public = this.fileList_public.filter((u) => {
+          return u.id != file.id;
+        });
+        // console.log("after", this.image_id);
+      }
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    handleDownload(file) {
-      console.log(file);
+
+    handleChangePrivate(list, fileList) {
+      this.showAlert = false;
+      this.btn_upload = true;
+      this.fileList_private = fileList;
     },
-  },
-  mounted() {
-    this.getCustomerList();
-    this.getStaffList();
-    // this.getDictrictList();
-    this.getProvinceList();
-  },
-  updated() {
-    // this.getDictrictList();
-  },
-  computed: {
-    ...mapState("staffs", ["staffList"]),
-    ...mapState("global", ["dictrictList"]),
-    ...mapState("global", ["provinceList"]),
-    ...mapState("global", ["wardList"]),
+    handleChangePublic(list, fileList) {
+      this.showAlert02 = false;
+      this.btn_upload02 = true;
+      this.fileList_public = fileList;
+    },
+
+    async createNewEstate() {
+      if (this.btn_upload) {
+        this.showErr = true;
+        return;
+      }
+      if (this.btn_upload02) {
+        this.showErr02 = true;
+        return;
+      }
+      this.loading = true;
+      try {
+        await this.$store.dispatch("realEstate/createNewRealEstate", {
+          user_id: this.value,
+          customer_id: this.value02,
+          province_id: this.value03,
+          district_id: this.value04,
+          ward_id: this.value05,
+          project_id: this.value06,
+          street_name: this.value07,
+          real_estate_type: this.value10,
+          house_type: this.value11,
+          ownership: this.value12,
+          price: this.value13,
+          unit_price: this.value14,
+          street_type: this.value15,
+          width_street: this.value16,
+          house_orientation: this.value17,
+          brokerage_rate: this.value18,
+          brokerage_amount: this.value19,
+          land_area: this.value20,
+          width: this.value21,
+          length: this.value22,
+          floor_area: this.value23,
+          end_open: this.value24,
+          floor_number: this.value25,
+          directions: this.value26,
+          bedroom_number: this.value27,
+          bathroom_number: this.value28,
+          title: this.value29,
+          descriptions: this.value20,
+          image_private_id: this.img_val_private,
+          image_public_id: this.img_val_public,
+          share_public: this.checked01 ? 0 : 1,
+          purpose: 0,
+          is_save: 1,
+        });
+        this.loading = false;
+        setTimeout(this.openNotificationSuccess(), 1000);
+        this.$router.push("/real-estate");
+      } catch {
+        this.loading = false;
+        this.showErrorNotification();
+      }
+    },
+
+    submitUploadPrivate() {
+      this.loading_btn = true;
+      this.showErr = false;
+      this.fileList_private = this.fileList_private.filter((u) => {
+        return u.id != undefined;
+      });
+      let { uploadFiles } = this.$refs.uploadPrivate;
+      console.log("uploadFile", uploadFiles);
+      const img_arr = [];
+      let form = new FormData();
+      uploadFiles.forEach((item) => {
+        form.append("file[]", item.raw);
+      });
+      axiosClient
+        .post("/admin/real-estates/image", form)
+        .then((response) => {
+          this.img_arr = response.data.results.map((item) => {
+            return { ...item, url: item.thumbnail };
+          });
+          setTimeout(() => {
+            this.fileList_private = this.fileList_private.concat(this.img_arr);
+          }, 1000);
+          // this.fileList = this.fileList.concat(this.img_arr);
+          this.image_id_private = this.image_id_private.concat(
+            this.img_arr.map((u) => u.id)
+          );
+          this.img_val_private = this.image_id_private.map((item) => `${item}`).join(",");
+          console.log("img_val_prviate", this.img_val_prviate);
+          this.loading_btn = false;
+          this.btn_upload = false;
+          this.showAlert = true;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.loading_btn = false;
+          this.showErrorNotification();
+        });
+    },
+    submitUploadPublic() {
+      this.loading_btn02 = true;
+      this.showErr02 = false;
+      this.fileList_public = this.fileList_public.filter((u) => {
+        return u.id != undefined;
+      });
+      let { uploadFiles } = this.$refs.uploadPublic;
+      const img_arr = [];
+      let form = new FormData();
+      uploadFiles.forEach((item) => {
+        form.append("file[]", item.raw);
+      });
+      axiosClient
+        .post("/admin/real-estates/image", form)
+        .then((response) => {
+          this.img_arr = response.data.results.map((item) => {
+            return { ...item, url: item.thumbnail };
+          });
+          setTimeout(() => {
+            this.fileList_public = this.fileList_public.concat(this.img_arr);
+          }, 1000);
+          // this.fileList = this.fileList.concat(this.img_arr);
+          this.image_id_public = this.image_id_public.concat(
+            this.img_arr.map((u) => u.id)
+          );
+          this.img_val_public = this.img_val_public.map((item) => `${item}`).join(",");
+          // console.log("img_id", this.image_id);
+          this.loading_btn02 = false;
+          this.btn_upload02 = false;
+          this.showAlert02 = true;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.loading_btn02 = false;
+          this.showErrorNotification();
+        });
+    },
+    openNotificationSuccess() {
+      this.$notify({
+        title: "Success",
+        message: "Create real-esate successfull!!!",
+        type: "success",
+      });
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
   },
 };
 </script>

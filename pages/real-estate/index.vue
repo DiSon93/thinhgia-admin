@@ -10,7 +10,7 @@
     <div class="header_box">
       <v-row align="center">
         <button class="homepage" disabled>Bất động sản</button>
-        <v-btn depressed color="primary" id="social_network"> 1652 </v-btn>
+        <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
         <div class="select_box">
           <el-select v-model="value" placeholder="Select">
             <el-option
@@ -28,17 +28,23 @@
             </el-option>
           </el-select>
         </div>
-        <b-input-group class="search">
-          <b-input-group-prepend is-text>
-            <b-icon icon="search"></b-icon>
-          </b-input-group-prepend>
-          <b-form-input
+        <div id="search">
+          <el-input
             placeholder="Tìm kiếm tất cả thông tin"
-            type="search"
-          ></b-form-input>
-        </b-input-group>
+            prefix-icon="el-icon-search"
+            v-model="input"
+          >
+          </el-input>
+        </div>
         <div class="option_button">
-          <v-btn class="mx-2 add_btn" fab dark small color="warning">
+          <v-btn
+            class="mx-2 add_btn"
+            fab
+            dark
+            small
+            color="warning"
+            @click="$router.push('/form/house')"
+          >
             <v-icon dark small> mdi-plus </v-icon>
           </v-btn>
           <v-btn class="account" fab @click="centerDialogVisible02 = true"
@@ -80,6 +86,7 @@ import RealEstateTable from "@component/RealEstateTable.vue";
 import EstateTable from "@component/EstateTable.vue";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
+import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
@@ -90,6 +97,7 @@ export default {
   },
   data() {
     return {
+      input: "",
       clipped: false,
       drawer: true,
       fixed: false,
@@ -185,10 +193,15 @@ export default {
       value: "0",
     };
   },
+  computed: {
+    ...mapState("realEstate", ["total"]),
+  },
   methods: {
     handleChangePassword() {
-      this.centerDialogVisible02 = false;
       this.centerDialogVisible03 = true;
+      setTimeout(() => {
+        this.centerDialogVisible02 = false;
+      }, 100);
     },
   },
 };
@@ -350,7 +363,7 @@ export default {
   }
 }
 @media screen and (max-width: 600px) {
-  .search {
+  #search {
     display: none;
   }
   .select_box {

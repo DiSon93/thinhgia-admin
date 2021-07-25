@@ -46,7 +46,7 @@
           <td>{{ row.item.type_estate }}</td>
           <td>{{ row.item.type_house }}</td>
           <td>{{ row.item.square }} <span>&#13217;</span></td>
-          <td>{{ row.item.proble }} BĐS</td>
+          <td>{{ row.item.real_estates }} BĐS</td>
           <td>{{ row.item.discription }}</td>
           <td>
             <!-- <el-tooltip class="item" effect="dark" content="Sửa" placement="top"> -->
@@ -230,6 +230,7 @@ export default {
           proble: item.purpose,
           side: item.purpose == 0 ? "Mua" : "Thuê",
           discription: item.descriptions,
+          real_estates: item.real_estates.length,
         };
       });
     },

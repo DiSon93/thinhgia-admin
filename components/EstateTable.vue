@@ -1,9 +1,12 @@
 <template>
-  <div id="real_estate_table">
+  <div id="real_estate_table" v-loading="loading">
     <el-table
-      :data="tableData"
+      :data="realEstateTable"
       style="width: 100%"
       ref="multipleTable"
+      stripe
+      highlight-current-row
+      @row-click="handdle"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="35" fixed> </el-table-column>
@@ -14,13 +17,17 @@
         label="Loại"
         width="80"
         :filters="[
-          { text: 'Mua', value: 'MUA' },
+          { text: 'Thuê', value: 'THUÊ' },
           { text: 'Bán', value: 'BÁN' },
         ]"
         :filter-method="filterHandler"
       >
       </el-table-column>
-      <el-table-column prop="price" label="Giá" width="80" sortable> </el-table-column>
+      <el-table-column prop="price" label="Giá" width="80" sortable>
+        <template slot-scope="scope">
+          {{ scope.row.price }} {{ scope.row.unit_price }}
+        </template>
+      </el-table-column>
       <el-table-column
         prop="project"
         label="Dự án"
@@ -40,9 +47,7 @@
         <template slot-scope="scope">
           <div>{{ scope.row.address }}</div>
           <v-btn depressed color="primary" id="social_network"> Cộng đồng </v-btn>
-          <v-btn v-if="scope.row.web ? true : false" depressed color="success" id="web">
-            Web
-          </v-btn>
+          <v-btn v-if="scope.row.web" depressed color="success" id="web"> Web </v-btn>
         </template>
       </el-table-column>
       <el-table-column
@@ -60,7 +65,7 @@
           <div class="district">{{ scope.row.district }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="estate_type" label="Loại BĐS" width="140"></el-table-column>
+      <el-table-column prop="estate_type" label="Loại BĐS" width="160"></el-table-column>
       <el-table-column
         prop="home_type"
         label="Loại nhà"
@@ -74,7 +79,7 @@
       ></el-table-column>
       <el-table-column prop="square" label="Diện tích" width="140">
         <template slot-scope="scope">
-          {{ scope.row.square }}
+          {{ scope.row.square }} m2
           <div class="s_detail">{{ scope.row.s_detail }}</div>
         </template>
       </el-table-column>
@@ -98,105 +103,60 @@
       <el-table-column prop="register" label="Đăng ký ngày" width="180"></el-table-column>
       <el-table-column prop="update" label="Ngày cập nhật" width="180"></el-table-column>
     </el-table>
+    <div class="block_pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-sizes="[10, 15, 20, 25]"
+        :page-size="10"
+        layout="sizes, prev, pager, next"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
+    <el-drawer
+      title="I am the title"
+      :visible.sync="drawer"
+      :with-header="false"
+      size="418px"
+    >
+      <EstateDetail
+        :estateId="selected_id"
+        :estateItem="selectd_item"
+        :key="childKey"
+        v-on:cancel-modals="reloadPage"
+      />
+    </el-drawer>
   </div>
 </template>
 
 <script>
+import EstateDetail from "@component/Form/EstateDetail";
+import { mapState, mapActions } from "vuex";
 export default {
+  components: {
+    EstateDetail,
+  },
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          amount: 3243,
-          side: "BÁN",
-          price: "7.5 tỷ",
-          project: "Không có",
-          address: "75/11 Phạm Hồng Thái",
-          area: "Vũng Tàu",
-          district: "Phường 7",
-          estate_type: "Nhà ở riêng lẻ",
-          home_type: "Nhà cao tầng",
-          square: "96 m2",
-          s_detail: "6.1m x 15.4",
-          law: "Sổ hồng",
-          floor: 12,
-          direction: "Đông Nam",
-          loby: "Tây Bắc",
-          iron: 12,
-          viewer: 12,
-          staff: "Cao Thông Nhất",
-          customer: "Trình Minh Tuấn",
-          fee: 7200,
-          bedroom: 3,
-          road_type: 12,
-          road: 12,
-          large: 234,
-          register: "12/4/2021 09:12:21",
-          update: "8/6/2020 12:09:33",
-        },
-        {
-          id: 2,
-          amount: 3456,
-          side: "MUA",
-          price: "6.5 tỷ",
-          project: "Có",
-          address: "212 D9 Nguyễn Hữu Cảnh",
-          area: "Vũng Tàu",
-          district: "Phường Thống Nhất",
-          estate_type: "Nhà ở riếng lẻ",
-          home_type: "Nhà cấp 4",
-          square: "98 m2",
-          s_detail: "6.7m x 14.7m",
-          law: "No",
-          floor: 12,
-          direction: "Đông Nam",
-          loby: "Đông Bắc",
-          iron: 12,
-          viewer: 12,
-          staff: "Võ Hoàng Yến",
-          customer: "Sơn Tùng MTP",
-          fee: 90,
-          bedroom: 2,
-          road_type: 12,
-          road: 12,
-          large: 634,
-          register: "23/4/2021",
-          update: "1/6/2020",
-          web: true,
-        },
-        {
-          id: 3,
-          amount: 3086,
-          side: "BÁN",
-          price: "10.5 tỷ",
-          project: "Không có",
-          address: "212 D9 Lê Văn Việt",
-          area: "Hồ Chí Minh",
-          district: "Phường 6",
-          estate_type: "Nhà ở riếng lẻ",
-          home_type: "Nhà cấp 2",
-          square: "98 m2",
-          s_detail: "6.7m x 14.7m",
-          law: "Sổ hồng",
-          floor: 9,
-          direction: "Tây Nam",
-          loby: "Đông Bắc",
-          iron: 12,
-          viewer: 12,
-          staff: "Hà Anh Tuấn",
-          customer: "Cao Thái Sơn",
-          fee: 90,
-          bedroom: 2,
-          road_type: 12,
-          road: 12,
-          large: 634,
-          register: "23/4/2021",
-          update: "1/6/2020",
-        },
-      ],
+      drawer: false,
+      loading: false,
+      rowPerPage: 10,
+      page: 1,
+      selected_id: "",
+      selectd_item: {},
+      childKey: 0,
+      realEstateTable: [],
       multipleSelection: [],
+      currentPage: 1,
     };
+  },
+  created() {
+    this.getRealEstateListPerPage();
+  },
+  computed: {
+    ...mapState("realEstate", ["realEstateList", "total"]),
   },
   methods: {
     formatter(row, column) {
@@ -208,6 +168,88 @@ export default {
     filterHandler(value, row, column) {
       const property = column["property"];
       return row[property] === value;
+    },
+    handdle(row, event, column) {
+      console.log(row);
+      this.drawer = true;
+      this.selected_id = row.id;
+      this.selectd_item = row;
+      this.childKey += 1;
+    },
+    reloadPage() {
+      this.drawer = false;
+      this.getRealEstateListPerPage();
+    },
+    async getRealEstateListPerPage() {
+      this.loading = true;
+      try {
+        await this.$store.dispatch("realEstate/getRealEstateList", {
+          limit: this.rowPerPage,
+          page: this.page,
+        });
+        await this.showEstateList();
+        this.loading = false;
+      } catch {
+        this.loading = false;
+      }
+    },
+    showEstateList() {
+      this.realEstateTable = this.realEstateList.map((item, index) => {
+        return {
+          id: item.id,
+          amount: item.id,
+          side: item.purpose == 0 ? "BÁN" : "THUÊ",
+          price: item.price,
+          project: item.project == null ? "Không có" : "Có",
+          projectName: item.project?.name,
+          address: `${item.street_name} ${item.ward.name}`,
+          area: item.province.name,
+          district: item.district.name,
+          estate_type: item.real_estate_type_dict?.name,
+          home_type: item.house_type_dict?.name,
+          square: item.length * item.width,
+          length: item.length,
+          width: item.width,
+          s_detail: `${item.length}m x ${item.width}`,
+          law: item.ownership_dict?.name,
+          floor: item.floor_number,
+          direction: item.house_orientation_dict?.name,
+          loby: item.directions_dict?.name,
+          iron: item.end_open == 0 ? "Không có" : "Có",
+          viewer: 12,
+          staff: item.staff?.name,
+          customer: item.customer?.name,
+          phone: item.customer?.phone,
+          fee: item.brokerage_amount,
+          brokerage_amount: item.brokerage_amount,
+          bedroom: item.bedroom_number,
+          road_type: item.street_type_dict?.name,
+          road: item.width_street,
+          large: item.land_area,
+          register: item.created_at.slice(0, 10),
+          update: item.updated_at.slice(0, 10),
+          web: item.share_web == 0 ? true : false,
+          image_private: item.image_private,
+          unit_price: item.unit_price == "ty" ? "tỷ" : "triệu",
+          descriptions: item.descriptions,
+        };
+      });
+    },
+
+    async handleSizeChange(val) {
+      this.loading = true;
+      if (this.page > 1) {
+        return (this.page = 1);
+      }
+      this.rowPerPage = val;
+      await this.getRealEstateListPerPage();
+      this.loading = false;
+    },
+    async handleCurrentChange(val) {
+      this.loading = true;
+      this.page = val;
+      await this.getRealEstateListPerPage();
+      this.loading = false;
     },
   },
 };
@@ -246,5 +288,12 @@ export default {
   border: 1px solid #52c41a !important;
   border-radius: 5px;
   font-size: 12px;
+}
+.block_pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+.v-application .elevation-1 {
+  box-shadow: none !important;
 }
 </style>

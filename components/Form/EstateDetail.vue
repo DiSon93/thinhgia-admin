@@ -1,85 +1,83 @@
 <template>
-  <div class="detail">
+  <div class="detail" v-loading="loading">
     <div class="detail_title d-flex">
       <div>Chi tiết</div>
-      <el-button type="danger" icon="el-icon-close" circle size="mini"></el-button>
+      <div>
+        <el-button
+          type="danger"
+          icon="el-icon-delete"
+          circle
+          size="mini"
+          @click="deleteItem"
+        ></el-button>
+        <!-- <el-button type="danger" icon="el-icon-close" circle size="mini"></el-button> -->
+      </div>
     </div>
     <el-divider></el-divider>
     <div class="contents">
       <div class="d-flex small">
-        <div class="price">VNĐ 2.5 tỷ</div>
+        <div class="price">VNĐ {{ estateItem.price }} {{ estateItem.unit_price }}</div>
         <div>
           <v-btn id="congdong">Cộng Đồng</v-btn>
           <v-btn id="web">Web</v-btn>
+          <NuxtLink :to="`detail/house/${estateId}`">
+            <img src="@image/icons/views.svg" alt="" />
+          </NuxtLink>
         </div>
       </div>
       <div class="information d-flex">
         <v-icon>mdi-map-marker</v-icon>
         <div class="address">
-          12A-06 30 tháng 4, CHUNG CƯ LAPEN CENTER, Phường 9, Vũng Tàu.
+          {{ estateItem.address }}, {{ estateItem.district }}, {{ estateItem.area }}
         </div>
       </div>
       <div class="information d-flex staff">
         <v-icon>mdi-account</v-icon>
-        <div>Nguyễn Thi Diễm Thúy</div>
+        <div>{{ estateItem.customer }}</div>
       </div>
       <v-btn class="chiase"> <v-icon>mdi-share</v-icon> Chia sẻ</v-btn>
       <div class="more_info">
-        <div><img src="@image/icons/bed.svg" alt="" /> <span>2</span></div>
-        <div><img src="@image/icons/lau.svg" alt="" /> <span>0</span></div>
-        <div><img src="@image/icons/width.svg" alt="" /> <span>7m</span></div>
+        <div>
+          <img src="@image/icons/bed.svg" alt="" /> <span>{{ estateItem.bedroom }}</span>
+        </div>
+        <div>
+          <img src="@image/icons/lau.svg" alt="" /> <span>{{ estateItem.floor }}</span>
+        </div>
+        <div>
+          <img src="@image/icons/width.svg" alt="" /> <span>{{ estateItem.road }}m</span>
+        </div>
         <div>
           <img src="@image/icons/square.svg" alt="" />
-          <span>71<span id="mv">&#13217;</span></span>
+          <span>{{ estateItem.square }}<span id="mv">&#13217;</span></span>
         </div>
       </div>
     </div>
     <el-divider></el-divider>
     <div class="edit">
-      <v-btn> <v-icon> mdi-pencil </v-icon>Sửa</v-btn>
+      <v-btn @click="updateRealEstate"> <v-icon> mdi-pencil </v-icon>Sửa</v-btn>
       <v-btn> <v-icon> mdi-cloud-upload </v-icon>Tải lên</v-btn>
       <v-btn> <v-icon>mdi-dots-vertical</v-icon> Thêm</v-btn>
     </div>
     <div class="user_logo">
       <img src="@image/icons/user.svg" alt="" />
-      <span>Chị Hạnh</span>
+      <span>{{ estateItem.staff }}</span>
     </div>
     <div class="img_title">
-      <div>10 ảnh</div>
+      <div>{{ estateItem.image_private.length }} ảnh</div>
       <v-btn> <img src="@image/icons/taixuong.svg" alt="" /> Tải xuống</v-btn>
     </div>
     <div class="img_main">
-      <img src="@image/layouts/detail_img_1.svg" alt="" />
-      <img src="@image/layouts/detail_img_2.svg" alt="" />
-      <img src="@image/layouts/detail_img_3.svg" alt="" />
-      <img src="@image/layouts/detail_img_4.svg" alt="" />
-      <img src="@image/layouts/detail_img_3.svg" alt="" />
+      <img
+        v-for="item in estateItem.image_private"
+        :key="item.id"
+        :src="item.thumbnail"
+        alt=""
+      />
     </div>
     <el-divider></el-divider>
     <div class="description">
       <div class="description_title">Mô tả</div>
-      <div>
-        Cần bán căn hộ 2 phòng ngủ OSC đã trang bị đầy đủ nội thất đầy đủ, tầng trung view
-        biển rất mát mẻ, cạnh biển Bãi Sau chỉ 800m, thích hợp nghỉ dưỡng, đi bộ ra biển.
-      </div>
-      <div>
-        <span class="hightlight">-Địa chỉ:</span>
-        <span> Chung cư OSC Land, Võ Thị Sáu, Phường Thắng Tam, Vũng Tàu</span>
-      </div>
-      <div>
-        <span class="hightlight">-Diện tích:</span> <span>58m2 rộng rãi, thoáng mát</span>
-      </div>
-      <div>
-        <span class="hightlight">-Kết cấu:</span>
-        <span>Gồm 2 phòng ngủ rộng rãi, 1 WC, bếp và phòng khách, đã sửa nội thất. </span>
-      </div>
-      <div>
-        <span class="hightlight">-Hướng cửa:</span>
-        <span>
-          là hướng Đông Bắc thoáng mát, view hướng Tây Nam nhà rất mát không bị nắng nóng
-          vào phòng.</span
-        >
-      </div>
+      <div v-html="estateItem.descriptions"></div>
       <div>
         <span class="hightlight">-Pháp lý:</span>
         <span>Sổ hồng chính chủ vay ngân hàng lên đến 70%</span>
@@ -92,90 +90,132 @@
     <div class="dimention">
       <div class="detail_small">
         <div>Loại BĐS</div>
-        <div class="hightlight">Căn hộ-Chung cư</div>
+        <div class="hightlight">{{ estateItem.estate_type }}</div>
       </div>
       <div class="detail_small">
         <div>Pháp Lý</div>
-        <div class="hightlight">Sổ hồng</div>
+        <div class="hightlight">{{ estateItem.law }}</div>
       </div>
       <div class="detail_small">
         <div>Loại Nhà</div>
-        <div class="hightlight">Nhà cao tầng</div>
+        <div class="hightlight">{{ estateItem.home_type }}</div>
       </div>
       <div class="detail_small">
         <div>Ngang</div>
-        <div class="hightlight">0m</div>
+        <div class="hightlight">{{ estateItem.width }}</div>
       </div>
       <div class="detail_small">
         <div>Dài</div>
-        <div class="hightlight">0m</div>
+        <div class="hightlight">{{ estateItem.length }}</div>
       </div>
       <div class="detail_small">
         <div>Nở hậu</div>
-        <div class="hightlight">Không</div>
+        <div class="hightlight">{{ estateItem.iron }}</div>
       </div>
       <div class="detail_small">
         <div>Hướng</div>
-        <div class="hightlight">Đông Nam</div>
+        <div class="hightlight">{{ estateItem.direction }}</div>
       </div>
       <div class="detail_small">
         <div>Hướng ban công</div>
-        <div class="hightlight">Tây Bắc</div>
+        <div class="hightlight">{{ estateItem.loby }}</div>
       </div>
       <div class="detail_small">
         <div>Mục đích</div>
-        <div class="hightlight">Bán</div>
+        <div class="hightlight">{{ estateItem.side }}</div>
       </div>
       <div class="detail_small">
         <div>SĐT</div>
-        <div class="hightlight">012324324</div>
+        <div class="hightlight">{{ estateItem.phone }}</div>
       </div>
       <div class="detail_small">
         <div>Dự án</div>
-        <div class="hightlight">CHUNG CƯ LAPEN CENTER</div>
-      </div>
-      <div class="detail_small">
-        <div>Block/Khu</div>
-        <div class="hightlight">Không có</div>
-      </div>
-      <div class="detail_small">
-        <div>Block/Khu</div>
-        <div class="hightlight">Không có</div>
-      </div>
-      <div class="detail_small">
-        <div>Tầng/Lô</div>
-        <div class="hightlight">13</div>
+        <div class="hightlight">{{ estateItem.projectName }}</div>
       </div>
       <div class="detail_small">
         <div>Phí môi giới</div>
-        <div class="hightlight">1</div>
+        <div class="hightlight">{{ estateItem.fee }}</div>
       </div>
       <div class="detail_small">
         <div>Tỷ lệ môi giới</div>
-        <div class="hightlight">0</div>
+        <div class="hightlight">{{ estateItem.brokerage_amount }}</div>
       </div>
       <div class="detail_small">
         <div>Loại đường</div>
-        <div class="hightlight">Mặt tiền đường</div>
+        <div class="hightlight">{{ estateItem.road_type }}</div>
       </div>
       <div class="detail_small">
         <div>Diện tích sàn</div>
-        <div class="hightlight">71m2</div>
+        <div class="hightlight">{{ estateItem.large }}m2</div>
       </div>
       <div class="detail_small">
         <div>Đăng ký ngày</div>
-        <div class="hightlight">08/07/2021 10:25:09</div>
+        <div class="hightlight">{{ estateItem.register }}</div>
       </div>
       <div class="detail_small">
         <div>NGÀY CẬP NHẬT</div>
-        <div class="hightlight">08/07/2021 10:25:09</div>
+        <div class="hightlight">{{ estateItem.update }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["estateId", "estateItem"],
+  data() {
+    return {
+      loading: false,
+    };
+  },
+  methods: {
+    updateRealEstate() {
+      this.$router.push(`/form/house/update/${this.estateId}`);
+    },
+    deleteItem() {
+      this.$confirm(`Are you sure to delete this real-estate. Continue?`, "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.loading = true;
+          this.deleteThisRealEstate();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Delete canceled",
+          });
+        });
+    },
+    async deleteThisRealEstate() {
+      try {
+        await this.$store.dispatch("realEstate/deleteEstateInSystem", this.estateId);
+        this.loading = false;
+        setTimeout(this.openNotificationSuccess(), 500);
+        this.$router.push("/real-estate");
+        this.$emit("cancel-modals");
+      } catch {
+        this.loading = false;
+        this.showErrorNotification();
+      }
+    },
+    openNotificationSuccess() {
+      this.$notify({
+        title: "Success",
+        message: "Delete real-esate successfull!!!",
+        type: "success",
+      });
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -219,6 +259,9 @@ export default {};
     .small {
       justify-content: space-between;
       margin-bottom: 12px;
+      img {
+        margin-left: 20px;
+      }
     }
     .price {
       font-weight: 900;
@@ -298,6 +341,7 @@ export default {};
       width: 100px;
       height: 100px;
       margin: 0 5px;
+      border-radius: 10px;
     }
     display: flex;
     overflow-x: auto;
