@@ -11,30 +11,42 @@ export default {
        deleteImage: null,
        selectedProject: null,
        updateProject: null,
+       errorMessage: null,
     },
     mutations: {
         getProjectList(state, data){
            state.projectList = data.data;
            state.total = data.total;
+           state.errorMessage = null;
         },
         getAllProjectList(state, data){
-             state.allProject = data
+             state.allProject = data;
+           state.errorMessage = null;
+
         },
         createProject(state, data){
            state.addProject = data;
+           state.errorMessage = null;
         },
         deleteProject(state, data){
           state.deleteProject = data;
+          state.errorMessage = null;
         },
         deleteImage(state, data){
-            state.deleteImage = data;       
+            state.deleteImage = data;  
+           state.errorMessage = null;
          },
          selectedProject(state, data){
           state.selectedProject = data;
+          state.errorMessage = null;
          },
          updateNewProject(state, data){
              state.updateProject = data;
+           state.errorMessage = null;
          },
+         showErrorr(state, data){
+             state.errorMessage = data;
+         }
     },
     actions: {
         getProjectList: ({ commit }, data) => {
@@ -43,6 +55,7 @@ export default {
                     commit('getProjectList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showErrorr', e.response.data)
                     reject(e);
                 })
             })
@@ -53,6 +66,7 @@ export default {
                     commit('getAllProjectList', response.data);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showErrorr', e.response.data)
                     reject(e);
                 })
             })
@@ -63,6 +77,7 @@ export default {
                     commit('createProject', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showErrorr', e.response.data)
                     reject(e);
                 })
             })
@@ -93,6 +108,7 @@ export default {
                     commit('updateNewProject', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showErrorr', e.response.data)
                     reject(e);
                 })
             })

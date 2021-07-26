@@ -9,23 +9,31 @@ export default {
         selected: [],
         convert: null,
         total: 0,
+       errorMessage: null,
     },
     mutations: {
         getDemandList(state, data) {
             state.demandList = data.data;
             state.total = data.total;
+           state.errorMessage = null;
         },
         addDemandList(state, data) {
             state.demandAdd = data;
+           state.errorMessage = null;
         },
         deleteDemands(state, data) {
             state.deleteDemand = data;
+           state.errorMessage = null;
         },
         selectedDemand(state, data){
             state.selected = data;
+           state.errorMessage = null;
         },
         convertDemands(state, data){
             state.convert = data;
+        },
+        showErrorr(state, data){
+            state.errorMessage = data;
         }
     },
     actions: {
@@ -35,16 +43,18 @@ export default {
                     commit('getDemandList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showErrorr', e.response.data)
                     reject(e);
                 })
             })
         },
         createDemandList: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/needs?is_save=:`, method: "POST", data: data }).then(response => {
+                axiosClient({ url: `/admin/needs?is_save=${data.is_save}`, method: "POST", data: data }).then(response => {
                     commit('addDemandList', response.data.results.data);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showErrorr', e.response.data)
                     reject(e);
                 })
             })
@@ -55,6 +65,7 @@ export default {
                     commit('deleteDemands', response.data.results.data);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showErrorr', e.response.data)
                     reject(e);
                 })
             })
@@ -65,6 +76,7 @@ export default {
                     commit('deleteDemands', response.data.results.data);
                     resolve(response.data);
                 }).catch(e => {
+                    commit('showErrorr', e.response.data)
                     reject(e);
                 })
             })

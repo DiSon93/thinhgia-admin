@@ -39,7 +39,7 @@
           <el-button type="primary" @click="submitForm('ruleForm')" :loading="loading"
             >Login</el-button
           >
-          <div class="message">{{ userLogin }} {{ showError }}</div>
+          <div class="message">{{ userLogin }}</div>
         </el-form-item>
       </el-form>
     </div>
@@ -90,9 +90,9 @@ export default {
     // }
   },
   watch: {
-    showError() {
-      this.openNotification();
-    },
+    // showError() {
+    //   this.openNotification();
+    // },
   },
   // computed: {
   //   ...mapState("auth", ["currentUser"]),
@@ -115,12 +115,18 @@ export default {
         }
       });
     },
-    loginIntoServer() {
+    async loginIntoServer() {
       this.loading = true;
-      this.$store.dispatch("auth/loginIntoServer", {
-        email: this.ruleForm.email,
-        password: this.ruleForm.pass,
-      });
+      try {
+        await this.$store.dispatch("auth/loginIntoServer", {
+          email: this.ruleForm.email,
+          password: this.ruleForm.pass,
+        });
+        this.loading = false;
+      } catch {
+        this.loading = true;
+        this.openNotification();
+      }
     },
     openNotification() {
       this.$notify.error({

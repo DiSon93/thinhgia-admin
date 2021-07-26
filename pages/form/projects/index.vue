@@ -17,6 +17,9 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.province_id ? errorMessage.province_id[0] : null }}
+            </p>
           </v-col>
           <v-col cols="3">
             <div class="label">Huyện/TP <span style="color: red">*</span></div>
@@ -34,6 +37,9 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.district_id ? errorMessage.district_id[0] : null }}
+            </p>
           </v-col>
           <v-col cols="3">
             <div class="label">Phường/Xã <span style="color: red">*</span></div>
@@ -50,13 +56,16 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.ward_id ? errorMessage.ward_id[0] : null }}
+            </p>
           </v-col>
           <v-col cols="3">
             <div class="label">Tên đường/Số nhà</div>
             <el-input v-model="value04"></el-input>
           </v-col>
           <v-col cols="3">
-            <div class="label">Loại dự án</div>
+            <div class="label">Loại dự án <span style="color: red">*</span></div>
             <el-select v-model="value05" placeholder="Chọn loại dự án">
               <el-option
                 v-for="item in projectType"
@@ -66,6 +75,9 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.type ? errorMessage.type[0] : null }}
+            </p>
           </v-col>
           <v-col cols="3">
             <div class="label">Tiến độ</div>
@@ -319,6 +331,7 @@ export default {
     ...mapState("global", ["wardList"]),
     ...mapState("dictionaries", ["dictionaryList"]),
     ...mapState("auth", ["currentUser"]),
+    ...mapState("projects", ["errorMessage"]),
   },
   methods: {
     ...mapActions("global", ["getProvinceList"]),
@@ -562,5 +575,11 @@ export default {
       padding: 8px 20px;
     }
   }
+}
+.error_message {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 </style>

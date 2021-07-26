@@ -47,7 +47,6 @@
           <v-btn color="warning" dark id="createBDS" @click="$router.push('/form/house')"
             ><img src="@image/icons/Vector.svg" />Tạo BĐS
           </v-btn>
-          <!-- <el-dropdown class="account" @command="handleCommand"> -->
           <el-button
             type="info"
             circle
@@ -56,15 +55,91 @@
             class="account"
           >
           </el-button>
-          <!-- <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>Thông tin tài khoản</el-dropdown-item>
+          <!-- <el-dropdown class="account" @command="handleCommand">
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>
+                <div>
+                  <div></div>
+                  <div>Vũ Nguyễn Lệ Chi đã chia sẻ bất động sản lên cộng đồng</div>
+                  <div>a few seconds ago</div>
+                </div>
+              </el-dropdown-item>
               <el-dropdown-item divided command="logout">Log out</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown> -->
+          <el-popover
+            placement="bottom-end"
+            width="500"
+            trigger="click"
+            id="notification"
+          >
+            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">a few seconds ago</div>
+            </NuxtLink>
+            <el-divider><i class="el-icon-star-on"></i></el-divider>
+            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">26 minutes ago</div>
+            </NuxtLink>
+
+            <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">39 minutes ago</div>
+            </NuxtLink>
+            <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">39 minutes ago</div>
+            </NuxtLink>
+            <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">39 minutes ago</div>
+            </NuxtLink>
+
+            <el-button slot="reference" circle class="btn_notification"
+              ><img src="@image/icons/bell-badge-noti.jpg" alt=""
+            /></el-button>
+          </el-popover>
           <!-- <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn> -->
-          <v-btn class="notifiaction" fab
+          <!-- <v-btn class="notifiaction" fab
             ><img src="@image/icons/bell-badge-noti.jpg" alt=""
-          /></v-btn>
+          /></v-btn> -->
         </v-col>
       </v-row>
     </v-app-bar>
@@ -341,24 +416,37 @@ export default {
     //   transition: 0.5s;
     // }
   }
-  .notifiaction {
-    position: absolute;
-    right: 30px;
-    bottom: 0px;
-    border: none;
-    box-shadow: none;
+  // .notifiaction {
+  //   position: absolute;
+  //   right: 30px;
+  //   bottom: 0px;
+  //   border: none;
+  //   box-shadow: none;
+  //   background-color: #eff5f9 !important;
+  //   width: 24px !important;
+  //   height: 24px !important;
+  //   img {
+  //     width: 18px;
+  //     height: 20.57px;
+  //     border-radius: 50%;
+  //   }
+  //   &:hover {
+  //     border: 1px solid blue;
+  //     transition: 0.5s;
+  //   }
+  // }
+  .btn_notification {
     background-color: #eff5f9 !important;
-    width: 24px !important;
-    height: 24px !important;
+    border: none;
     img {
       width: 18px;
       height: 20.57px;
       border-radius: 50%;
     }
-    &:hover {
-      border: 1px solid blue;
-      transition: 0.5s;
-    }
+    position: absolute;
+    right: 25px;
+    bottom: -1px;
+    padding: 4px;
   }
 }
 .v-main {

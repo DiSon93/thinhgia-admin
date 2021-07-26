@@ -26,7 +26,7 @@
             <v-btn id="web">Web</v-btn>
           </div>
           <div class="sell_estate">
-            {{ showDetail.title.toUpperCase() }}
+            {{ showDetail.title ? showDetail.title.toUpperCase() : null }}
           </div>
         </div>
         <div class="sell_price">

@@ -44,6 +44,9 @@
               </el-select>
               <el-button round>+ Tạo</el-button>
             </div>
+            <p class="error_message customer_id" v-if="errorMessage">
+              {{ errorMessage.customer_id ? errorMessage.customer_id[0] : null }}
+            </p>
           </div>
         </v-col>
         <v-col cols="9">
@@ -63,7 +66,9 @@
                 >
                 </el-option>
               </el-select>
-
+              <p class="error_message" v-if="errorMessage">
+                {{ errorMessage.province_id ? errorMessage.province_id[0] : null }}
+              </p>
               <div class="form_label">Dự án</div>
               <el-select
                 v-model="value06"
@@ -95,9 +100,17 @@
                 >
                 </el-option>
               </el-select>
+              <p class="error_message" v-if="errorMessage">
+                {{ errorMessage.district_id ? errorMessage.district_id[0] : null }}
+              </p>
 
-              <div class="form_label">Tên đường/Số nhà</div>
+              <div class="form_label">
+                Tên đường/Số nhà <span style="color: red">*</span>
+              </div>
               <el-input v-model="value07" id="input_stress"></el-input>
+              <p class="error_message street_name" v-if="errorMessage">
+                {{ errorMessage.street_name ? errorMessage.street_name[0] : null }}
+              </p>
             </v-col>
             <v-col cols="4">
               <div class="form_label">Phường/Xã <span style="color: red">*</span></div>
@@ -114,6 +127,9 @@
                 >
                 </el-option>
               </el-select>
+              <p class="error_message" v-if="errorMessage">
+                {{ errorMessage.ward_id ? errorMessage.ward_id[0] : null }}
+              </p>
             </v-col>
           </v-row>
           <!-- <div v-if="shownmore" class="address"> -->
@@ -133,7 +149,9 @@
       <div class="content_02">
         <div class="typeOfEstate">
           <div class="estate_item">
-            <div class="form_label">Loại Bất Động Sản</div>
+            <div class="form_label">
+              Loại Bất Động Sản <span style="color: red">*</span>
+            </div>
             <el-select v-model="value10" placeholder="Chọn loại BĐS">
               <el-option
                 v-for="item in estates"
@@ -143,9 +161,14 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{
+                errorMessage.real_estate_type ? errorMessage.real_estate_type[0] : null
+              }}
+            </p>
           </div>
           <div class="estate_item">
-            <div class="form_label">Loại nhà đất</div>
+            <div class="form_label">Loại nhà đất <span style="color: red">*</span></div>
             <el-select v-model="value11" placeholder="Chọn loại nhà">
               <el-option
                 v-for="item in houses"
@@ -155,9 +178,12 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.house_type ? errorMessage.house_type[0] : null }}
+            </p>
           </div>
           <div class="estate_item">
-            <div class="form_label">Pháp Lý</div>
+            <div class="form_label">Pháp Lý <span style="color: red">*</span></div>
             <el-select v-model="value12" placeholder="Chọn pháp lý">
               <el-option
                 v-for="item in laws"
@@ -167,6 +193,9 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.ownership ? errorMessage.ownership[0] : null }}
+            </p>
           </div>
           <div class="estate_item">
             <div class="form_label">Giá</div>
@@ -187,7 +216,7 @@
         </div>
         <div class="typeOfEstate">
           <div class="estate_item">
-            <div class="form_label">Loại đường</div>
+            <div class="form_label">Loại đường <span style="color: red">*</span></div>
             <el-select v-model="value15" placeholder="Chọn loại đường">
               <el-option
                 v-for="item in roads"
@@ -197,6 +226,9 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.street_type ? errorMessage.street_type[0] : null }}
+            </p>
           </div>
           <div class="estate_item">
             <div class="form_label">Đường rộng</div>
@@ -531,6 +563,7 @@ export default {
     ...mapState("dictionaries", ["dictionaryList"]),
     ...mapState("projects", ["allProject"]),
     ...mapState("auth", ["currentUser"]),
+    ...mapState("realEstate", ["errorMessage"]),
   },
   methods: {
     ...mapActions("customers", ["getCustomerList"]),
@@ -695,6 +728,8 @@ export default {
         this.$router.push("/real-estate");
       } catch {
         this.loading = false;
+        console.log("error", this.errorMessage);
+
         this.showErrorNotification();
       }
     },
@@ -983,5 +1018,14 @@ export default {
     font-size: 14px;
     padding: 8px 20px;
   }
+}
+.error_message {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: -8px;
+}
+.street_name {
+  margin-top: 0px;
 }
 </style>

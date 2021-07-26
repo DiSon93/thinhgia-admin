@@ -18,6 +18,9 @@
           >
           </el-option>
         </el-select>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.province_id ? errorMessage.province_id[0] : null }}
+        </p>
       </div>
       <div class="addres_items">
         <div class="label">Huyện <span style="color: red">*</span></div>
@@ -35,6 +38,9 @@
           >
           </el-option>
         </el-select>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.district_id ? errorMessage.district_id[0] : null }}
+        </p>
       </div>
       <div class="addres_items">
         <div class="label">Phường <span style="color: red">*</span></div>
@@ -66,6 +72,9 @@
           >
           </el-option>
         </el-select>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.real_estate_type ? errorMessage.real_estate_type[0] : null }}
+        </p>
       </div>
       <div class="estate_items">
         <div class="label">Loại nhà <span style="color: red">*</span></div>
@@ -78,19 +87,28 @@
           >
           </el-option>
         </el-select>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.house_type ? errorMessage.house_type[0] : null }}
+        </p>
       </div>
     </div>
     <div class="price_staff">
       <div class="price">
         <div class="label">Giá tối thiểu (VNĐ) <span style="color: red">*</span></div>
         <el-input v-model="value06" id="input_price"></el-input>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.price_min ? errorMessage.price_min[0] : null }}
+        </p>
 
         <div class="label">Giá tối đa (VNĐ) <span style="color: red">*</span></div>
         <el-input v-model="value07" id="input_price"></el-input>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.price_max ? errorMessage.price_max[0] : null }}
+        </p>
       </div>
 
       <div class="staff">
-        <div class="label">Nhân viên</div>
+        <div class="label">Nhân viên <span style="color: red">*</span></div>
         <el-select v-model="value08" placeholder="Chọn nhân viên">
           <el-option
             v-for="item in staffList"
@@ -100,6 +118,9 @@
           >
           </el-option>
         </el-select>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.user_id ? errorMessage.user_id[0] : null }}
+        </p>
         <div class="label">Khách hàng <span style="color: red">*</span></div>
         <div class="d-flex">
           <el-select v-model="value09" placeholder="Chọn khách hàng">
@@ -113,6 +134,9 @@
           </el-select>
           <el-button round>+ Tạo</el-button>
         </div>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.customer_id ? errorMessage.customer_id[0] : null }}
+        </p>
       </div>
     </div>
     <div class="direction">
@@ -129,16 +153,27 @@
     </div>
     <div class="tool">
       <div class="tool_item">
-        <div class="label">Số phòng ngủ tối thiểu</div>
+        <div class="label">Số phòng ngủ tối thiểu <span style="color: red">*</span></div>
         <el-input v-model="value11" id="input_price"></el-input>
+        <p class="error_message" v-if="errorMessage">
+          {{
+            errorMessage.bedroom_number_min ? errorMessage.bedroom_number_min[0] : null
+          }}
+        </p>
       </div>
       <div class="tool_item">
-        <div class="label">Số lầu tối thiểu</div>
+        <div class="label">Số lầu tối thiểu <span style="color: red">*</span></div>
         <el-input v-model="value12" id="input_price"></el-input>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.floor_number_min ? errorMessage.floor_number_min[0] : null }}
+        </p>
       </div>
       <div class="tool_item">
-        <div class="label">Diện tích tối thiểu</div>
+        <div class="label">Diện tích tối thiểu <span style="color: red">*</span></div>
         <el-input v-model="value13" id="input_price"></el-input>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.land_area_min ? errorMessage.land_area_min[0] : null }}
+        </p>
       </div>
     </div>
     <div class="discription">
@@ -208,6 +243,7 @@ export default {
     ...mapState("dictionaries", ["dictionaryList"]),
     ...mapState("demand", ["selected"]),
     ...mapState("customers", ["customerList"]),
+    ...mapState("demand", ["errorMessage"]),
   },
   methods: {
     ...mapActions("customers", ["getCustomerList"]),
@@ -450,5 +486,11 @@ export default {
       padding: 2px 20px;
     }
   }
+}
+.error_message {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 </style>
