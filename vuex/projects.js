@@ -19,6 +19,9 @@ export default {
            state.total = data.total;
            state.errorMessage = null;
         },
+        getProjectListOverPageOne(state, data){
+            state.projectList = data;
+        },
         getAllProjectList(state, data){
              state.allProject = data;
            state.errorMessage = null;

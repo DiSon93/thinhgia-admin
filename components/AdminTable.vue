@@ -116,6 +116,7 @@ export default {
         text: "#",
         value: "index",
         width: "58px",
+        sortable: false,
       },
       {
         text: "NHÂN VIÊN",
@@ -128,26 +129,31 @@ export default {
         text: "SĐT",
         value: "sdt",
         width: "130px",
+        sortable: false,
       },
       {
         text: "EMAIL",
         value: "email",
         width: "140px",
+        sortable: false,
       },
       {
         text: "NGÀY SINH",
         value: "birthday",
         width: "120px",
+        sortable: false,
       },
       {
         text: "CMND",
         value: "cmnd",
         width: "140px",
+        sortable: false,
       },
       {
         text: "NGÀY CẤP CMND",
         value: "cmnd_date",
         width: "160px",
+        sortable: false,
       },
       {
         text: "TRẠNG THÁI",

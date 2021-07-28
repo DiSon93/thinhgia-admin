@@ -18,8 +18,10 @@
       <div class="d-flex small">
         <div class="price">VNĐ {{ estateItem.price }} {{ estateItem.unit_price }}</div>
         <div>
-          <v-btn id="congdong">Cộng Đồng</v-btn>
-          <v-btn id="web">Web</v-btn>
+          <button id="congdong" v-if="estateItem.share_public == 1" disabled>
+            Cộng Đồng
+          </button>
+          <button id="web" v-if="estateItem.share_web == 1" disabled>Web</button>
           <NuxtLink :to="`detail/house/${estateId}`">
             <img src="@image/icons/views.svg" alt="" />
           </NuxtLink>
@@ -55,11 +57,30 @@
     <el-divider></el-divider>
     <div class="edit">
       <v-btn @click="updateRealEstate"> <v-icon> mdi-pencil </v-icon>Sửa</v-btn>
-      <v-btn> <v-icon> mdi-cloud-upload </v-icon>Tải lên</v-btn>
-      <v-btn> <v-icon>mdi-dots-vertical</v-icon> Thêm</v-btn>
+      <!-- <v-btn> <v-icon> mdi-cloud-upload </v-icon>Tải lên</v-btn> -->
+      <el-dropdown class="account" @command="handleCommand">
+        <v-btn> <v-icon> mdi-cloud-upload </v-icon>Tải lên</v-btn>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="public">
+            {{ estateItem.share_public == 1 ? "Thu hồi cộng đồng" : "Upload cộng đồng" }}
+          </el-dropdown-item>
+          <el-dropdown-item divided command="web">
+            {{
+              estateItem.share_web == 1 ? "Thu hồi web" : "Upload web"
+            }}</el-dropdown-item
+          >
+        </el-dropdown-menu>
+      </el-dropdown>
+      <!-- <v-btn> <v-icon>mdi-dots-vertical</v-icon> Thêm</v-btn> -->
+      <el-dropdown class="account" @command="handleCommand">
+        <v-btn> <v-icon>mdi-dots-vertical</v-icon> Thêm</v-btn>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="status"> Chuyển trạng thái </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
     <div class="user_logo">
-      <img src="@image/icons/user.svg" alt="" />
+      <img :src="estateItem.avatar" alt="" />
       <span>{{ estateItem.staff }}</span>
     </div>
     <div class="img_title">
@@ -214,6 +235,168 @@ export default {
         message: "Unsuccess require!!!",
       });
     },
+
+    handleCommand(command) {
+      if (command == "public") {
+        this.sharePublicEstate();
+      }
+      if (command == "web") {
+        this.shareWebEstate();
+      }
+      if (command == "status") {
+        this.changeSellStatus();
+      }
+    },
+
+    sharePublicEstate() {
+      let share = this.estateItem.share_public == 0 ? "Share" : "Unshare";
+
+      this.$confirm(
+        `Are you sure to ${share} public this real estate. Continue?`,
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.loading = true;
+          this.sharePublicEstateInSystem();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: `${share} canceled`,
+          });
+        });
+    },
+
+    shareWebEstate() {
+      let share = this.estateItem.share_web == 0 ? "Share" : "Unshare";
+
+      this.$confirm(
+        `Are you sure to ${share} web this real estate. Continue?`,
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.loading = true;
+          this.shareWebEstateInSystem();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: `${share} canceled`,
+          });
+        });
+    },
+
+    changeSellStatus() {
+      this.$confirm(
+        `Are you sure to tranfer sell to stop selling or stop selling to sell this real estate. Continue?`,
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.loading = true;
+          this.changeSellStatusInSystem();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: `Change canceled`,
+          });
+        });
+    },
+    async sharePublicEstateInSystem() {
+      try {
+        await this.$store.dispatch("realEstate/sharePublicRealEstate", {
+          id: this.estateId,
+          share_public: this.estateItem.share_public == 0 ? 1 : 0,
+        });
+        this.loading = false;
+        setTimeout(this.openNotificationSuccessShare("public"), 500);
+        this.$router.push("/real-estate");
+        this.$emit("cancel-modals");
+      } catch {
+        this.loading = false;
+        this.showErrorNotificationShare("public");
+      }
+    },
+
+    async shareWebEstateInSystem() {
+      try {
+        await this.$store.dispatch("realEstate/shareWebRealEstate", {
+          id: this.estateId,
+          share_web: this.estateItem.share_web == 0 ? 1 : 0,
+        });
+        this.loading = false;
+        setTimeout(this.openNotificationSuccessShare("web"), 500);
+        this.$router.push("/real-estate");
+        this.$emit("cancel-modals");
+      } catch {
+        this.loading = false;
+        this.showErrorNotificationShare("web");
+      }
+    },
+    async changeSellStatusInSystem() {
+      try {
+        await this.$store.dispatch("realEstate/changeSellRealEstate", {
+          id: this.estateId,
+          is_sell: this.estateItem.is_sell == 0 ? 1 : 0,
+        });
+        this.loading = false;
+        setTimeout(this.openNotificationSuccessChange(), 500);
+        this.$router.push("/real-estate");
+        this.$emit("cancel-modals");
+      } catch {
+        this.loading = false;
+        this.showErrorNotificationChange();
+      }
+    },
+
+    openNotificationSuccessShare(e) {
+      let share = "";
+      if (e == "public") {
+        share = this.estateItem.share_public == 0 ? "Share" : "Unshare";
+      }
+      if (e == "web") {
+        share = this.estateItem.share_web == 0 ? "Share" : "Unshare";
+      }
+      this.$notify({
+        title: "Success",
+        message: `${share} ${e} successfull!!!`,
+        type: "success",
+      });
+    },
+    openNotificationSuccessChange() {
+      this.$notify({
+        title: "Success",
+        message: "Change status successfull!!!",
+        type: "success",
+      });
+    },
+    showErrorNotificationShare(e) {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
+    showErrorNotificationChange() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
   },
 };
 </script>
@@ -275,7 +458,6 @@ export default {
     #congdong {
       font-weight: 300;
       font-size: 8px;
-      line-height: 24px;
       letter-spacing: 0.5px;
       color: #ffffff;
       background: #2db7f5;
@@ -288,7 +470,6 @@ export default {
       border-radius: 15px;
       font-weight: 300;
       font-size: 8px;
-      line-height: 24px;
       letter-spacing: 0.5px;
       color: #ffffff;
       height: 19px;
@@ -305,6 +486,9 @@ export default {
     margin: 12px -12px 0;
     img {
       margin-right: 5px;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
     }
     font-weight: 500;
   }

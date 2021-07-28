@@ -17,6 +17,9 @@ export default {
             state.total = data.total;
            state.errorMessage = null;
         },
+        getDemandListOverPageOne(state, data){
+           state.demandList = data;
+        },
         addDemandList(state, data) {
             state.demandAdd = data;
            state.errorMessage = null;

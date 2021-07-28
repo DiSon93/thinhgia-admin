@@ -15,7 +15,7 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/thinhgia_logo_1.png' },
+      { rel: 'icon', type: 'image/x-icon', href: '/batdongsanviet.png' },
     ]
   },
 
@@ -38,6 +38,7 @@ export default {
     // { src: "@/plugins/vue-select.js",  ssr: false},
     { src: "@/plugins/element-ui.js", mode: "client"},
     { src: "@/plugins/CKEditor.js", mode: "client"},
+    { src: "@/plugins/vue-ele-upload-video.js", mode: "client"},
 
     // { src: "@/plugins/vue-lazyloading.js", mode: "client"},
   ],

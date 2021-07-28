@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   data: () => ({
     dialog: false,
@@ -97,7 +97,7 @@ export default {
     gridData: [],
     dialogTableVisible: false,
     headers: [
-      { text: "#", value: "id", width: "80px" },
+      { text: "#", value: "id", width: "80px", sortable: false },
       {
         text: "TÊN",
         align: "start",
@@ -105,10 +105,10 @@ export default {
         value: "name",
         width: "400px",
       },
-      { text: "ẢNH", value: "picture", width: "150px" },
-      { text: "BĐS", value: "estate", width: "140px" },
-      { text: "NGÀY TẠO", value: "create_date", width: "140px" },
-      { text: "NGÀY CẬP NHẬT", value: "update_date", width: "140px" },
+      { text: "ẢNH", value: "picture", sortable: false, width: "150px" },
+      { text: "BĐS", value: "estate", sortable: false, width: "140px" },
+      { text: "NGÀY TẠO", value: "create_date", sortable: false, width: "140px" },
+      { text: "NGÀY CẬP NHẬT", value: "update_date", sortable: false, width: "140px" },
       { text: "ACTIONS", value: "actions", sortable: false, width: "100px" },
     ],
     projects: [],
@@ -116,6 +116,7 @@ export default {
 
   computed: {
     ...mapState("projects", ["projectList", "total"]),
+    ...mapState("realEstate", ["listOnDemand"]),
   },
 
   created() {
@@ -137,7 +138,13 @@ export default {
       }
     },
     initializeList() {
-      console.log("page2", this.projectList);
+      if (this.page > 1) {
+        this.$store.commit(
+          "projects/getProjectListOverPageOne",
+          Object.values(this.projectList)
+        );
+        console.log(this.projectList);
+      }
       this.projects = this.projectList.map((item, index) => {
         return {
           id: item.id,
@@ -210,7 +217,7 @@ export default {
     openNotificationSuccess() {
       this.$notify({
         title: "Success",
-        message: "Delete demand successfull!!!",
+        message: "Delete project successfull!!!",
         type: "success",
       });
     },
@@ -239,7 +246,12 @@ export default {
     },
     showRealEstateDetail(item) {
       this.dialogTableVisible = true;
-      console.log("item", item);
+      let id_arr = item.map((u) => {
+        return u.id;
+      });
+      this.$store.dispatch("realEstate/getRealEstateListOnDemand", id_arr);
+      console.log("id_arr", id_arr);
+      console.log("test", this.listOnDemand);
       this.gridData = item.map((u, i) => {
         return {
           id: u.id,

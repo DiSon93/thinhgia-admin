@@ -84,41 +84,51 @@ body .el-table th.gutter {
     }
 }
 
-.el-popover.el-popper{
-    a.notification_item{
+.el-popover.el-popper {
+    a.notification_item {
         padding: 10px 0;
         justify-content: space-between;
-        text-decoration: none!important;
-        img{
+        text-decoration: none !important;
+        img {
             width: 30px;
             height: 30px;
         }
-        &:hover{
+        &:hover {
             background-color: rgba(97, 95, 95, 0.075);
         }
-        .name{
+        .name {
             margin-left: 5px;
             color: #000;
             font-size: 13px;
-            .staff_name{
+            .staff_name {
                 font-weight: 700;
                 color: rgb(83, 83, 83);
             }
         }
     }
-    .el-divider--horizontal{
-        margin: 0px!important;
+    .el-divider--horizontal {
+        margin: 0px !important;
     }
-    .time{
+    .time {
         margin-left: 30px;
-        text-align: right;;
+        text-align: right;
         width: 140px;
         font-size: 11px;
         color: gray;
         font-weight: 500;
     }
     .el-button {
-        background-color: transparent!important;
+        background-color: transparent !important;
+    }
+    .setting {
+        font-size: 13px;
+        .el-divider--horizontal {
+            margin: 10px 0 5px !important;
+        }
+        .el-input__inner {
+            margin: 5px 0;
+            font-size: 13px;
+        }
     }
 }
 

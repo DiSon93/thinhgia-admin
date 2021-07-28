@@ -52,12 +52,48 @@
           >
           <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
 
-          <v-btn class="setting" fab><v-icon dark small>mdi-cog</v-icon></v-btn>
+          <!-- <v-btn class="setting" fab><v-icon dark small>mdi-cog</v-icon></v-btn> -->
+          <el-popover placement="bottom-end" width="200" trigger="click" id="setting">
+            <span class="setting">
+              <div class="label">Tùy chỉnh</div>
+              <el-divider></el-divider>
+              <el-select
+                v-model="value01"
+                placeholder="Cộng đồng"
+                @change="handleChangePublic($event)"
+              >
+                <el-option
+                  v-for="item in shares"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select
+                v-model="value02"
+                placeholder="Mở bán"
+                @change="handleChangeSell($event)"
+              >
+                <el-option
+                  v-for="item in sells"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </span>
+
+            <el-button slot="reference" circle class="btn_notification"
+              ><v-icon dark small>mdi-cog</v-icon></el-button
+            >
+          </el-popover>
         </div>
       </v-row>
 
       <v-row class="data_table">
-        <EstateTable />
+        <EstateTable :is_public="is_public" :is_sell="is_sell" :key="keyChild" />
       </v-row>
       <el-dialog
         :visible.sync="centerDialogVisible02"
@@ -104,6 +140,31 @@ export default {
       isActive: false,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
+      value01: 1,
+      value02: 1,
+      keyChild: 0,
+      is_public: null,
+      is_sell: null,
+      shares: [
+        {
+          id: 1,
+          name: "Cộng đồng",
+        },
+        {
+          id: 2,
+          name: "Cá nhân",
+        },
+      ],
+      sells: [
+        {
+          id: 1,
+          name: "Mở bán",
+        },
+        {
+          id: 2,
+          name: "Ngưng bán",
+        },
+      ],
       desserts: [
         {
           id: 2971,
@@ -202,6 +263,26 @@ export default {
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
+    },
+    handleChangePublic(e) {
+      if (e == 1) {
+        this.is_public = 1;
+        this.keyChild += 1;
+      }
+      if (e == 2) {
+        this.is_public = 0;
+        this.keyChild += 1;
+      }
+    },
+    async handleChangeSell(e) {
+      if (e == 1) {
+        this.is_sell = 1;
+        this.keyChild += 1;
+      }
+      if (e == 2) {
+        this.is_sell = 0;
+        this.keyChild += 1;
+      }
     },
   },
 };
@@ -329,17 +410,25 @@ export default {
         transition: 0.5s;
       }
     }
-    .setting {
+    #setting {
       padding: 0;
-      width: 24px !important;
-      height: 24px !important;
+      // width: 24px !important;
+      // height: 24px !important;
       border-radius: 50%;
       background-color: #fff !important;
       box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
       margin-left: 10px;
-      &:hover {
-        border: 1px solid blue;
-        transition: 0.5s;
+
+      .el-button {
+        padding: 4px !important;
+        .v-icon {
+          // line-height: 24px;
+          color: #000;
+        }
+        &:hover {
+          border: 1px solid blue;
+          transition: 0.5s;
+        }
       }
     }
   }

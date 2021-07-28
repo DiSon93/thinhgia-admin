@@ -12,6 +12,13 @@ export default {
       detailEstate: null,
       updateEstate: null,
       deleteEstate: null,
+      approve: null,
+      sharePubilc: null,
+      shareWeb: null,
+      changeSell: null,
+      approveRealList: [],
+      listOnDemand: [],
+      isSellList:[],
     },
     mutations: {
         getRealEstateList(state, data) {
@@ -45,6 +52,34 @@ export default {
         deleteNewEstate(state, data){
             state.deleteEstate = data;
             state.errorMessage = null 
+        },
+        approveNewEstate(state, data){
+            state.approve = data;
+            state.errorMessage = null 
+        },
+        sharePublicEstate(state, data){
+            state.sharePubilc = data;
+            state.errorMessage = null 
+        },
+        shareWebEstate(state, data){
+            state.shareWeb = data;
+            state.errorMessage = null 
+        },
+        changeSellEstate(state, data){
+            state.changeSell = data;
+            state.errorMessage = null 
+        },
+        getApproveList(state, data){
+            state.approveRealList = data;
+            state.errorMessage = null;
+        },
+        getListOnDemand(state, data){
+            state.listOnDemand = data;
+            state.errorMessage = null;
+        },
+        getEstateListIsSell(state, data){
+            state.isSellList = data;
+            state.errorMessage = null;
         }
     },
     actions: {
@@ -122,6 +157,84 @@ export default {
 
                 }).catch(e => {
 
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        approveRealEstate: ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/approve/${data.id}`, method: "POST", data: data}).then(response => {
+                    commit('approveNewEstate', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+
+        sharePublicRealEstate: ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/share-public/${data.id}`, method: "POST", data: data}).then(response => {
+                    commit('sharePublicEstate', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        shareWebRealEstate: ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/share-web/${data.id}`, method: "POST", data: data}).then(response => {
+                    commit('shareWebEstate', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        changeSellRealEstate: ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/sell/${data.id}`, method: "POST", data: data}).then(response => {
+                    commit('changeSellEstate', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        getApproveRealEstateList: ({ commit }, data)  => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates?share=${data.share}&is_approve=0`, method: "GET"}).then(response => {
+                    commit('getApproveList', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        getRealEstateListOnDemand: ({ commit }, data)  => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/global/list-real-estates?real_estate_ids=${data}`, method: "GET"}).then(response => {
+                    commit('getListOnDemand', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        getEstateListIsSell:({ commit }, data)  => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}&is_sell=${data.is_sell}`, method: "GET"}).then(response => {
+                    commit('getEstateListIsSell', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
                     commit('showError', e.response.data);
                     reject(e);
                 })

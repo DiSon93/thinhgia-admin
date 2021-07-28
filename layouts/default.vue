@@ -55,18 +55,7 @@
             class="account"
           >
           </el-button>
-          <!-- <el-dropdown class="account" @command="handleCommand">
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <div>
-                  <div></div>
-                  <div>Vũ Nguyễn Lệ Chi đã chia sẻ bất động sản lên cộng đồng</div>
-                  <div>a few seconds ago</div>
-                </div>
-              </el-dropdown-item>
-              <el-dropdown-item divided command="logout">Log out</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown> -->
+
           <el-popover
             placement="bottom-end"
             width="500"

@@ -7,6 +7,7 @@ import dictionaries from '../vuex/dictionaries';
 import demand from '~/vuex/demand';
 import projects from '~/vuex/projects';
 import realEstate from '~/vuex/realEstate';
+import blog from '../vuex/blog';
 
 export default {
     modules:{
@@ -19,6 +20,7 @@ export default {
         demand,
         projects,
         realEstate,
+        blog,
     }
 
 }

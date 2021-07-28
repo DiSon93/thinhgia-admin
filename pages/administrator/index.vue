@@ -22,9 +22,78 @@
             <v-btn class="account" fab @click="centerDialogVisible02 = true"
               ><v-icon dark small>mdi-account</v-icon></v-btn
             >
-            <v-btn class="notifiaction" fab
+            <!-- <v-btn class="notifiaction" fab
               ><img src="@image/icons/bell-badge-noti.jpg" alt=""
-            /></v-btn>
+            /></v-btn> -->
+            <el-popover
+              placement="bottom-end"
+              width="500"
+              trigger="click"
+              id="notification"
+            >
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">a few seconds ago</div>
+              </NuxtLink>
+              <el-divider><i class="el-icon-star-on"></i></el-divider>
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">26 minutes ago</div>
+              </NuxtLink>
+
+              <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">39 minutes ago</div>
+              </NuxtLink>
+              <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">39 minutes ago</div>
+              </NuxtLink>
+              <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">39 minutes ago</div>
+              </NuxtLink>
+
+              <el-button slot="reference" circle class="btn_notification"
+                ><img src="@image/icons/bell-badge-noti.jpg" alt=""
+              /></el-button>
+            </el-popover>
           </div>
         </v-col>
       </v-row>
@@ -37,7 +106,9 @@
           <span class="figure"> {{ dicSelected[0].dictionaries.length }}</span>
           {{ dicSelected[0].name }}
         </v-col>
-        <v-col cols="6" sm="4" v-if="isRealEstate"> 1BĐS </v-col>
+        <v-col cols="6" sm="4" v-if="isRealEstate">
+          <span class="figure">{{ approveRealList.length }}</span> BĐS
+        </v-col>
 
         <v-col cols="6" sm="4" align="center" v-if="isUser || isDictionary">
           1 / 1
@@ -88,6 +159,7 @@
               placeholder="Tất cả"
               v-if="isRealEstate"
               class="congDong"
+              @change="handleChangeApp($event)"
             >
               <el-option
                 v-for="item in estate"
@@ -156,7 +228,7 @@
         />
       </v-row>
       <v-row class="data_table define" v-if="isRealEstate">
-        <DefineRealEstate />
+        <DefineRealEstate :is_share="value3" :key="keyApp" />
       </v-row>
       <v-row class="data_table" v-if="isUser"> </v-row>
       <el-dialog
@@ -205,6 +277,7 @@ export default {
     return {
       keyChild: 0,
       keyDic: 0,
+      keyApp: 0,
       isActive: false,
       isUser: true,
       isDictionary: false,
@@ -230,19 +303,10 @@ export default {
           label: "Web",
         },
       ],
-      dictionaris: [
-        {
-          value: "Cộng Đồng",
-          label: "Cộng Đồng",
-        },
-        {
-          value: "Web",
-          label: "Web",
-        },
-      ],
+      dictionaris: [],
       value1: "",
       value2: 1,
-      value3: "",
+      value3: "Cộng Đồng",
     };
   },
   mounted() {
@@ -252,6 +316,7 @@ export default {
   computed: {
     ...mapState("role", ["roleList"]),
     ...mapState("dictionaries", ["dictionaryList"]),
+    ...mapState("realEstate", ["approveRealList"]),
   },
   methods: {
     getTotalUser(value) {
@@ -265,6 +330,9 @@ export default {
     handleChangeRole(e) {
       this.role_id = e;
       this.keyChild += 1;
+    },
+    handleChangeApp(e) {
+      this.keyApp += 1;
     },
     reload() {
       this.keyChild += 1;
@@ -363,6 +431,7 @@ export default {
     top: -12px;
     .account {
       margin-left: 2px;
+      margin-right: 40px;
       padding: 0;
       width: 24px !important;
       height: 24px !important;
@@ -374,24 +443,24 @@ export default {
         transition: 0.5s;
       }
     }
-    .notifiaction {
-      border: none;
-      box-shadow: none;
-      background-color: #eff5f9 !important;
-      width: 24px !important;
-      height: 24px !important;
-      //   margin-right: 10px;
-      margin-left: 10px;
-      img {
-        width: 18px;
-        height: 20.57px;
-        border-radius: 50%;
-      }
-      &:hover {
-        border: 1px solid blue;
-        transition: 0.5s;
-      }
-    }
+    // .notifiaction {
+    //   border: none;
+    //   box-shadow: none;
+    //   background-color: #eff5f9 !important;
+    //   width: 24px !important;
+    //   height: 24px !important;
+    //   //   margin-right: 10px;
+    //   margin-left: 10px;
+    //   img {
+    //     width: 18px;
+    //     height: 20.57px;
+    //     border-radius: 50%;
+    //   }
+    //   &:hover {
+    //     border: 1px solid blue;
+    //     transition: 0.5s;
+    //   }
+    // }
     .setting {
       padding: 0;
       width: 24px !important;
@@ -406,6 +475,19 @@ export default {
       }
     }
   }
+}
+.btn_notification {
+  background-color: #eff5f9 !important;
+  border: none;
+  img {
+    width: 18px;
+    height: 20.57px;
+    border-radius: 50%;
+  }
+  position: absolute;
+  right: 0px;
+  bottom: -1px;
+  padding: 4px;
 }
 .admin_option {
   margin-top: 40px;

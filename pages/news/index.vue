@@ -11,7 +11,7 @@
       <v-row align="center" d-flex>
         <v-col cols="8" sm="6" class="app_bar new_titles">
           <button class="homepage" disabled>Tin tức</button>
-          <v-btn depressed color="primary" id="social_network"> 16 </v-btn>
+          <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
         </v-col>
         <v-col cols="4" sm="6" class="app_bar">
           <div class="option_button">
@@ -31,141 +31,70 @@
           </div>
         </v-col>
       </v-row>
-      <v-row class="news_table">
-        <v-col cols="12" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <!-- <v-parallax height="200" :src="getImageUrl('house1.png')"></v-parallax> -->
-              <img src="@image/layouts/house1.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-        <v-col cols="12" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house2.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-        <v-col cols="12" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house3.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
+      <div class="content_loading" v-loading="loading">
+        <div class="news_table list" v-if="blogList.length != 0">
+          <div class="content_items" v-for="item in blogListDetail" :key="item.id">
+            <div class="content">
+              <div class="d-flex img_fix">
+                <!-- <v-parallax height="200" :src="getImageUrl('house1.png')"></v-parallax> -->
+                <!-- <img src="@image/layouts/house1.png" alt="" /> -->
+                <div v-for="img in item.image.slice(0, 4)" :key="img.id">
+                  <img :src="img.thumbnail" alt="" class="project_picture" />
+                </div>
+
+                <div>
+                  <el-dropdown @command="handleCommand" trigger="click">
+                    <el-button
+                      type="primary"
+                      icon="el-icon-edit"
+                      circle
+                      class="el-dropdown-link btn_select"
+                      @click="user_info(item)"
+                    >
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item command="edit">
+                        <v-icon>mdi-pen-plus</v-icon> Sửa
+                      </el-dropdown-item>
+                      <el-dropdown-item command="delete">
+                        <v-icon>mdi-trash-can</v-icon> Xóa
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
+              </div>
+              <div class="create">
+                Tạo bởi
+                <span class="username">{{ item.user ? item.user.name : null }}</span> lúc
+                {{ item.created_at.slice(0, 10) }}
+                {{ item.created_at.slice(11, 19) }}
+              </div>
+              <div class="blog">
+                Loại blog: {{ item.blog_type ? item.blog_type.name : null }}
+              </div>
+              <h5>{{ item.title }}</h5>
+              <div class="introduce">GIỚI THIỆU</div>
+              <div class="detail" v-bind:class="{ estate_content: item.read }">
+                <div v-html="item.content"></div>
+                <!-- <span> <a href="#">...Xem thêm</a> </span> -->
+              </div>
+              <a href="javascript:;" @click="item.read = !item.read">
+                {{ item.read ? "Xem thêm" : "Rút gọn" }}
+              </a>
             </div>
           </div>
-        </v-col>
-        <v-col cols="12" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house4.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-        <v-col cols="12" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-        <v-col cols="12" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
+        </div>
+        <p v-if="loadingMore">Loading...</p>
+        <p v-if="noMore">No more</p>
+        <!-- <video width="320" height="240" controls>
+          <source
+            src="https://thinhgiacore.demo.fit/upload/blogs/1627465801989.mp4"
+            type="video/mp4"
+          />
+          Your browser does not support the video tag.
+        </video> -->
+      </div>
+
       <el-dialog
         :visible.sync="centerDialogVisible02"
         width="25%"
@@ -191,7 +120,7 @@
 <script>
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
-
+import { mapState, mapActions } from "vuex";
 export default {
   components: {
     UserDetail,
@@ -202,14 +131,109 @@ export default {
       isActive: false,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
+      limit: 10,
+      page: 1,
+      loading: false,
+      selectedItem: {},
+      blogListDetail: [],
+      loadingMore: false,
     };
   },
+  created() {
+    this.getBlogList();
+  },
+  computed: {
+    ...mapState("blog", ["total", "blogList"]),
+    noMore() {
+      return this.blogList?.length >= 20;
+    },
+    disabled() {
+      return this.loadingMore || this.noMore;
+    },
+  },
   methods: {
+    user_info(item) {
+      this.selectedItem = item;
+    },
+    load() {
+      this.loadingMore = true;
+      this.page += 1;
+      this.getBlogList();
+    },
+    handleCommand(command) {
+      if (command == "edit") {
+        this.$router.push(`/form/blog/update/${this.selectedItem.id}`);
+      }
+      if (command == "delete") {
+        this.deleteBlogConfirm();
+      }
+    },
+    async getBlogList() {
+      if (this.page == 1) {
+        this.loading = true;
+      }
+      try {
+        await this.$store.dispatch("blog/getBlogList", {
+          limit: this.limit,
+          page: this.page,
+        });
+        this.blogListDetail = this.blogList.map((u) => {
+          return { ...u, read: true };
+        });
+        this.loading = false;
+        this.loadingMore = false;
+      } catch {
+        this.loading = false;
+        this.loadingMore = false;
+      }
+    },
+    deleteBlogConfirm() {
+      this.$confirm(`Are you sure to delete this blog. Continue?`, "Warning", {
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+        type: "warning",
+      })
+        .then(() => {
+          this.loading = true;
+          this.deleteBlogInSystem();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "Delete canceled",
+          });
+        });
+    },
     handleChangePassword() {
       this.centerDialogVisible03 = true;
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
+    },
+    async deleteBlogInSystem() {
+      try {
+        await this.$store.dispatch("blog/deleteBlog", this.selectedItem.id);
+        await this.getBlogList();
+        setTimeout(this.openNotificationSuccess(), 1000);
+        this.loading = false;
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
+    },
+    openNotificationSuccess() {
+      this.$notify({
+        title: "Success",
+        message: "Delete blog successfull!!!",
+        type: "success",
+      });
+    },
+
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
     },
   },
 };
@@ -283,6 +307,10 @@ export default {
 .news_table {
   padding: 20px 20px;
 }
+.content_loading {
+  margin-top: 20px;
+  min-height: 300px;
+}
 .content_items {
   padding: 2px 12px;
   h5 {
@@ -300,6 +328,9 @@ export default {
       font-size: 13px;
       font-weight: 500;
       margin-top: 5px;
+      .username {
+        font-weight: 700;
+      }
     }
     .blog {
       color: rgb(78, 78, 245);
@@ -309,14 +340,30 @@ export default {
     }
     .img_fix {
       justify-content: space-between;
+      img {
+        width: 200px;
+        height: 200px;
+      }
     }
     a {
       font-size: 14px;
     }
+    .estate_content {
+      // font-size: 14px;
+      // height: 70px;
+      // overflow: hidden;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
     .detail {
       font-size: 15px;
       color: gray;
       line-height: 25px;
+      height: auto !important;
     }
     .introduce {
       font-weight: 500;
@@ -351,6 +398,7 @@ export default {
     h5 {
       font-size: 14px !important;
     }
+
     .detail {
       font-size: 12px !important;
       line-height: 20px !important;

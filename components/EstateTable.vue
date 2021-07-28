@@ -46,8 +46,17 @@
         </div> -->
         <template slot-scope="scope">
           <div>{{ scope.row.address }}</div>
-          <v-btn depressed color="primary" id="social_network"> Cộng đồng </v-btn>
-          <v-btn v-if="scope.row.web" depressed color="success" id="web"> Web </v-btn>
+          <v-btn
+            v-if="scope.row.share_public == 1"
+            depressed
+            color="primary"
+            id="social_network"
+          >
+            Cộng đồng
+          </v-btn>
+          <v-btn v-if="scope.row.share_web == 1" depressed color="success" id="web">
+            Web
+          </v-btn>
         </template>
       </el-table-column>
       <el-table-column
@@ -135,6 +144,7 @@
 import EstateDetail from "@component/Form/EstateDetail";
 import { mapState, mapActions } from "vuex";
 export default {
+  props: ["is_share", "is_sell"],
   components: {
     EstateDetail,
   },
@@ -182,15 +192,29 @@ export default {
     },
     async getRealEstateListPerPage() {
       this.loading = true;
-      try {
-        await this.$store.dispatch("realEstate/getRealEstateList", {
-          limit: this.rowPerPage,
-          page: this.page,
-        });
-        await this.showEstateList();
-        this.loading = false;
-      } catch {
-        this.loading = false;
+      if (!this.is_sell == null) {
+        try {
+          await this.$store.dispatch("realEstate/getRealEstateList", {
+            limit: this.rowPerPage,
+            page: this.page,
+          });
+          await this.showEstateList();
+          this.loading = false;
+        } catch {
+          this.loading = false;
+        }
+      } else if (this.is_sell != null) {
+        try {
+          await this.$store.dispatch("realEstate/getEstateListIsSell", {
+            limit: this.rowPerPage,
+            page: this.page,
+            is_sell: this.is_sell,
+          });
+          await this.showEstateList();
+          this.loading = false;
+        } catch {
+          this.loading = false;
+        }
       }
     },
     showEstateList() {
@@ -218,6 +242,7 @@ export default {
           iron: item.end_open == 0 ? "Không có" : "Có",
           viewer: 12,
           staff: item.staff?.name,
+          avatar: item.staff?.image[0]?.main,
           customer: item.customer?.name,
           phone: item.customer?.phone,
           fee: item.brokerage_amount,
@@ -232,6 +257,8 @@ export default {
           image_private: item.image_private,
           unit_price: item.unit_price == "ty" ? "tỷ" : "triệu",
           descriptions: item.descriptions,
+          share_public: item.share_public,
+          share_web: item.share_web,
         };
       });
     },

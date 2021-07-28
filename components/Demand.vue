@@ -106,6 +106,7 @@ export default {
         text: "#",
         value: "id",
         width: "50px",
+        sortable: false,
       },
       {
         text: "KHÁCH HÀNG",
@@ -118,56 +119,67 @@ export default {
         text: "KHU VỰC",
         value: "area",
         width: "300px",
+        sortable: false,
       },
       {
         text: "KHOẢNG GIÁ",
         value: "price",
         width: "140px",
+        sortable: false,
       },
       {
         text: "SỐ LẦU",
         value: "floor",
         width: "100px",
+        sortable: false,
       },
       {
         text: "SỐ PN",
         value: "bedroom",
         width: "100px",
+        sortable: false,
       },
       {
         text: "HƯỚNG",
         value: "direction",
         width: "150px",
+        sortable: false,
       },
       {
         text: "NHÂN VIÊN",
         value: "staff",
         width: "160px",
+        sortable: false,
       },
       {
         text: "LOẠI BĐS",
         value: "type_estate",
         width: "160px",
+        sortable: false,
       },
       {
         text: "LOẠI NHÀ",
         value: "type_house",
         width: "160px",
+        sortable: false,
       },
       {
         text: "DIỆN TÍCH",
         value: "square",
         width: "140px",
+        sortable: false,
       },
       {
         text: "BĐS PHÙ HỢP",
         value: "proble",
         width: "160px",
+        sortable: false,
       },
       {
         text: "MÔ TẢ",
         value: "discription",
         width: "260px",
+        sortable: false,
       },
       {
         text: "SỬA-CHUYỂN HƯỚNG-XÓA",
@@ -203,6 +215,12 @@ export default {
       }
     },
     initializeList() {
+      if (this.page > 1) {
+        this.$store.commit(
+          "demand/getDemandListOverPageOne",
+          Object.values(this.demandList)
+        );
+      }
       this.demands = this.demandList.map((item, index) => {
         return {
           id: item.id,

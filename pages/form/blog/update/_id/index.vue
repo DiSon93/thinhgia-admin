@@ -70,43 +70,22 @@
           ref="upload"
         >
           <i slot="default" class="el-icon-picture"></i>
+
           <!-- <div slot="tip" slot-scope="{ file }">
-            <video class="el-upload-list__item-thumbnail" controls>
-              <source :src="file.thumbnail" type="video/mp4" />
-            </video>
-          </div> -->
+                  <img
+                    class="el-upload-list__item-thumbnail"
+                    :src="file.thumbnail"
+                    alt=""
+                  />
+                </div> -->
         </el-upload>
         <p class="error_message" v-if="errorMessage">
           {{ errorMessage.image_id ? errorMessage.image_id[0] : null }}
         </p>
-        <!-- <el-upload
-          v-if="headers"
-          action="https://thinhgiacore.demo.fit/api/admin/blogs/image"
-          list-type="picture-card"
-          drag
-          name="file[]"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemoveVideo"
-          :on-change="handleChangeVideo"
-          :on-success="handleVideoSuccess"
-          :headers="headers"
-        >
-          <i slot="default" class="el-icon-picture"></i>
-      
-          <video
-            v-if="video"
-            class="el-upload-list__item-thumbnail"
-            controls
-            width="130"
-            height="150"
-          >
-            <source :src="video" type="video/mp4" />
-          </video>
-        </el-upload> -->
       </div>
     </div>
     <div class="btn_submit">
-      <el-button id="create_btn" @click="createBlog">Tạo bài viết</el-button>
+      <el-button id="create_btn" @click="getEditBlog">Sửa bài viết</el-button>
     </div>
   </div>
 </template>
@@ -114,11 +93,9 @@
 <script>
 import Editor from "@tinymce/tinymce-vue";
 import { mapState, mapActions } from "vuex";
-import EleUploadVideo from "vue-ele-upload-video";
 export default {
   components: {
     editor: Editor,
-    EleUploadVideo,
   },
   data() {
     return {
@@ -132,29 +109,31 @@ export default {
       image_id: [],
       img_val: "",
       loading: false,
-      video: "",
     };
   },
   mounted() {
     this.token = `bearer ${this.currentUser.results.access_token}`;
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
     this.getDictionaryList();
+    this.getItemUpdate();
   },
   computed: {
     ...mapState("auth", ["currentUser"]),
     ...mapState("dictionaries", ["dictionaryList"]),
-    ...mapState("blog", ["errorMessage"]),
+    ...mapState("blog", ["blogDetail", "errorMessage"]),
   },
   methods: {
-    handleRemoveVideo() {},
-    handleChangeVideo() {},
-    handleVideoSuccess(res, file) {
-      console.log("video", file);
-      this.video = file.response.results[0].thumbnail;
-    },
-
     handleRemove(file, fileList) {
-      if (file.response) {
+      if (file.id) {
+        this.$store.dispatch("blog/deleteBlogPhoto", file.id);
+        this.image_id = this.image_id.filter((u) => {
+          return u != file.id;
+        });
+        this.img_val = this.image_id.map((item) => `${item}`).join(",");
+        this.fileList = this.fileList.filter((u) => {
+          return u.id != file.id;
+        });
+      } else if (file.response) {
         this.$store.dispatch("blog/deleteBlogPhoto", file.response.results[0].id);
         this.image_id = this.image_id.filter((u) => {
           return u != file.response.results[0].id;
@@ -178,9 +157,6 @@ export default {
       this.img_val = this.image_id.map((item) => `${item}`).join(",");
       console.log("image_val", this.img_val);
     },
-    // handleVideoSuccess(res, file) {
-    //   console.log("video", file);
-    // },
     async getDictionaryList() {
       await this.$store.dispatch("dictionaries/getDictionaryList", {
         limit: 10,
@@ -197,10 +173,20 @@ export default {
         };
       });
     },
-    async createBlog() {
+    async getItemUpdate() {
       this.loading = true;
       try {
-        await this.$store.dispatch("blog/createBlogList", {
+        await this.$store.dispatch("blog/getBlogDetail", this.$route.params.id);
+        await this.showDetail();
+      } catch {
+        this.loading = false;
+      }
+    },
+    async getEditBlog() {
+      this.loading = true;
+      try {
+        await this.$store.dispatch("blog/updateBlogInSystem", {
+          id: this.$route.params.id,
           title: this.title,
           content: this.content,
           blog_type_id: this.blogType,
@@ -214,10 +200,22 @@ export default {
         this.loading = false;
       }
     },
+    showDetail() {
+      this.title = this.blogDetail.title;
+      this.content = this.blogDetail.content;
+      this.blogType = this.blogDetail.blog_type_id;
+      this.img_val = this.blogDetail.image_id;
+      this.fileList = this.blogDetail.image.map((u) => {
+        return { ...u, url: u.thumbnail };
+      });
+      this.image_id = this.blogDetail.image_id.split(",");
+      this.loading = false;
+    },
+
     openNotificationSuccess() {
       this.$notify({
         title: "Success",
-        message: "Create new blog successfull!!!",
+        message: "Update new blog successfull!!!",
         type: "success",
       });
     },

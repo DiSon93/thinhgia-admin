@@ -16,14 +16,20 @@
           >
           <v-btn class="chiase"> <v-icon>mdi-share</v-icon> Chia sẻ</v-btn>
         </div>
-        <el-button type="danger" icon="el-icon-close" circle size="mini"></el-button>
+        <el-button
+          type="danger"
+          icon="el-icon-close"
+          circle
+          size="mini"
+          @click="$router.back()"
+        ></el-button>
       </div>
       <div class="contents d-flex">
         <div>
           <div class="address">{{ showDetail.street_name }}</div>
           <div>
-            <v-btn id="congdong">Cộng Đồng</v-btn>
-            <v-btn id="web">Web</v-btn>
+            <button id="congdong" disabled>Cộng Đồng</button>
+            <button id="web" disabled>Web</button>
           </div>
           <div class="sell_estate">
             {{ showDetail.title ? showDetail.title.toUpperCase() : null }}
@@ -452,7 +458,6 @@ export default {
     #congdong {
       font-weight: 300;
       font-size: 8px;
-      line-height: 24px;
       letter-spacing: 0.5px;
       color: #ffffff;
       background: #2db7f5;
@@ -465,7 +470,6 @@ export default {
       border-radius: 15px;
       font-weight: 300;
       font-size: 8px;
-      line-height: 24px;
       letter-spacing: 0.5px;
       color: #ffffff;
       height: 19px;
