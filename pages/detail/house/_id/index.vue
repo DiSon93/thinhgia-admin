@@ -1,5 +1,5 @@
 <template>
-  <div class="detail" v-if="showDetail">
+  <div class="detail" v-if="showDetail" v-loading="loading">
     <div class="detail_first">
       <div class="detail_title d-flex">
         <div class="header_detail d-flex">
@@ -283,6 +283,7 @@ export default {
   data() {
     return {
       input: "",
+      loading: false,
       tableData: [
         {
           name: "Tom",
@@ -329,12 +330,13 @@ export default {
       console.log(index, row);
     },
     async getRealEstateDetail() {
+      this.loading = true;
       try {
         await this.$store.dispatch(
           "realEstate/showDetailRealEstate",
           this.$route.params.id
         );
-        console.log("detail", this.showDetail);
+        this.loading = false;
       } catch {}
     },
   },

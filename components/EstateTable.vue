@@ -144,7 +144,7 @@
 import EstateDetail from "@component/Form/EstateDetail";
 import { mapState, mapActions } from "vuex";
 export default {
-  props: ["is_share", "is_sell"],
+  props: ["is_public", "is_sell"],
   components: {
     EstateDetail,
   },
@@ -180,7 +180,6 @@ export default {
       return row[property] === value;
     },
     handdle(row, event, column) {
-      console.log(row);
       this.drawer = true;
       this.selected_id = row.id;
       this.selectd_item = row;
@@ -192,7 +191,7 @@ export default {
     },
     async getRealEstateListPerPage() {
       this.loading = true;
-      if (!this.is_sell == null) {
+      if (this.is_sell == null && this.is_public == null) {
         try {
           await this.$store.dispatch("realEstate/getRealEstateList", {
             limit: this.rowPerPage,
@@ -203,12 +202,13 @@ export default {
         } catch {
           this.loading = false;
         }
-      } else if (this.is_sell != null) {
+      } else {
         try {
           await this.$store.dispatch("realEstate/getEstateListIsSell", {
             limit: this.rowPerPage,
             page: this.page,
             is_sell: this.is_sell,
+            is_public: this.is_public,
           });
           await this.showEstateList();
           this.loading = false;
@@ -259,6 +259,7 @@ export default {
           descriptions: item.descriptions,
           share_public: item.share_public,
           share_web: item.share_web,
+          is_sell: item.is_sell,
         };
       });
     },

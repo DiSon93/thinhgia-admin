@@ -8,6 +8,7 @@ import demand from '~/vuex/demand';
 import projects from '~/vuex/projects';
 import realEstate from '~/vuex/realEstate';
 import blog from '../vuex/blog';
+import homepage from '../vuex/homepage';
 
 export default {
     modules:{
@@ -21,6 +22,7 @@ export default {
         projects,
         realEstate,
         blog,
+        homepage,
     }
 
 }

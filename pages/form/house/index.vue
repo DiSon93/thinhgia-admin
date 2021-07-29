@@ -8,7 +8,13 @@
           <v-btn value="1"> Cho thuê </v-btn>
         </v-btn-toggle>
       </div>
-      <el-button type="danger" icon="el-icon-close" circle size="mini"></el-button>
+      <el-button
+        type="danger"
+        icon="el-icon-close"
+        circle
+        size="mini"
+        @click="$router.back()"
+      ></el-button>
     </div>
     <div class="form_content">
       <v-row class="content_01">

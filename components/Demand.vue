@@ -46,7 +46,14 @@
           <td>{{ row.item.type_estate }}</td>
           <td>{{ row.item.type_house }}</td>
           <td>{{ row.item.square }} <span>&#13217;</span></td>
-          <td>{{ row.item.real_estates }} BĐS</td>
+          <td>
+            <el-button
+              type="warning"
+              plain
+              @click="showRealEstateDetail(row.item.real_estates)"
+              >{{ row.item.estate }} BĐS</el-button
+            >
+          </td>
           <td>{{ row.item.discription }}</td>
           <td>
             <!-- <el-tooltip class="item" effect="dark" content="Sửa" placement="top"> -->
@@ -74,6 +81,39 @@
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
       </template> -->
     </v-data-table>
+    <el-dialog title="BĐS" :visible.sync="dialogTableVisible" class="suitableEstate">
+      <el-table :data="gridData" v-loading="loadingChild">
+        <el-table-column property="id" label="#" width="50"></el-table-column>
+        <el-table-column property="name" label="KHÁCH HÀNG" width="150"></el-table-column>
+        <el-table-column
+          property="address"
+          label="THÔNG TIN"
+          width="250"
+        ></el-table-column>
+        <el-table-column property="create_date" label="NGÀY TẠO" width="150">
+          <template slot-scope="scope">
+            {{ scope.row.create_date }}
+            <div>{{ scope.row.create_time }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="ACTION">
+          <template slot-scope="scope">
+            <el-button
+              class="views"
+              icon="el-icon-view"
+              type="warning"
+              plain
+              @click="$router.push(`/detail/house/${scope.row.id}`)"
+            >
+              Xem</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">Hủy</el-button>
+      </span>
+    </el-dialog>
     <div class="block_pagination">
       <el-pagination
         @size-change="handleSizeChange"
@@ -101,6 +141,9 @@ export default {
     currentPage: 1,
     page: 1,
     rowPerPage: 10,
+    dialogTableVisible: false,
+    loadingChild: false,
+    gridData: [],
     headers: [
       {
         text: "#",
@@ -193,6 +236,7 @@ export default {
 
   computed: {
     ...mapState("demand", ["demandList", "total"]),
+    ...mapState("realEstate", ["listOnDemand"]),
   },
 
   created() {
@@ -248,7 +292,8 @@ export default {
           proble: item.purpose,
           side: item.purpose == 0 ? "Mua" : "Thuê",
           discription: item.descriptions,
-          real_estates: item.real_estates.length,
+          estate: item.real_estates.length,
+          real_estates: item.real_estates,
         };
       });
     },
@@ -358,6 +403,33 @@ export default {
       this.page = val;
       await this.getDemandList();
       this.loading = false;
+    },
+
+    async showRealEstateDetail(item) {
+      this.dialogTableVisible = true;
+      this.loadingChild = true;
+      let id_arr = item.map((u) => {
+        return u.id;
+      });
+      try {
+        await this.$store.dispatch("realEstate/getRealEstateListOnDemand", id_arr);
+        this.gridData = this.listOnDemand.map((u, i) => {
+          return {
+            id: u.id,
+            name: u.customer?.name,
+            address: `${u.street_name}/${u.ward?.name}/${u.district?.name}/${u.province?.name}`,
+            date: u.created_at,
+            create_date: u.created_at.slice(0, 10),
+            create_time: u.created_at.slice(11, 19),
+          };
+        });
+        this.dialogTableVisible = true;
+        this.loadingChild = false;
+      } catch {
+        this.gridData = [];
+        this.dialogTableVisible = true;
+        this.loadingChild = false;
+      }
     },
   },
 };

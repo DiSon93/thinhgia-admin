@@ -44,7 +44,7 @@
       </template>
     </v-data-table>
     <el-dialog title="BĐS" :visible.sync="dialogTableVisible" class="suitableEstate">
-      <el-table :data="gridData">
+      <el-table :data="gridData" v-loading="loadingChild">
         <el-table-column property="id" label="#" width="50"></el-table-column>
         <el-table-column property="name" label="KHÁCH HÀNG" width="150"></el-table-column>
         <el-table-column
@@ -53,14 +53,20 @@
           width="250"
         ></el-table-column>
         <el-table-column property="create_date" label="NGÀY TẠO" width="150">
-          <templates slot-scope="scope">
+          <template slot-scope="scope">
             {{ scope.row.create_date }}
             <div>{{ scope.row.create_time }}</div>
-          </templates>
+          </template>
         </el-table-column>
         <el-table-column label="ACTION">
-          <template>
-            <el-button class="views" icon="el-icon-view" type="warning" plain>
+          <template slot-scope="scope">
+            <el-button
+              class="views"
+              icon="el-icon-view"
+              type="warning"
+              plain
+              @click="$router.push(`/detail/house/${scope.row.id}`)"
+            >
               Xem</el-button
             >
           </template>
@@ -91,6 +97,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     loading: false,
+    loadingChild: false,
     currentPage: 1,
     rowPerPage: 10,
     page: 1,
@@ -143,7 +150,6 @@ export default {
           "projects/getProjectListOverPageOne",
           Object.values(this.projectList)
         );
-        console.log(this.projectList);
       }
       this.projects = this.projectList.map((item, index) => {
         return {
@@ -244,24 +250,31 @@ export default {
       await this.getProjectListPerPage();
       this.loading = false;
     },
-    showRealEstateDetail(item) {
+    async showRealEstateDetail(item) {
       this.dialogTableVisible = true;
+      this.loadingChild = true;
       let id_arr = item.map((u) => {
         return u.id;
       });
-      this.$store.dispatch("realEstate/getRealEstateListOnDemand", id_arr);
-      console.log("id_arr", id_arr);
-      console.log("test", this.listOnDemand);
-      this.gridData = item.map((u, i) => {
-        return {
-          id: u.id,
-          name: u.customer_id,
-          address: `${u.ward_id}/${u.district_id}/${u.province_id}`,
-          date: u.created_at,
-          create_date: u.created_at.slice(0, 10),
-          create_time: u.created_at.slice(11, 19),
-        };
-      });
+      try {
+        await this.$store.dispatch("realEstate/getRealEstateListOnDemand", id_arr);
+        this.gridData = this.listOnDemand.map((u, i) => {
+          return {
+            id: u.id,
+            name: u.customer?.name,
+            address: `${u.street_name}/${u.ward?.name}/${u.district?.name}/${u.province?.name}`,
+            date: u.created_at,
+            create_date: u.created_at.slice(0, 10),
+            create_time: u.created_at.slice(11, 19),
+          };
+        });
+        this.dialogTableVisible = true;
+        this.loadingChild = false;
+      } catch {
+        this.gridData = [];
+        this.dialogTableVisible = true;
+        this.loadingChild = false;
+      }
     },
   },
 };

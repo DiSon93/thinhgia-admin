@@ -75,7 +75,9 @@
       <el-dropdown class="account" @command="handleCommand">
         <v-btn> <v-icon>mdi-dots-vertical</v-icon> Thêm</v-btn>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="status"> Chuyển trạng thái </el-dropdown-item>
+          <el-dropdown-item command="status">
+            Chuyển trạng thái (Bán hoặc ngưng bán)
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>

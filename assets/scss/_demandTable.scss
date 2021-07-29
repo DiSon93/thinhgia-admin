@@ -68,8 +68,14 @@
     font-weight: 700;
   }
   tr td:nth-child(12){
-    color: orange;
-    font-weight: 700;
+    .el-button{
+      padding: 8px 10px;
+      background: transparent;
+      &:hover{
+        // background-color: rgb(231, 150, 0);
+        color: #E6A23C;
+      }
+    }
   }
   tr td:nth-child(14){
     // .v-icon{

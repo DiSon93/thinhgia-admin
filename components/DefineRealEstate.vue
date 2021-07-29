@@ -36,7 +36,14 @@
           >
             <i class="el-icon-check"></i>
           </v-btn>
-          <v-btn class="mx-2 delete" fab dark color="red" x-small>
+          <v-btn
+            class="mx-2 delete"
+            fab
+            dark
+            color="red"
+            x-small
+            @click="deleteApproveRealEstate(item.id)"
+          >
             <i class="el-icon-close"></i>
           </v-btn>
         </div>
@@ -110,14 +117,50 @@ export default {
           });
         });
     },
+    deleteApproveRealEstate(item) {
+      this.$confirm(
+        `Are you sure to delete to share this real estate. Continue?`,
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.loading = true;
+          this.deleteApproveRealEstateInSystem(item);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: `Delete canceled`,
+          });
+        });
+    },
     async approveRealEstateInSystem(_id) {
       try {
         await this.$store.dispatch("realEstate/approveRealEstate", {
           id: _id,
-          is_approve: 1,
+          share: this.is_share == "Cộng Đồng" ? "public" : "web",
         });
         setTimeout(this.openNotificationSuccess, 500);
-        await this.getRealEstateListPerPage();
+        await this.getApproveRealEstateList();
+        this.loading = false;
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
+    },
+    async deleteApproveRealEstateInSystem(_id) {
+      try {
+        await this.$store.dispatch("realEstate/deleteEstateInApproveList", {
+          id: _id,
+          share: this.is_share == "Cộng Đồng" ? "public" : "web",
+        });
+        setTimeout(this.openNotificationSuccessDelete, 500);
+        await this.getApproveRealEstateList();
+        this.loading = false;
       } catch {
         this.showErrorNotification();
         this.loading = false;
@@ -130,7 +173,13 @@ export default {
         type: "success",
       });
     },
-
+    openNotificationSuccessDelete() {
+      this.$notify({
+        title: "Success",
+        message: "Delete this real-estate successfull!!!",
+        type: "success",
+      });
+    },
     showErrorNotification() {
       this.$notify.error({
         title: "Error",

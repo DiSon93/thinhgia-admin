@@ -140,8 +140,8 @@ export default {
       isActive: false,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
-      value01: 1,
-      value02: 1,
+      value01: "",
+      value02: "",
       keyChild: 0,
       is_public: null,
       is_sell: null,
@@ -265,16 +265,22 @@ export default {
       }, 100);
     },
     handleChangePublic(e) {
+      if (this.is_sell == null) {
+        this.is_sell = 1;
+      }
       if (e == 1) {
-        this.is_public = 1;
+        this.is_public = "public";
         this.keyChild += 1;
       }
       if (e == 2) {
-        this.is_public = 0;
+        this.is_public = "web";
         this.keyChild += 1;
       }
     },
     async handleChangeSell(e) {
+      if (this.is_public == null) {
+        this.is_public = "public";
+      }
       if (e == 1) {
         this.is_sell = 1;
         this.keyChild += 1;

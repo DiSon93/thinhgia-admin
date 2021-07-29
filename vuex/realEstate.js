@@ -18,7 +18,7 @@ export default {
       changeSell: null,
       approveRealList: [],
       listOnDemand: [],
-      isSellList:[],
+      deleteApprove: null,
     },
     mutations: {
         getRealEstateList(state, data) {
@@ -70,7 +70,8 @@ export default {
             state.errorMessage = null 
         },
         getApproveList(state, data){
-            state.approveRealList = data;
+            state.approveRealList = data.data;
+            state.total = data.total;
             state.errorMessage = null;
         },
         getListOnDemand(state, data){
@@ -78,7 +79,12 @@ export default {
             state.errorMessage = null;
         },
         getEstateListIsSell(state, data){
-            state.isSellList = data;
+            state.realEstateList = data.data;
+            state.total = data.total;
+            state.errorMessage = null;
+        },
+        deleteAprrove(state, data){
+            state.deleteApprove = data;
             state.errorMessage = null;
         }
     },
@@ -154,9 +160,7 @@ export default {
                 axiosClient({ url: `/admin/real-estates/${_id}`, method: "DELETE"}).then(response => {
                     commit('deleteNewEstate', response.data.results);
                     resolve(response.data);
-
                 }).catch(e => {
-
                     commit('showError', e.response.data);
                     reject(e);
                 })
@@ -209,7 +213,7 @@ export default {
         },
         getApproveRealEstateList: ({ commit }, data)  => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/real-estates?share=${data.share}&is_approve=0`, method: "GET"}).then(response => {
+                axiosClient({ url: `/admin/real-estates/list-approve?limit=${data.limit}&page=${data.page}&share=${data.share}`, method: "GET"}).then(response => {
                     commit('getApproveList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
@@ -231,8 +235,19 @@ export default {
         },
         getEstateListIsSell:({ commit }, data)  => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}&is_sell=${data.is_sell}`, method: "GET"}).then(response => {
+                axiosClient({ url: `/admin/real-estates?is_sell=${data.is_sell}&share=${data.is_public}&limit=${data.limit}&page=${data.page}`, method: "GET"}).then(response => {
                     commit('getEstateListIsSell', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        deleteEstateInApproveList: ({ commit }, data)  => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/${data.id}?share=${data.share}`, method: "DELETE"}).then(response => {
+                    commit('deleteAprrove', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showError', e.response.data);
