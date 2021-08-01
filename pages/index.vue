@@ -47,6 +47,13 @@
           v-bind:style="{ height: height2 + 'px' }"
         >
           <div class="pt-0 time-action" tile>Bất động sản theo thời gian</div>
+          <!-- <div id="app">
+            <div v-for="(message, index) in messages" :key="index">
+              {{ message.type }} : {{ message.message }}
+            </div>
+            <input type="text" v-model="text" />
+            <button @click="sendMessage">Send</button>
+          </div> -->
           <div class="chart">
             <RealEstateChart />
           </div>
@@ -80,7 +87,8 @@ import NewAction from "@component/NewAction.vue";
 import Overview from "@component/Overview.vue";
 import Notification from "@component/Notification.vue";
 import Special from "@component/Special.vue";
-
+import io from "socket.io-client";
+var socket = io.connect("https://thinhgiacore.demo.fit/socket.io");
 export default {
   components: {
     RealEstateChart,
@@ -95,14 +103,107 @@ export default {
       isWidth: window.innerWidth > 1263 ? true : false,
       height1: window.innerHeight - 130,
       height2: window.innerHeight - 110,
+      text: "",
+      messages: [],
+      socket: null,
+      users: [],
     };
   },
-
+  created() {
+    let vm = this;
+    this.$socket.on("bds", (data) => {
+      console.log(data);
+    });
+  },
   mounted() {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
       setTimeout(() => this.$nuxt.$loading.finish(), 500);
     });
+
+    // use "main" socket defined in nuxt.config.js
+    // this.socket = this.$nuxtSocket({
+    //   name: "main", // select "main" socket from nuxt.config.js - we could also skip this because "main" is the default socket
+    // });
+
+    // this.socket.on("bds", (tickId) => {
+    //   console.log(tickId);
+    //   console.log("TTTT");
+    // });
+
+    // this.$socket.emit("bds");
+    socket.on(
+      "bds",
+      function (data) {
+        console.log("bds", data);
+      }.bind(this)
+    );
+    // this.sockets.listener.subscribe("bds", (data) => {
+    //   debugger;
+    //   console.log(data);
+    //   this.$socket.emit("dbs");
+    // });
+    // this.$socket.emit("bds");
+    // this.sockets.listener.subscribe("bds", (data) => {
+    //   console.log("bds", data);
+    // });
+  },
+  sockets: {
+    initRoom: function (message) {
+      // Đây là nơi nhận cái even initRoom với param là message mà server emit về
+      this.messages.push({
+        message,
+        type: "status",
+      });
+    },
+    statusRoom: function (message) {
+      this.messages.push({
+        message,
+        type: "status",
+      });
+    },
+    receiveMessage: function (message) {
+      console.log("GGGG");
+      this.messages.push({
+        message,
+        type: "receive",
+      });
+    },
+    connect: function (data) {
+      console.log(data);
+    },
+    customEmit: function (data) {
+      console.log(data);
+    },
+    //Thí dụ muốn nhận data từ sự kiện "bds" thì mình làm dầy  phải ko? uh
+    //cái data này lúc nào thì có => ko biêt nữa
+    //phải kêu anh quý hoặc anh cảnh đấy cái đó vô hoặc là admin tạo bds mới
+    //Vậy nhưu vầy là nhận dc data phải kmoiwsddungs rôi
+    //Dậy giúp tui coi cái nút chia sẻ Zalo ko da đi , hix
+    bds: function (data) {
+      console.log(data);
+    },
+  },
+  methods: {
+    sendMessage() {
+      if (this.text !== "") {
+        this.$socket.emit("sendMessage", this.text); // emit lên server
+        this.messages.push({
+          message: this.text,
+          type: "send",
+        });
+      }
+      this.text = "";
+    },
+    // getMessage() {
+    //   return new Promise((resolve) => {
+    //     this.socket.on("bds", (resp) => {
+    //       this.text = resp;
+    //       console.log(this.text);
+    //       resolve();
+    //     });
+    //   });
+    // },
   },
 };
 </script>

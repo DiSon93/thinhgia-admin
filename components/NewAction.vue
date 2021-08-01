@@ -1,84 +1,105 @@
 <template>
   <div v-loading="loading">
-    <div class="action" v-for="item in actionList" :key="item.id">
-      <div class="d-flex username">
-        <div class="name_info d-flex">
-          <img v-if="item.staff.image[0]" :src="item.staff.image[0].thumbnail" alt="" />
-          <img v-else src="@image/icons/username.png" alt="" />
-          <div class="name">
-            {{ item.staff.name }}
-            <div class="seconds">a few seconds ago</div>
-          </div>
-        </div>
-        <div>
-          <img src="@image/icons/i.png" alt="" />
-        </div>
-      </div>
-      <div class="sell-department">
-        {{ item.title ? item.title.toUpperCase() : null }}
-      </div>
-      <div class="d-flex address">
-        <img src="@image/icons/nam.png" alt="" />
-        <span>{{ item.house_orientation_dict.name }}</span>
-        <img src="@image/icons/address.png" alt="" />
-        <span
-          >{{ item.street_name }}, {{ item.ward.name }}, {{ item.district.name }},
-          {{ item.province.name }}</span
-        >
-      </div>
-      <div class="adjust" v-bind:class="{ estate_content: item.read }">
-        <div v-html="item.descriptions"></div>
-        <br />
-      </div>
-      <button class="more-info" @click="item.read = !item.read">
-        {{ item.read ? "Xem thêm" : "Rút gọn" }}
-      </button>
-      <v-row no-gutters class="house-img">
-        <CoolLightBox
-          :items="item.image_private.slice(0, 4)"
-          :index="index"
-          @close="index = null"
-          v-if="item.image_private.length > 0"
-        >
-        </CoolLightBox>
-
-        <div class="images-wrapper">
-          <a href="javascript:;">
-            <img
-              v-for="(image, imageIndex) in item.image_private.slice(0, 4)"
-              :key="imageIndex"
-              @click="index = imageIndex"
-              :src="image.src"
-            />
-
-            <div v-if="item.image_private.length > 4" class="overlay">
-              +{{ item.image_private.length - 4 }}
+    <div class="infinite-list-wrapper" style="overflow: auto">
+      <ul
+        class="list"
+        v-infinite-scroll="load"
+        infinite-scroll-disabled="disabled"
+        infinite-scroll-delay="1000"
+      >
+        <li class="action" v-for="item in actionList" :key="item.id">
+          <div class="d-flex username">
+            <div class="name_info d-flex">
+              <img
+                v-if="item.staff.image[0]"
+                :src="item.staff.image[0].thumbnail"
+                alt=""
+              />
+              <img v-else src="@image/icons/username.png" alt="" />
+              <div class="name">
+                {{ item.staff.name }}
+                <div class="seconds">a few seconds ago</div>
+              </div>
             </div>
-          </a>
-        </div>
-      </v-row>
-      <v-row no-gutters class="comment_like">
-        <v-col cols="4" align="center">
-          <button @click="updateLikeStatus(item.id)">
-            <img src="@image/icons/heart.png" alt="" />
-            <span class="touch">Thích</span>
-            <span>1</span>
+            <div>
+              <img src="@image/icons/i.png" alt="" />
+            </div>
+          </div>
+          <div class="sell-department">
+            {{ item.title ? item.title.toUpperCase() : null }}
+          </div>
+          <div class="d-flex address">
+            <img src="@image/icons/nam.png" alt="" />
+            <span>{{ item.house_orientation_dict.name }}</span>
+            <img src="@image/icons/address.png" alt="" />
+            <span
+              >{{ item.street_name }}, {{ item.ward.name }}, {{ item.district.name }},
+              {{ item.province.name }}</span
+            >
+          </div>
+          <div class="adjust" v-bind:class="{ estate_content: item.read }">
+            <div v-html="item.descriptions"></div>
+            <br />
+          </div>
+          <button class="more-info" @click="item.read = !item.read">
+            {{ item.read ? "Xem thêm" : "Rút gọn" }}
           </button>
-        </v-col>
-        <v-col cols="4" align="center">
-          <button>
-            <img src="@image/icons/comment.png" alt="" />
-            <span class="touch">Bình luận</span>
-            <span>2</span>
-          </button>
-        </v-col>
-        <v-col cols="4" align="center">
-          <button>
-            <img src="@image/icons/share.png" alt="" />
-            <span>Chia sẻ</span>
-          </button>
-        </v-col>
-      </v-row>
+          <CoolLightBoxImage :items="item ? item.image_private : []" />
+          <v-row no-gutters class="comment_like">
+            <v-col cols="4" align="center">
+              <button @click="updateLikeStatus(item.id)">
+                <img src="@image/icons/heart.png" alt="" />
+                <span class="touch">Thích</span>
+                <span>1</span>
+              </button>
+            </v-col>
+            <v-col cols="4" align="center">
+              <button>
+                <img src="@image/icons/comment.png" alt="" />
+                <span class="touch">Bình luận</span>
+                <span>2</span>
+              </button>
+            </v-col>
+            <v-col cols="4" align="center">
+              <el-dropdown class="account" @command="handleCommand" trigger="click">
+                <button class="share">
+                  <img src="@image/icons/share.png" alt="" />
+                  <span>Chia sẻ</span>
+                </button>
+                <el-dropdown-menu slot="dropdown" id="dropdown_social">
+                  <el-dropdown-item>
+                    <div
+                      class="zalo-share-button"
+                      data-href="https://khobatdongsanviet.demo.fit/"
+                      data-oaid="579745863508352884"
+                      data-layout="1"
+                      data-color="blue"
+                      data-customize="false"
+                    ></div>
+                  </el-dropdown-item>
+                  <el-dropdown-item divided>
+                    <ShareNetwork
+                      network="facebook"
+                      url="https://khobatdongsanviet.demo.fit/"
+                      title="Say hi to Vite! A brand new, extremely fast development setup for Vue."
+                      description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
+                      quote=""
+                      hashtags="BĐSViet,BĐS"
+                      class="share_facebook"
+                    >
+                      <img src="@image/icons/facebook.png" alt="" /> Chia sẻ
+                    </ShareNetwork>
+                  </el-dropdown-item>
+                  <el-dropdown-item command="URL" divided> Copy URL </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </v-col>
+          </v-row>
+        </li>
+      </ul>
+      <script src="https://sp.zalo.me/plugins/sdk.js"></script>
+      <p v-if="loadingMore">Loading...</p>
+      <p v-if="noMore">No more</p>
     </div>
   </div>
 </template>
@@ -87,17 +108,19 @@
 import CoolLightBox from "vue-cool-lightbox";
 import "vue-cool-lightbox/dist/vue-cool-lightbox.min.css";
 import { mapState, mapActions } from "vuex";
-
+import CoolLightBoxImage from "@component/CoolLightBoxImage.vue";
 export default {
   components: {
     CoolLightBox,
+    CoolLightBoxImage,
   },
   data: function () {
     return {
       read: false,
-      limit: 10,
+      limit: 3,
       page: 1,
       loading: false,
+      loadingMore: false,
       actionList: [],
       items: [
         {
@@ -128,14 +151,36 @@ export default {
     this.getNewActionList();
   },
   computed: {
-    ...mapState("realEstate", ["realEstateList"]),
+    ...mapState("realEstate", ["realEstateList", "lastPage"]),
+    noMore() {
+      return this.page >= this.lastPage;
+    },
+    disabled() {
+      return this.loadingMore || this.noMore;
+    },
   },
   methods: {
     readMore: function () {
       this.read = !this.read;
     },
+    async load() {
+      this.loadingMore = true;
+      this.page += 1;
+      if (this.page > this.lastPage) {
+        this.loadingMore = false;
+        this.noMore = true;
+        return;
+      }
+      try {
+        this.getNewActionList();
+      } catch {
+        this.loadingMore = false;
+      }
+    },
     async getNewActionList() {
-      this.loading = true;
+      if (this.page == 1) {
+        this.loading = true;
+      }
       try {
         await this.$store.dispatch("realEstate/getRealEstateList", {
           limit: this.limit,
@@ -143,7 +188,7 @@ export default {
         });
         // await this.renderAcitonList();
         console.log("realEstate", this.realEstateList);
-        this.actionList = this.realEstateList.map((item, index) => {
+        let actionListSroll = this.realEstateList.map((item, index) => {
           return {
             ...item,
             read: true,
@@ -152,8 +197,9 @@ export default {
             }),
           };
         });
-
+        this.actionList = this.actionList.concat(actionListSroll);
         this.loading = false;
+        this.loadingMore = false;
       } catch {
         this.loading = false;
       }
@@ -173,9 +219,23 @@ export default {
       //   })
       // }
     },
-    // renderAcitonList(){
-
-    // }
+    handleCommand(command) {
+      if (command == "URL") {
+        this.copyURLNotification();
+      }
+    },
+    copyURLNotification() {
+      // var copyText = document.getElementById("myInput");
+      // copyText.select();
+      // copyText.setSelectionRange(0, 99999); /* For mobile devices */
+      // document.execCommand("copy");
+      navigator.clipboard.writeText("https://khobatdongsanviet.demo.fit/");
+      this.$notify({
+        title: "Success",
+        message: "Copy URL successfull!!!",
+        type: "success",
+      });
+    },
   },
 };
 </script>
@@ -307,6 +367,9 @@ export default {
     font-style: normal;
     font-weight: 300;
     font-size: 11px;
+    .share {
+      font-size: 11px;
+    }
     span {
       margin: 0 3px;
     }
@@ -315,6 +378,14 @@ export default {
 .big_img {
   width: 500px;
   height: auto;
+}
+.share_facebook {
+  text-decoration: none;
+  img {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+  }
 }
 @media screen and (max-width: 600px) {
   .action {
@@ -340,5 +411,12 @@ export default {
       }
     }
   }
+}
+.infinite-list-wrapper {
+  height: 800px;
+}
+div::-webkit-scrollbar {
+  width: 3px !important;
+  opacity: 0.1 !important;
 }
 </style>

@@ -8,6 +8,7 @@
       highlight-current-row
       @row-click="handdle"
       @selection-change="handleSelectionChange"
+      height="80vh"
     >
       <el-table-column type="selection" width="35" fixed> </el-table-column>
       <el-table-column prop="amount" label="#" sortable width="60" fixed>
@@ -21,9 +22,10 @@
           { text: 'Bán', value: 'BÁN' },
         ]"
         :filter-method="filterHandler"
+        fixed
       >
       </el-table-column>
-      <el-table-column prop="price" label="Giá" width="80" sortable>
+      <el-table-column prop="price" label="Giá" width="80" sortable fixed>
         <template slot-scope="scope">
           {{ scope.row.price }} {{ scope.row.unit_price }}
         </template>
@@ -137,12 +139,22 @@
         v-on:cancel-modals="reloadPage"
       />
     </el-drawer>
+    <!-- <div
+      class="zalo-share-button"
+      data-href="https://khobatdongsanviet.demo.fit/"
+      data-oaid="4442939145961016330"
+      data-layout="3"
+      data-color="blue"
+      data-customize="false"
+    ></div>
+    <script src="https://sp.zalo.me/plugins/sdk.js"></script> -->
   </div>
 </template>
 
 <script>
 import EstateDetail from "@component/Form/EstateDetail";
 import { mapState, mapActions } from "vuex";
+
 export default {
   props: ["is_public", "is_sell"],
   components: {

@@ -51,7 +51,9 @@
                 </el-option>
               </el-select>
             </div>
-            <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
+            <v-btn class="export" fab
+              ><img src="@image/icons/export.png" alt="" @click="openExportConfirm"
+            /></v-btn>
           </div>
         </v-col>
       </v-row>
@@ -125,6 +127,17 @@ export default {
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
+    },
+    openExportConfirm() {
+      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Title", {
+        confirmButtonText: "OK",
+        callback: (action) => {
+          this.$message({
+            type: "info",
+            message: `Please wait`,
+          });
+        },
+      });
     },
   },
 };

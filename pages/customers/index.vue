@@ -34,7 +34,9 @@
           <v-btn class="account" fab @click="centerDialogVisible02 = true"
             ><v-icon dark small>mdi-account</v-icon></v-btn
           >
-          <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
+          <v-btn class="export" fab @click="openExportConfirm"
+            ><img src="@image/icons/export.png" alt=""
+          /></v-btn>
         </div>
       </v-row>
       <el-dialog
@@ -123,6 +125,17 @@ export default {
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
+    },
+    openExportConfirm() {
+      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Title", {
+        confirmButtonText: "OK",
+        callback: (action) => {
+          this.$message({
+            type: "info",
+            message: `Please wait`,
+          });
+        },
+      });
     },
   },
 };

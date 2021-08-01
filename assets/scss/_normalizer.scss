@@ -131,9 +131,21 @@ body .el-table th.gutter {
         }
     }
 }
+.compensate-for-scrollbar {
+    margin-right: 0px !important;
+}
+.zalo-share-button{
+    overflow: unset!important ;
+}
+// #dropdown_social{
+//     .el-dropdown-menu__item{
+//         line-height: 28px;
+//     }
+// }
 
 @media screen and (max-width: 800px) {
     #search {
         margin-left: 10px;
     }
 }
+

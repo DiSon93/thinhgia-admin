@@ -19,11 +19,13 @@ export default {
       approveRealList: [],
       listOnDemand: [],
       deleteApprove: null,
+      lastPage: 0,
     },
     mutations: {
         getRealEstateList(state, data) {
             state.realEstateList = data.data;
             state.total = data.total;
+            state.lastPage = data.last_page;
             state.errorMessage = null
         },
         createNewRealEstate(state, data){

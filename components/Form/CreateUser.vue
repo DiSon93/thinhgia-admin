@@ -66,7 +66,7 @@
           </el-form-item>
         </v-col>
         <v-col cols="4">
-          <div>CMND</div>
+          <div>CMND/CCCD</div>
           <el-form-item prop="identity_card">
             <el-input v-model="ruleForm.identity_card"></el-input>
           </el-form-item>
@@ -205,8 +205,8 @@ export default {
           },
           { validator: checkNumber, trigger: "blur" },
           {
-            max: 9,
-            message: "Indentity Card must be not longer than 9",
+            max: 12,
+            message: "Indentity Card must be not longer than 12",
             trigger: "blur",
           },
         ],

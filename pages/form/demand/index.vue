@@ -58,6 +58,9 @@
           >
           </el-option>
         </el-select>
+        <p class="error_message" v-if="errorMessage">
+          {{ errorMessage.ward_id ? errorMessage.ward_id[0] : null }}
+        </p>
       </div>
     </div>
     <div class="estate">
@@ -132,7 +135,7 @@
             >
             </el-option>
           </el-select>
-          <el-button round>+ Tạo</el-button>
+          <el-button round @click="centerDialogVisible = true">+ Tạo</el-button>
         </div>
         <p class="error_message" v-if="errorMessage">
           {{ errorMessage.customer_id ? errorMessage.customer_id[0] : null }}
@@ -150,6 +153,9 @@
         >
         </el-option>
       </el-select>
+      <p class="error_message" v-if="errorMessage">
+        {{ errorMessage.house_orientation ? errorMessage.house_orientation[0] : null }}
+      </p>
     </div>
     <div class="tool">
       <div class="tool_item">
@@ -184,12 +190,29 @@
       <el-button id="soft_save" @click="adddDemandOffCustomer(0)">Lưu nháp</el-button>
       <el-button id="save" @click="adddDemandOffCustomer(1)">Lưu</el-button>
     </div>
+    <el-dialog
+      title="Tạo khách hàng mới"
+      :visible.sync="centerDialogVisible"
+      width="25%"
+      center
+      destroy-on-close
+      id="createCustomersSimple"
+    >
+      <SimpleCreateCustomer
+        v-on:close-modals="centerDialogVisible = false"
+        v-on:reload-page="reload"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
+import SimpleCreateCustomer from "@component/Form/SimpleCreateCustomer";
 export default {
+  components: {
+    SimpleCreateCustomer,
+  },
   data() {
     return {
       // radio: "0",
@@ -212,6 +235,7 @@ export default {
       directions: [],
       estates: [],
       houses: [],
+      centerDialogVisible: false,
       loading: false,
       customers: [
         {
@@ -248,6 +272,9 @@ export default {
     ...mapActions("customers", ["getCustomerList"]),
     ...mapActions("staffs", ["getStaffList"]),
     ...mapActions("global", ["getProvinceList"]),
+    reload() {
+      this.getCustomerList();
+    },
     async adddDemandOffCustomer(e) {
       this.loading = true;
       try {

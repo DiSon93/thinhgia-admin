@@ -445,7 +445,7 @@
 </template>
 
 <script>
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "@tinymce/tinymce-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 import axiosClient from "~/utils/axiosClient";
@@ -462,11 +462,6 @@ export default {
       checked02: false,
       headers: null,
       token: "",
-      editor: ClassicEditor,
-      editorData: "<p>Content of the editor.</p>",
-      editorConfig: {
-        //  toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'insertTable', '|', 'imageUpload', 'mediaEmbed', '|', 'undo', 'redo' ],
-      },
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,

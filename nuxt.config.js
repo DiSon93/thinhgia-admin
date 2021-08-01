@@ -16,6 +16,9 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/batdongsanviet.png' },
+    ],
+    script: [
+      { type: 'text/javascript', src:'https://sp.zalo.me/plugins/sdk.js' },
     ]
   },
 
@@ -37,8 +40,7 @@ export default {
     { src: "@/plugins/bootstrap_icon.js", mode: "client"},
     // { src: "@/plugins/vue-select.js",  ssr: false},
     { src: "@/plugins/element-ui.js", mode: "client"},
-    { src: "@/plugins/CKEditor.js", mode: "client"},
-    { src: "@/plugins/vue-ele-upload-video.js", mode: "client"},
+    { src: "@/plugins/socket-io.js", mode: "client"},
 
     // { src: "@/plugins/vue-lazyloading.js", mode: "client"},
   ],
@@ -60,14 +62,20 @@ export default {
     '@nuxtjs/axios',
     'bootstrap-vue/nuxt',
     'nuxt-vue-select',
-    'dropzone-nuxt',
+    'vue-social-sharing/nuxt',
   ],
 
   // bootstrapVue: {
   //   bootstrapCSS: false, // Or `css: false`
   //   bootstrapVueCSS: false // Or `bvCSS: false`
   // },
-
+  // io: {
+  //   // module options
+  //   sockets: [{
+  //     name: 'main',
+  //     url: 'https://thinhgiacore.demo.fit/socket.io'
+  //   }]
+  // },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: 'https://thinhgiacore.demo.fit/api', 

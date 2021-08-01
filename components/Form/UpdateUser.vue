@@ -54,7 +54,7 @@
           </el-form-item>
         </v-col>
         <v-col cols="4">
-          <div>CMND</div>
+          <div>CMND/CCCD</div>
           <el-form-item prop="identity_card">
             <el-input v-model="ruleForm.identity_card"></el-input>
           </el-form-item>
@@ -158,7 +158,7 @@ export default {
             message: "Please input number",
             trigger: "change",
           },
-          // { validator: checkNumber, trigger: "blur" },
+          { validator: checkNumber, trigger: "blur" },
           {
             min: 7,
             message: "The phone must be at least 7 characters.",
@@ -178,12 +178,12 @@ export default {
             message: "Please select at least one activity type",
             trigger: "change",
           },
-          // { validator: checkNumber, trigger: "blur" },
-          // {
-          //   max: 9,
-          //   message: "Indentity Card must be not longer than 9",
-          //   trigger: "blur",
-          // },
+          { validator: checkNumber, trigger: "blur" },
+          {
+            max: 12,
+            message: "Indentity Card must be not longer than 12",
+            trigger: "blur",
+          },
         ],
         issued_on: [
           { required: true, message: "Please input activity form", trigger: "change" },

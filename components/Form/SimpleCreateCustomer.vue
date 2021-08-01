@@ -3,7 +3,7 @@
     <!-- <div class="create_title"></div> -->
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
       <v-row>
-        <v-col cols="4" class="img_user">
+        <v-col cols="12" class="img_user">
           <el-upload
             v-if="headers"
             class="avatar-uploader"
@@ -12,33 +12,32 @@
             :on-success="handleAvatarSuccess"
             :headers="headers"
           >
-            <img v-if="avatar_image" :src="avatar_image" class="avatar" />
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <img v-else src="@image/icons/user.svg" alt="" />
           </el-upload>
-          <div class="select_img">Thêm ảnh</div>
         </v-col>
-        <v-col cols="8">
+        <div class="select_img">Thêm ảnh</div>
+        <v-col cols="12">
           <div>Tên</div>
           <el-form-item prop="name">
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
-          <v-row>
-            <v-col cols="6">
-              <div>SDT</div>
-              <el-form-item prop="phone">
-                <el-input v-model="ruleForm.phone"></el-input>
-              </el-form-item>
-            </v-col>
-            <v-col cols="6">
-              <div>Số Fax</div>
-              <el-form-item prop="fax">
-                <el-input v-model="ruleForm.fax"></el-input>
-              </el-form-item>
-            </v-col>
-          </v-row>
+          <div>SDT</div>
+          <el-form-item prop="phone">
+            <el-input v-model="ruleForm.phone"></el-input>
+          </el-form-item>
+          <el-button id="showMore_createUser" @click="showMore = !showMore">{{
+            showMore ? "- Rút gọn" : "+ Thêm thông tin"
+          }}</el-button>
+          <div v-if="showMore">
+            <div>Số Fax</div>
+            <el-form-item prop="fax">
+              <el-input v-model="ruleForm.fax"></el-input>
+            </el-form-item>
+          </div>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row v-if="showMore">
         <v-col cols="6">
           <div>Email</div>
           <el-form-item prop="email">
@@ -66,6 +65,7 @@
         <v-col cols="6">
           <div>Nhân viên</div>
           <el-form-item prop="user_id">
+            <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select v-model="ruleForm.user_id" placeholder="Chọn nhân viên">
               <el-option
                 v-for="item in staffList"
@@ -99,9 +99,7 @@
       </v-row>
       <el-form-item class="btn_submit">
         <el-button id="huy_createUser" @click="cancelModal">Hủy</el-button>
-        <el-button id="new_createUser" @click="submitForm('ruleForm')"
-          >Cập nhật</el-button
-        >
+        <el-button id="new_createUser" @click="submitForm('ruleForm')">Tạo mới</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -111,7 +109,6 @@
 import { showErrorMessage, showSuccessMessage } from "../../utils/notification";
 import { mapState, mapActions } from "vuex";
 export default {
-  props: ["customerDetail"],
   data() {
     var checkNumber = (rule, value, callback) => {
       var regex = /^[0-9]*$/;
@@ -126,6 +123,7 @@ export default {
       dropzoneOptions: null,
       headers: null,
       loadingChild: false,
+      showMore: false,
       ruleForm: {
         name: "",
         email: "",
@@ -138,7 +136,6 @@ export default {
         note: "",
         avatar: "",
       },
-      avatar_image: null,
       imageUrl: "",
       avatar_id: null,
       selectedFile: null,
@@ -148,11 +145,6 @@ export default {
           { min: 2, max: 30, message: "Length should be 2 to 30", trigger: "blur" },
         ],
         email: [
-          {
-            required: true,
-            message: "Please input email",
-            trigger: "submit",
-          },
           {
             type: "email",
             message: "Please input email address",
@@ -173,19 +165,8 @@ export default {
           },
         ],
         fax: [{ validator: checkNumber, trigger: "blur" }],
-        birth_day: [
-          {
-            required: true,
-            message: "Please pick a time",
-            trigger: "submit",
-          },
-        ],
+        birth_day: [],
         identity_card: [
-          {
-            required: true,
-            message: "Please select at least one activity type",
-            trigger: "submit",
-          },
           { validator: checkNumber, trigger: "blur" },
           {
             max: 12,
@@ -193,16 +174,8 @@ export default {
             trigger: "blur",
           },
         ],
-        user_id: [
-          { required: true, message: "Please select staff name", trigger: "change" },
-        ],
-        address: [
-          {
-            required: true,
-            message: "Please select activity resource",
-            trigger: "change",
-          },
-        ],
+        user_id: [],
+        address: [],
       },
     };
   },
@@ -218,11 +191,10 @@ export default {
     //   headers: { Authorization: `bearer ${this.currentUser.results.access_token}` },
     // };
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
-    this.getCustomerDetail();
     this.getStaffList();
   },
   computed: {
-    ...mapState("staffs", ["loading", "staffList"]),
+    ...mapState("staffs", ["staffList"]),
     ...mapState("auth", ["currentUser"]),
     ...mapState("customers", ["errorMessage"]),
   },
@@ -232,41 +204,26 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.updateCustomerToSystem();
+          this.addCustomerToSystem();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    getCustomerDetail() {
-      this.ruleForm = {
-        name: this.customerDetail.name,
-        email: this.customerDetail.email,
-        phone: this.customerDetail.phone,
-        birth_day: this.customerDetail.birthday,
-        identity_card: this.customerDetail.cmnd,
-        address: this.customerDetail.address,
-        avatar: this.customerDetail.avatar,
-        user_id: this.customerDetail.user_id,
-        fax: this.customerDetail.fax,
-        note: this.customerDetail.note,
-      };
-      this.avatar_image = this.customerDetail.picture;
-    },
-    async updateCustomerToSystem() {
+    async addCustomerToSystem() {
       this.loadingChild = true;
       try {
-        await this.$store.dispatch("customers/updateNewCustomer", {
+        await this.$store.dispatch("customers/createNewCustomer", {
           ...this.ruleForm,
-          id: this.customerDetail.id,
+          avatar: this.avatar_id ? this.avatar_id : 0,
         });
 
         // if (!this.errorMessage) {
         this.loadingChild = false;
         this.cancelModal();
-        setTimeout(this.openNotificationUpdate(), 1000);
-        this.$emit("update-modals");
+        setTimeout(this.openNotificationCreate(), 1000);
+        this.$emit("reload-page");
         // }
       } catch {
         this.loadingChild = false;
@@ -274,7 +231,7 @@ export default {
       }
     },
     showErrorMessage() {
-      let message = "Update customer failure!!!";
+      let message = "Create customer failure!!!";
       console.log(this.errorMessage);
       if (this.errorMessage?.email) {
         message = this.errorMessage?.email[0];
@@ -299,17 +256,17 @@ export default {
     cancelModal() {
       this.$emit("close-modals");
     },
-    openNotificationUpdate() {
+    openNotificationCreate() {
       this.$notify({
         title: "Success",
-        message: "Upadte customer successfull!!!",
+        message: "Create customer successfull!!!",
         type: "success",
       });
     },
     handleAvatarSuccess(res, file) {
-      this.avatar_image = URL.createObjectURL(file.raw);
-      this.ruleForm.avatar = res.results.id;
-      console.log(this.avatar_image);
+      this.imageUrl = URL.createObjectURL(file.raw);
+      this.avatar_id = res.results.id;
+      console.log(this.avatar_id);
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -334,14 +291,13 @@ export default {
     justify-content: center;
     align-items: center;
     position: relative;
-    .select_img {
-      position: absolute;
-      bottom: 5%;
-    }
     img {
       width: 100px;
       height: 100px;
     }
+  }
+  .select_img {
+    margin: 0 auto;
   }
   .col.col-4,
   .col-6,

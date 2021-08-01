@@ -8,7 +8,7 @@
     transition="fade-transition"
   >
     <div class="header_box">
-      <v-row align="center" d-flex>
+      <v-row align="center" d-flex class="header_option">
         <v-col cols="8" sm="6" class="app_bar new_titles">
           <button class="homepage" disabled>Tin tức</button>
           <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
@@ -32,60 +32,6 @@
         </v-col>
       </v-row>
       <div class="content_loading" v-loading="loading">
-        <div class="news_table list" v-if="blogList.length != 0">
-          <div class="content_items" v-for="item in blogListDetail" :key="item.id">
-            <div class="content">
-              <div class="d-flex img_fix">
-                <!-- <v-parallax height="200" :src="getImageUrl('house1.png')"></v-parallax> -->
-                <!-- <img src="@image/layouts/house1.png" alt="" /> -->
-                <div v-for="img in item.image.slice(0, 4)" :key="img.id">
-                  <img :src="img.thumbnail" alt="" class="project_picture" />
-                </div>
-
-                <div>
-                  <el-dropdown @command="handleCommand" trigger="click">
-                    <el-button
-                      type="primary"
-                      icon="el-icon-edit"
-                      circle
-                      class="el-dropdown-link btn_select"
-                      @click="user_info(item)"
-                    >
-                    </el-button>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item command="edit">
-                        <v-icon>mdi-pen-plus</v-icon> Sửa
-                      </el-dropdown-item>
-                      <el-dropdown-item command="delete">
-                        <v-icon>mdi-trash-can</v-icon> Xóa
-                      </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
-                </div>
-              </div>
-              <div class="create">
-                Tạo bởi
-                <span class="username">{{ item.user ? item.user.name : null }}</span> lúc
-                {{ item.created_at.slice(0, 10) }}
-                {{ item.created_at.slice(11, 19) }}
-              </div>
-              <div class="blog">
-                Loại blog: {{ item.blog_type ? item.blog_type.name : null }}
-              </div>
-              <h5>{{ item.title }}</h5>
-              <div class="introduce">GIỚI THIỆU</div>
-              <div class="detail" v-bind:class="{ estate_content: item.read }">
-                <div v-html="item.content"></div>
-                <!-- <span> <a href="#">...Xem thêm</a> </span> -->
-              </div>
-              <a href="javascript:;" @click="item.read = !item.read">
-                {{ item.read ? "Xem thêm" : "Rút gọn" }}
-              </a>
-            </div>
-          </div>
-        </div>
-        <p v-if="loadingMore">Loading...</p>
-        <p v-if="noMore">No more</p>
         <!-- <video width="320" height="240" controls>
           <source
             src="https://thinhgiacore.demo.fit/upload/blogs/1627465801989.mp4"
@@ -93,6 +39,69 @@
           />
           Your browser does not support the video tag.
         </video> -->
+        <div class="infinite-list-wrapper" style="overflow: auto">
+          <ul
+            class="list"
+            v-infinite-scroll="load"
+            infinite-scroll-disabled="disabled"
+            infinite-scroll-delay="1000"
+          >
+            <!-- <div v-for="i in count" :key="i" class="list-item">{{ i }}</div> -->
+            <li class="content_items" v-for="item in blogListDetail" :key="item.id">
+              <div class="content">
+                <div class="d-flex img_fix">
+                  <!-- <v-parallax height="200" :src="getImageUrl('house1.png')"></v-parallax> -->
+                  <!-- <img src="@image/layouts/house1.png" alt="" /> -->
+                  <div v-for="img in item.image.slice(0, 4)" :key="img.id">
+                    <img :src="img.thumbnail" alt="" class="project_picture" />
+                  </div>
+
+                  <div>
+                    <el-dropdown @command="handleCommand" trigger="click">
+                      <el-button
+                        type="primary"
+                        icon="el-icon-edit"
+                        circle
+                        class="el-dropdown-link btn_select"
+                        @click="user_info(item)"
+                      >
+                      </el-button>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="edit">
+                          <v-icon>mdi-pen-plus</v-icon> Sửa
+                        </el-dropdown-item>
+                        <el-dropdown-item command="delete">
+                          <v-icon>mdi-trash-can</v-icon> Xóa
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
+                </div>
+                <div class="create">
+                  Tạo bởi
+                  <span class="username">{{ item.user ? item.user.name : null }}</span>
+                  lúc
+                  {{ item.created_at.slice(0, 10) }}
+                  {{ item.created_at.slice(11, 19) }}
+                </div>
+                <div class="blog">
+                  Loại blog: {{ item.blog_type ? item.blog_type.name : null }}
+                </div>
+                <h5>{{ item.title }}</h5>
+                <div class="introduce">GIỚI THIỆU</div>
+                <div class="detail" v-bind:class="{ estate_content: item.read }">
+                  <div v-html="item.content"></div>
+                  <!-- <span> <a href="#">...Xem thêm</a> </span> -->
+                </div>
+                <a href="javascript:;" @click="item.read = !item.read">
+                  {{ item.read ? "Xem thêm" : "Rút gọn" }}
+                </a>
+              </div>
+            </li>
+          </ul>
+          <p v-if="loadingMore">Loading...</p>
+          <p v-if="noMore">No more</p>
+        </div>
       </div>
 
       <el-dialog
@@ -131,21 +140,22 @@ export default {
       isActive: false,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
-      limit: 10,
+      limit: 3,
       page: 1,
       loading: false,
       selectedItem: {},
       blogListDetail: [],
       loadingMore: false,
+      count: 10,
     };
   },
   created() {
     this.getBlogList();
   },
   computed: {
-    ...mapState("blog", ["total", "blogList"]),
+    ...mapState("blog", ["total", "blogList", "lastPage"]),
     noMore() {
-      return this.blogList?.length >= 20;
+      return this.page > this.lastPage;
     },
     disabled() {
       return this.loadingMore || this.noMore;
@@ -155,10 +165,19 @@ export default {
     user_info(item) {
       this.selectedItem = item;
     },
-    load() {
+    async load() {
       this.loadingMore = true;
       this.page += 1;
-      this.getBlogList();
+      if (this.page > this.lastPage) {
+        this.loadingMore = false;
+        this.noMore = true;
+        return;
+      }
+      try {
+        this.getBlogList();
+      } catch {
+        this.loadingMore = false;
+      }
     },
     handleCommand(command) {
       if (command == "edit") {
@@ -177,9 +196,10 @@ export default {
           limit: this.limit,
           page: this.page,
         });
-        this.blogListDetail = this.blogList.map((u) => {
+        let scrollBlogList = this.blogList.map((u) => {
           return { ...u, read: true };
         });
+        this.blogListDetail = this.blogListDetail.concat(scrollBlogList);
         this.loading = false;
         this.loadingMore = false;
       } catch {
@@ -308,7 +328,7 @@ export default {
   padding: 20px 20px;
 }
 .content_loading {
-  margin-top: 20px;
+  margin-top: 40px;
   min-height: 300px;
 }
 .content_items {
@@ -373,6 +393,16 @@ export default {
     }
   }
 }
+.header_option {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background: #eff5f9 !important;
+}
+div::-webkit-scrollbar {
+  width: 3px !important;
+  opacity: 0.1 !important;
+}
 @media screen and (min-width: 1265px) {
   .header_box {
     margin-top: -60px !important;
@@ -423,5 +453,8 @@ export default {
     padding: 0 !important;
     margin-bottom: 30px;
   }
+}
+.infinite-list-wrapper {
+  height: 800px;
 }
 </style>

@@ -58,7 +58,7 @@
           </el-form-item>
         </v-col>
         <v-col cols="6">
-          <div>CMND</div>
+          <div>CMND/CCCD</div>
           <el-form-item prop="identity_card">
             <el-input v-model="ruleForm.identity_card"></el-input>
           </el-form-item>
@@ -170,11 +170,11 @@ export default {
           },
         ],
         fax: [
-          {
-            required: true,
-            message: "Please input fax",
-            trigger: "submit",
-          },
+          // {
+          //   required: true,
+          //   message: "Please input fax",
+          //   trigger: "submit",
+          // },
           { validator: checkNumber, trigger: "blur" },
         ],
         birth_day: [
@@ -192,8 +192,8 @@ export default {
           },
           { validator: checkNumber, trigger: "blur" },
           {
-            max: 9,
-            message: "Indentity Card must be not longer than 9",
+            max: 12,
+            message: "Indentity Card must be not longer than 12",
             trigger: "blur",
           },
         ],
@@ -201,11 +201,11 @@ export default {
           { required: true, message: "Please select staff name", trigger: "change" },
         ],
         address: [
-          {
-            required: true,
-            message: "Please select activity resource",
-            trigger: "change",
-          },
+          // {
+          //   required: true,
+          //   message: "Please select activity resource",
+          //   trigger: "change",
+          // },
         ],
       },
     };

@@ -48,7 +48,7 @@
                 >
                 </el-option>
               </el-select>
-              <el-button round>+ Tạo</el-button>
+              <el-button round @click="centerDialogVisible = true">+ Tạo</el-button>
             </div>
             <p class="error_message customer_id" v-if="errorMessage">
               {{ errorMessage.customer_id ? errorMessage.customer_id[0] : null }}
@@ -439,17 +439,31 @@
         <el-button id="save" @click="createNewEstate(1)">Lưu</el-button>
       </div>
     </div>
+    <el-dialog
+      title="Tạo khách hàng mới"
+      :visible.sync="centerDialogVisible"
+      width="25%"
+      center
+      destroy-on-close
+      id="createCustomersSimple"
+    >
+      <SimpleCreateCustomer
+        v-on:close-modals="centerDialogVisible = false"
+        v-on:reload-page="reload"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "@tinymce/tinymce-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 import axiosClient from "~/utils/axiosClient";
+import SimpleCreateCustomer from "@component/Form/SimpleCreateCustomer";
 export default {
   components: {
     editor: Editor,
+    SimpleCreateCustomer,
   },
   data() {
     return {
@@ -460,13 +474,10 @@ export default {
       checked02: false,
       headers: null,
       token: "",
-      editor: ClassicEditor,
-      editorData: "<p>Content of the editor.</p>",
-      editorConfig: {
-        //  toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'insertTable', '|', 'imageUpload', 'mediaEmbed', '|', 'undo', 'redo' ],
-      },
+      keyChild: 0,
       dialogImageUrl: "",
       dialogVisible: false,
+      centerDialogVisible: false,
       disabled: false,
       projects: [
         {
@@ -575,6 +586,9 @@ export default {
     ...mapActions("customers", ["getCustomerList"]),
     ...mapActions("staffs", ["getStaffList"]),
     ...mapActions("global", ["getProvinceList"]),
+    reload() {
+      this.getCustomerList();
+    },
     chooseProvince() {
       this.value04 = "";
       this.value05 = "";
@@ -1033,5 +1047,21 @@ export default {
 }
 .street_name {
   margin-top: 0px;
+}
+
+#huy_createUser.el-button {
+  border: 1px solid #fbad18;
+  box-sizing: border-box;
+  border-radius: 15px;
+  color: #fbad18;
+  margin-top: 20px;
+}
+#new_createUser.el-button {
+  background: #fbad18;
+  border: 1px solid #fbad18;
+  box-sizing: border-box;
+  color: #fff;
+  border-radius: 15px;
+  margin-top: 20px;
 }
 </style>

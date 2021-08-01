@@ -9,6 +9,36 @@
       width="100vw"
       :mobile-breakpoint="0"
     >
+      <template v-slot:header.valid="{ header }">
+        {{ header.text }}
+        <v-menu offset-y :close-on-content-click="false">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon small :color="dessertName ? 'primary' : ''"> mdi-filter </v-icon>
+            </v-btn>
+          </template>
+          <div style="background-color: white; width: 280px">
+            <v-text-field
+              v-model="dessertName"
+              class="pa-4"
+              type="text"
+              label="Enter the search term"
+              @change="filterDessertName()"
+            ></v-text-field>
+            <v-btn @click="clearText" small text class="ml-2 mb-2 btn_search"
+              >Clean</v-btn
+            >
+            <v-btn
+              @click="filterDessertName"
+              color="primary"
+              small
+              text
+              class="ml-2 mb-2 btn_search"
+              >Search</v-btn
+            >
+          </div>
+        </v-menu>
+      </template>
       <template v-slot:item="row">
         <tr>
           <td>{{ row.item.index }}</td>
@@ -65,6 +95,8 @@ export default {
     selectedDictionary: "",
     dialogVisible: false,
     selectedItem: {},
+    dessertName: "",
+    firstDic: [],
     headers: [
       { text: "#", value: "index", width: "58px" },
       {
@@ -74,8 +106,8 @@ export default {
         value: "valid",
         width: "240px",
       },
-      { text: "NGÀY TẠO", value: "create_date", sortable: false, width: "130px" },
-      { text: "NGÀY CẬP NHẬT", value: "update_date", sortable: false, width: "140px" },
+      { text: "NGÀY TẠO", value: "create_date", width: "130px" },
+      { text: "NGÀY CẬP NHẬT", value: "update_date", width: "140px" },
       ,
       { text: "SỬA/XÓA", value: "actions", sortable: false, width: "100px" },
     ],
@@ -91,6 +123,27 @@ export default {
   },
 
   methods: {
+    clearText() {
+      this.dessertName = "";
+      this.filterDessertName();
+    },
+    filterDessertName() {
+      // return item.name.toLowerCase().includes(this.dessertName.toLowerCase());
+      if (this.dessertName == "") {
+        return (this.dictionaries = this.firstDic);
+      }
+      let content = [];
+      this.dessertName = this.dessertName.toLowerCase();
+      this.dictionaries.map((item, index) => {
+        var tenChuThuong = item.valid.toLowerCase();
+        if (tenChuThuong.indexOf(this.dessertName) > -1) {
+          //tìm thấy từ khóa trong tên nhân viên (tenChuThuong)
+          //thêm nhân viên tìm thấy vào mảng kết quả
+          content.push(item);
+        }
+      });
+      return (this.dictionaries = content);
+    },
     user_info(item) {
       this.selectedItem = item;
     },
@@ -110,13 +163,14 @@ export default {
         return {
           index: index + 1,
           valid: item.name,
-          create_date: item.created_at,
-          update_date: item.updated_at,
+          create_date: `${item.created_at.slice(0, 10)} ${item.created_at.slice(11, 19)}`,
+          update_date: `${item.updated_at.slice(0, 10)} ${item.updated_at.slice(11, 19)}`,
           id: item.id,
           dictionary_type_id: item.dictionary_type_id,
         };
       });
       this.loading = false;
+      this.firstDic = this.dictionaries;
     },
     async handleCommand(command) {
       if (command == "edit") {
@@ -212,5 +266,8 @@ export default {
     padding: 8px 10px;
     border: none;
   }
+}
+.v-btn.btn_search {
+  margin-top: -20px;
 }
 </style>

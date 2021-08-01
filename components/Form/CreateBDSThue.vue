@@ -435,7 +435,6 @@
 </template>
 
 <script>
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "@tinymce/tinymce-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 export default {
@@ -448,11 +447,6 @@ export default {
       shownmore: false,
       checked01: false,
       checked02: false,
-      editor: ClassicEditor,
-      editorData: "<p>Content of the editor.</p>",
-      editorConfig: {
-        //  toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'insertTable', '|', 'imageUpload', 'mediaEmbed', '|', 'undo', 'redo' ],
-      },
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,

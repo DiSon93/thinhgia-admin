@@ -98,6 +98,7 @@ export default {
   //   ...mapState("auth", ["currentUser"]),
   // },
   computed: {
+    ...mapState("auth", ["error"]),
     userLogin() {
       return this.$store.state.auth.currentUser;
     },
@@ -124,14 +125,15 @@ export default {
         });
         this.loading = false;
       } catch {
-        this.loading = true;
+        this.loading = false;
         this.openNotification();
       }
     },
     openNotification() {
+      let message = this.error.data.message;
       this.$notify.error({
         title: "Error",
-        message: "The email or password does not match.",
+        message,
       });
       this.loading = false;
     },

@@ -11,11 +11,13 @@ export default {
         updateBlog: null,
         blogDetail: {},
         deleteBlog: null,
+        lastPage: 0,
     },
     mutations: {
         getBlogList(state, data) {
             state.blogList = data.data;
             state.total = data.total;
+            state.lastPage = data.last_page;
             state.errorMessage = null
         },
         createBlogList(state, data){

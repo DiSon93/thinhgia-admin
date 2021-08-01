@@ -90,9 +90,14 @@
                 <div class="time">39 minutes ago</div>
               </NuxtLink>
 
-              <el-button slot="reference" circle class="btn_notification"
-                ><img src="@image/icons/bell-badge-noti.jpg" alt=""
-              /></el-button>
+              <el-button
+                slot="reference"
+                circle
+                class="btn_notification"
+                @click="saw_noti = true"
+                ><img v-if="!saw_noti" src="@image/icons/bell-badge-noti.jpg" alt="" />
+                <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
+              </el-button>
             </el-popover>
           </div>
         </v-col>
@@ -192,7 +197,7 @@
             >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
-            <v-btn class="export" fab v-if="!isRealEstate"
+            <v-btn class="export" fab v-if="!isRealEstate" @click="openExportConfirm"
               ><img src="@image/icons/export.png" alt=""
             /></v-btn>
           </div>
@@ -287,6 +292,7 @@ export default {
       centerDialogVisible02: false,
       centerDialogVisible03: false,
       dialogVisible: false,
+      saw_noti: false,
       dicSelected: "",
       opSelected: 1,
       addDicVal: 1,
@@ -360,6 +366,10 @@ export default {
           label: item.name,
         };
       });
+      this.options.push({
+        value: 0,
+        label: "Tất cả",
+      });
     },
     getDicOptions() {
       if (!this.dicSelected) {
@@ -377,6 +387,17 @@ export default {
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
+    },
+    openExportConfirm() {
+      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Title", {
+        confirmButtonText: "OK",
+        callback: (action) => {
+          this.$message({
+            type: "info",
+            message: `Please wait`,
+          });
+        },
+      });
     },
     user: function () {
       this.isUser = true;
@@ -484,9 +505,14 @@ export default {
     height: 20.57px;
     border-radius: 50%;
   }
+  img.saw_noti {
+    margin-top: 7px;
+    width: 16px;
+    height: 22px;
+  }
   position: absolute;
   right: 0px;
-  bottom: -1px;
+  bottom: -2px;
   padding: 4px;
 }
 .admin_option {

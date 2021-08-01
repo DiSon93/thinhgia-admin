@@ -7,6 +7,8 @@
       class="elevation-1"
       :mobile-breakpoint="0"
       hide-default-footer
+      fixed-header
+      height="80vh"
     >
       <template v-slot:item="row">
         <tr>

@@ -121,9 +121,14 @@
               <div class="time">39 minutes ago</div>
             </NuxtLink>
 
-            <el-button slot="reference" circle class="btn_notification"
-              ><img src="@image/icons/bell-badge-noti.jpg" alt=""
-            /></el-button>
+            <el-button
+              slot="reference"
+              circle
+              class="btn_notification"
+              @click="saw_noti = true"
+              ><img v-if="!saw_noti" src="@image/icons/bell-badge-noti.jpg" alt="" />
+              <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
+            </el-button>
           </el-popover>
           <!-- <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn> -->
           <!-- <v-btn class="notifiaction" fab
@@ -169,7 +174,7 @@
       </v-list>
     </v-bottom-navigation>
     <v-footer :absolute="!fixed" app>
-      <span class="footer_state">© 2021 Thinh Gia Land. All rights reserved.</span>
+      <span class="footer_state">© 2021 KhoBatdongsanViet. All rights reserved.</span>
     </v-footer>
   </v-app>
 </template>
@@ -196,6 +201,7 @@ export default {
       value: "recent",
       centerDialogVisible02: false,
       centerDialogVisible: false,
+      saw_noti: false,
       items: [
         {
           icon: "mdi-home-edit",
@@ -432,9 +438,14 @@ export default {
       height: 20.57px;
       border-radius: 50%;
     }
+    img.saw_noti {
+      margin-top: 7px;
+      width: 16px;
+      height: 22px;
+    }
     position: absolute;
     right: 25px;
-    bottom: -1px;
+    bottom: -4px;
     padding: 4px;
   }
 }

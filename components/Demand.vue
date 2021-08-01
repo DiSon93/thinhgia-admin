@@ -7,6 +7,7 @@
       :mobile-breakpoint="0"
       :items-per-page="100"
       hide-default-footer
+      fixed-header
     >
       <template v-slot:item="row">
         <tr>

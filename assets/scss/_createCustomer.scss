@@ -9,8 +9,16 @@
     .el-select{
       width: 100%;
     }
-   
+    .el-select .el-input__inner {
+      height: 40px;
+    }
 }
+#createCustomersSimple{
+  .el-dialog.el-dialog--center{
+    border-radius: 20px;
+  }
+}
+
 #huy_createUser.el-button {
     border: 1px solid #fbad18;
     box-sizing: border-box;
@@ -25,6 +33,11 @@
     color: #fff;
     border-radius: 15px;
     margin-top: 20px;
+}
+#showMore_createUser.el-button{
+    background-color: transparent;
+    border: none;
+    color: #fbad18;
 }
 .avatar_img.el-icon-user-solid {
     width: 100px !important;

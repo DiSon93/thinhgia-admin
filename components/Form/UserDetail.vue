@@ -1,7 +1,12 @@
 <template>
   <div class="user_detail">
     <div class="avatar">
-      <img :src="currentUser.results.user.avatar_image.thumbnail" alt="" />
+      <img
+        v-if="currentUser.results.user.avatar_image"
+        :src="currentUser.results.user.avatar_image.thumbnail"
+        alt=""
+      />
+      <img v-else src="@image/icons/user.svg" alt="" />
       <div>Chọn ảnh</div>
     </div>
     <div class="name">{{ currentUser.results.user.name.toUpperCase() }}</div>
@@ -91,6 +96,8 @@ export default {
     text-align: center;
     img {
       border-radius: 50%;
+      width: 150px;
+      height: 150px;
     }
   }
   .name {

@@ -50,7 +50,9 @@
           <v-btn class="account" fab @click="centerDialogVisible02 = true"
             ><v-icon dark small>mdi-account</v-icon></v-btn
           >
-          <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
+          <v-btn class="export" fab @click="openExportConfirm"
+            ><img src="@image/icons/export.png" alt=""
+          /></v-btn>
 
           <!-- <v-btn class="setting" fab><v-icon dark small>mdi-cog</v-icon></v-btn> -->
           <el-popover placement="bottom-end" width="200" trigger="click" id="setting">
@@ -289,6 +291,17 @@ export default {
         this.is_sell = 0;
         this.keyChild += 1;
       }
+    },
+    openExportConfirm() {
+      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Title", {
+        confirmButtonText: "OK",
+        callback: (action) => {
+          this.$message({
+            type: "info",
+            message: `Please wait`,
+          });
+        },
+      });
     },
   },
 };
