@@ -6,5 +6,5 @@ Vue.config.productionTip = false
 
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: 'https://thinhgiacore.demo.fit/socket.io',
+  connection: 'https://thinhgiacore.demo.fit',
 }))

@@ -8,18 +8,28 @@ export default {
         currentUser: currentUser,
         error: null,
         changePass: null,
+        forgotPass: null,
+        resetPass: null,
     },
     mutations: {
         setUser(state, data) {
             state.currentUser = data;
-           state.error = data;
+           state.error = null;
         },
         setError (state, data){
            state.error = data;
         },
         changePassword(state, data){
             state.changePass = data;
-           state.error = data;
+           state.error = null;
+        },
+        forgotPassword(state, data){
+            state.forgotPass = data.message;
+            state.error = null; 
+        },
+        resetPassword(state, data){
+            state.resetPass  = data.message;
+            state.error = null;
         }
     },
     actions: {
@@ -39,6 +49,28 @@ export default {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: '/admin/users/change-password', method: 'POST', data: data}).then(response => {
                     commit('changePassword', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('setError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        forgotPasswordSendEmail:  ({commit}, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: '/auth/send-reset-link', method: 'POST', data: data}).then(response => {
+                    commit('forgotPassword', response.data);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('setError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        changePasswordIntoServer: ({commit}, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/auth/change-password?resetToken=${data.reset_token}`, method: 'POST', data: data}).then(response => {
+                    commit('resetPassword', response.data);
                     resolve(response.data);
                 }).catch(e => {
                     commit('setError', e.response.data);

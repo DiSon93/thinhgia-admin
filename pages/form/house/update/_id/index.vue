@@ -201,6 +201,9 @@
           <div class="estate_item">
             <div class="form_label">Giá</div>
             <el-input v-model="value13" id="input_estate"></el-input>
+            <p class="error_message" v-if="errorMessage && value13">
+              {{ errorMessage.price ? errorMessage.price[0] : null }}
+            </p>
           </div>
           <div class="estate_item">
             <div class="form_label">Đơn vị</div>
@@ -234,6 +237,9 @@
           <div class="estate_item">
             <div class="form_label">Đường rộng</div>
             <el-input v-model="value16" id="input_estate" placeholder="0m"></el-input>
+            <p class="error_message" v-if="errorMessage && value16">
+              {{ errorMessage.width_street ? errorMessage.width_street[0] : null }}
+            </p>
             <!-- <el-select v-model="value16" placeholder="0m">
               <el-option
                 v-for="item in widths"
@@ -259,10 +265,18 @@
           <div class="estate_item">
             <div class="form_label">Tỷ lệ môi giới</div>
             <el-input v-model="value18" id="input_estate" placeholder="1%"></el-input>
+            <p class="error_message" v-if="errorMessage && value18">
+              {{ errorMessage.brokerage_rate ? errorMessage.brokerage_rate[0] : null }}
+            </p>
           </div>
           <div class="estate_item">
             <div class="form_label">Số tiền</div>
             <el-input v-model="value19" id="input_estate"></el-input>
+            <p class="error_message" v-if="errorMessage && value19">
+              {{
+                errorMessage.brokerage_amount ? errorMessage.brokerage_amount[0] : null
+              }}
+            </p>
           </div>
         </div>
       </div>
@@ -272,20 +286,32 @@
             <div class="items">
               <div class="form_label">Diện tích đất/Tìm đường</div>
               <el-input v-model="value20" id="input_estate"></el-input>
+              <p class="error_message" v-if="errorMessage && value20">
+                {{ errorMessage.land_area ? errorMessage.land_area[0] : null }}
+              </p>
             </div>
             <div class="items">
               <div class="form_label">Ngang</div>
               <el-input v-model="value21" id="input_estate"></el-input>
+              <p class="error_message" v-if="errorMessage && value21">
+                {{ errorMessage.width ? errorMessage.width[0] : null }}
+              </p>
             </div>
             <div class="items">
               <div class="form_label">Dài</div>
               <el-input v-model="value22" id="input_estate"></el-input>
+              <p class="error_message" v-if="errorMessage && value22">
+                {{ errorMessage.length ? errorMessage.length[0] : null }}
+              </p>
             </div>
           </div>
           <div class="content_03 d-flex">
             <div class="items">
               <div class="form_label">Diện tích sàn/Thông thủy</div>
               <el-input v-model="value23" id="input_estate"></el-input>
+              <p class="error_message" v-if="errorMessage && value23">
+                {{ errorMessage.floor_area ? errorMessage.floor_area[0] : null }}
+              </p>
             </div>
             <div class="items">
               <div class="form_label">Nở hậu</div>
@@ -302,6 +328,9 @@
             <div class="items">
               <div class="form_label">Số lầu</div>
               <el-input v-model="value25" id="input_estate"></el-input>
+              <p class="error_message" v-if="errorMessage && value25">
+                {{ errorMessage.floor_number ? errorMessage.floor_number[0] : null }}
+              </p>
             </div>
           </div>
           <div class="content_03 d-flex">
@@ -320,10 +349,18 @@
             <div class="items">
               <div class="form_label">Số phòng ngủ</div>
               <el-input v-model="value27" id="input_estate"></el-input>
+              <p class="error_message" v-if="errorMessage && value27">
+                {{ errorMessage.bedroom_number ? errorMessage.bedroom_number[0] : null }}
+              </p>
             </div>
             <div class="items">
               <div class="form_label">Số phòng tắm</div>
               <el-input v-model="value28" id="input_estate"></el-input>
+              <p class="error_message" v-if="errorMessage && value28">
+                {{
+                  errorMessage.bathroom_number ? errorMessage.bathroom_number[0] : null
+                }}
+              </p>
             </div>
           </div>
         </div>

@@ -52,6 +52,7 @@
                 plain
                 class="el-dropdown-link btn_select"
                 @click="user_info(row.item)"
+                :disabled="role_user == 4"
               >
                 Chọn
               </el-button>
@@ -97,6 +98,7 @@ export default {
     selectedItem: {},
     dessertName: "",
     firstDic: [],
+    role_user: "",
     headers: [
       { text: "#", value: "index", width: "58px" },
       {
@@ -116,9 +118,11 @@ export default {
 
   computed: {
     ...mapState("dictionaries", ["dictionaryList"]),
+    ...mapState("auth", ["currentUser"]),
   },
 
   mounted() {
+    this.role_user = this.currentUser ? this.currentUser.results.user.role_id : "";
     this.initializeDicList();
   },
 
@@ -134,7 +138,7 @@ export default {
       }
       let content = [];
       this.dessertName = this.dessertName.toLowerCase();
-      this.dictionaries.map((item, index) => {
+      this.firstDic.map((item, index) => {
         var tenChuThuong = item.valid.toLowerCase();
         if (tenChuThuong.indexOf(this.dessertName) > -1) {
           //tìm thấy từ khóa trong tên nhân viên (tenChuThuong)

@@ -10,12 +10,60 @@
     >
       <img src="@image/layouts/bansaodanhthiep.png" />
       <v-list>
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
+        <v-list-item to="/" router exact>
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>mdi-home-edit</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>Trang chủ</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/real-estate" router exact>
+          <v-list-item-action>
+            <v-icon>mdi-bank-check</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Bất động sản</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/customers" router exact v-if="role_user != 2">
+          <v-list-item-action>
+            <v-icon>mdi-account-switch</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Khách hàng</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/demands" router exact>
+          <v-list-item-action>
+            <v-icon>mdi-email-multiple</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Nhu cầu</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/projects" router exact>
+          <v-list-item-action>
+            <v-icon>mdi-share-variant-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Dự án</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/news" router exact>
+          <v-list-item-action>
+            <v-icon>mdi-newspaper-variant-multiple-outline</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Tin tức</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/administrator" router exact>
+          <v-list-item-action>
+            <v-icon>mdi-account-cog</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Quản trị</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -62,7 +110,7 @@
             trigger="click"
             id="notification"
           >
-            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+            <NuxtLink :to="`/detail/house/${bds_id}`" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -73,7 +121,7 @@
               <div class="time">a few seconds ago</div>
             </NuxtLink>
             <el-divider><i class="el-icon-star-on"></i></el-divider>
-            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+            <NuxtLink :to="`/detail/house/${bds_id}`" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -86,7 +134,7 @@
 
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -98,7 +146,7 @@
             </NuxtLink>
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -110,7 +158,7 @@
             </NuxtLink>
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -130,6 +178,40 @@
               <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
             </el-button>
           </el-popover>
+          <!-- <el-popover
+            placement="bottom-end"
+            width="500"
+            trigger="click"
+            id="notification"
+          >
+            <NuxtLink
+              :to="`/detail/house/${item.bds_id}`"
+              class="d-flex notification_item"
+              v-for="item in noti"
+              :key="item.bds_id"
+            >
+              <div class="d-flex">
+                <img :src="item.message.avatar" alt="" />
+                <div class="name">
+                  <span class="staff_name">{{ item.message.username }}</span> đã
+                  {{ item.message.type == "like" ? "like" : "chia sẻ" }} bất động sản
+                  {{ item.message.type == "like" ? null : "lên cộng đồng" }}
+                </div>
+              </div>
+              <div class="time">
+                {{ moment(item.message.timestamp).startOf("day").fromNow() }}
+              </div>
+            </NuxtLink>
+
+            <el-button
+              slot="reference"
+              circle
+              class="btn_notification"
+              @click="saw_noti = true"
+              ><img v-if="!saw_noti" src="@image/icons/bell-badge-noti.jpg" alt="" />
+              <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
+            </el-button>
+          </el-popover> -->
           <!-- <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn> -->
           <!-- <v-btn class="notifiaction" fab
             ><img src="@image/icons/bell-badge-noti.jpg" alt=""
@@ -166,7 +248,7 @@
         </el-dialog>
       </v-container>
     </v-main>
-    <v-bottom-navigation v-model="value" background-color="teal" shift>
+    <v-bottom-navigation v-model="value" shift>
       <v-list class="d-flex">
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
           <v-icon small>{{ item.icon }}</v-icon>
@@ -181,10 +263,10 @@
 
 <script>
 import SelectBox from "@component/SelectBox.vue";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
-
+import moment from "moment";
 export default {
   components: {
     SelectBox,
@@ -202,6 +284,7 @@ export default {
       centerDialogVisible02: false,
       centerDialogVisible: false,
       saw_noti: false,
+      bds_id: 13,
       items: [
         {
           icon: "mdi-home-edit",
@@ -243,7 +326,48 @@ export default {
       right: true,
       rightDrawer: false,
       title: "Vuetify.js",
+      noti: null,
+      role_user: "",
     };
+  },
+  computed: {
+    ...mapState("auth", ["currentUser"]),
+    ...mapState("role", ["roleList"]),
+  },
+  sockets: {
+    // initRoom: function (message) {
+    //   // Đây là nơi nhận cái even initRoom với param là message mà server emit về
+    //   this.messages.push({
+    //     message,
+    //     type: "status",
+    //   });
+    // },
+    // statusRoom: function (message) {
+    //   this.messages.push({
+    //     message,
+    //     type: "status",
+    //   });
+    // },
+    // receiveMessage: function (message) {
+    //   console.log("GGGG");
+    //   this.messages.push({
+    //     message,
+    //     type: "receive",
+    //   });
+    // },
+    // connect: function (data) {
+    //   console.log(data);
+    // },
+    // customEmit: function (data) {
+    //   console.log(data);
+    // },
+    message: function (data) {
+      console.log("message", data);
+    },
+    notifications: function (data) {
+      console.log("notifications", data);
+      this.noti = data;
+    },
   },
   beforeCreate() {
     if (!this.$store.state.auth.currentUser) {
@@ -254,10 +378,9 @@ export default {
   },
   beforeMount() {
     this.drawer = this.isWidth;
+    this.role_user = this.currentUser ? this.currentUser.results.user.role_id : "";
   },
-  computed: {
-    ...mapState("role", ["roleList"]),
-  },
+  mounted() {},
   methods: {
     handleCommand(command) {
       if (command == "logout") {

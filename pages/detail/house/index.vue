@@ -291,6 +291,7 @@
 
 <script>
 export default {
+  el: "#house-detail",
   data() {
     return {
       input: "",

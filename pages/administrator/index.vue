@@ -120,7 +120,10 @@
         </v-col>
         <v-col cols="6" sm="4" align="center" v-if="isRealEstate"> </v-col>
         <v-col cols="12" sm="4" align="right" class="res_phanquyen">
-          <div class="phanquyen" :class="{ adjust: isRealEstate }">
+          <div
+            class="phanquyen"
+            :class="{ adjust: isRealEstate, dictionary_option: isDictionary }"
+          >
             <span v-if="isUser">Phân quyền</span>
             <span v-if="isDictionary">Loại từ điển</span>
             <span v-if="isRealEstate"></span>
@@ -183,6 +186,7 @@
               color="warning"
               v-if="isUser"
               @click="centerDialogVisible = true"
+              :disabled="role_user == 3 || role_user == 4"
             >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
@@ -194,10 +198,11 @@
               color="warning"
               v-if="isDictionary"
               @click="dialogVisible = true"
+              :disabled="role_user == 3 || role_user == 4"
             >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
-            <v-btn class="export" fab v-if="!isRealEstate" @click="openExportConfirm"
+            <v-btn class="export" fab v-if="isUser" @click="openExportConfirm"
               ><img src="@image/icons/export.png" alt=""
             /></v-btn>
           </div>
@@ -223,13 +228,19 @@
         />
       </el-dialog>
       <v-row class="data_table" v-show="isUser">
-        <AdminTable :key="keyChild" @getTotal="getTotalUser" :select_role="role_id" />
+        <AdminTable
+          :key="keyChild"
+          @getTotal="getTotalUser"
+          :select_role="role_id"
+          v-if="role_user != 3 || role_user != 4"
+        />
       </v-row>
       <v-row class="data_table dictionary" v-if="isDictionary">
         <Dictionary
           :key="keyDic"
           :select_dic="dicSelected[0]"
           v-on:close-update="reloadDic"
+          v-if="role_user != 3"
         />
       </v-row>
       <v-row class="data_table define" v-if="isRealEstate">
@@ -299,6 +310,7 @@ export default {
       options: [],
       totalUser: 0,
       role_id: 0,
+      role_user: "",
       estate: [
         {
           value: "Cộng Đồng",
@@ -316,6 +328,7 @@ export default {
     };
   },
   mounted() {
+    this.role_user = this.currentUser ? this.currentUser.results.user.role_id : "";
     this.getRoleList();
     this.getDictionaryTypeList();
   },
@@ -323,6 +336,7 @@ export default {
     ...mapState("role", ["roleList"]),
     ...mapState("dictionaries", ["dictionaryList"]),
     ...mapState("realEstate", ["approveRealList"]),
+    ...mapState("auth", ["currentUser"]),
   },
   methods: {
     getTotalUser(value) {
@@ -586,6 +600,9 @@ export default {
     .congDong {
       right: 0;
     }
+  }
+  .dictionary_option {
+    width: 252px;
   }
   .adjust {
     width: 150px !important;

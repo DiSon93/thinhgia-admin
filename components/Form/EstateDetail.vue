@@ -51,7 +51,7 @@
             ></div>
             <script src="https://sp.zalo.me/plugins/sdk.js"></script>
           </el-dropdown-item>
-          <el-dropdown-item divided>
+          <el-dropdown-item>
             <ShareNetwork
               network="facebook"
               url="https://khobatdongsanviet.demo.fit/"
@@ -64,7 +64,7 @@
               <img src="@image/icons/facebook.png" alt="" /> Chia sẻ
             </ShareNetwork>
           </el-dropdown-item>
-          <el-dropdown-item command="URL" divided> Copy URL </el-dropdown-item>
+          <el-dropdown-item command="URL"> Copy URL </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <div class="more_info">

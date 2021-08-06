@@ -54,6 +54,7 @@
             <input type="text" v-model="text" />
             <button @click="sendMessage">Send</button>
           </div> -->
+
           <div class="chart">
             <RealEstateChart />
           </div>
@@ -88,7 +89,7 @@ import Overview from "@component/Overview.vue";
 import Notification from "@component/Notification.vue";
 import Special from "@component/Special.vue";
 import io from "socket.io-client";
-var socket = io.connect("https://thinhgiacore.demo.fit/socket.io");
+// var socket = io.connect("https://thinhgiacore.demo.fit/socket.io");
 export default {
   components: {
     RealEstateChart,
@@ -104,17 +105,15 @@ export default {
       height1: window.innerHeight - 130,
       height2: window.innerHeight - 110,
       text: "",
-      messages: [],
-      socket: null,
-      users: [],
+      // messages: [],
     };
   },
-  created() {
-    let vm = this;
-    this.$socket.on("bds", (data) => {
-      console.log(data);
-    });
-  },
+  // created() {
+  //   let vm = this;
+  //   this.$socket.on("bds", (data) => {
+  //     console.log(data);
+  //   });
+  // },
   mounted() {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
@@ -132,12 +131,12 @@ export default {
     // });
 
     // this.$socket.emit("bds");
-    socket.on(
-      "bds",
-      function (data) {
-        console.log("bds", data);
-      }.bind(this)
-    );
+    // socket.on(
+    //   "bds",
+    //   function (data) {
+    //     console.log("bds", data);
+    //   }.bind(this)
+    // );
     // this.sockets.listener.subscribe("bds", (data) => {
     //   debugger;
     //   console.log(data);
@@ -148,53 +147,51 @@ export default {
     //   console.log("bds", data);
     // });
   },
-  sockets: {
-    initRoom: function (message) {
-      // Đây là nơi nhận cái even initRoom với param là message mà server emit về
-      this.messages.push({
-        message,
-        type: "status",
-      });
-    },
-    statusRoom: function (message) {
-      this.messages.push({
-        message,
-        type: "status",
-      });
-    },
-    receiveMessage: function (message) {
-      console.log("GGGG");
-      this.messages.push({
-        message,
-        type: "receive",
-      });
-    },
-    connect: function (data) {
-      console.log(data);
-    },
-    customEmit: function (data) {
-      console.log(data);
-    },
-    //Thí dụ muốn nhận data từ sự kiện "bds" thì mình làm dầy  phải ko? uh
-    //cái data này lúc nào thì có => ko biêt nữa
-    //phải kêu anh quý hoặc anh cảnh đấy cái đó vô hoặc là admin tạo bds mới
-    //Vậy nhưu vầy là nhận dc data phải kmoiwsddungs rôi
-    //Dậy giúp tui coi cái nút chia sẻ Zalo ko da đi , hix
-    bds: function (data) {
-      console.log(data);
-    },
-  },
+  // sockets: {
+  //   // initRoom: function (message) {
+  //   //   // Đây là nơi nhận cái even initRoom với param là message mà server emit về
+  //   //   this.messages.push({
+  //   //     message,
+  //   //     type: "status",
+  //   //   });
+  //   // },
+  //   // statusRoom: function (message) {
+  //   //   this.messages.push({
+  //   //     message,
+  //   //     type: "status",
+  //   //   });
+  //   // },
+  //   // receiveMessage: function (message) {
+  //   //   console.log("GGGG");
+  //   //   this.messages.push({
+  //   //     message,
+  //   //     type: "receive",
+  //   //   });
+  //   // },
+  //   // connect: function (data) {
+  //   //   console.log(data);
+  //   // },
+  //   // customEmit: function (data) {
+  //   //   console.log(data);
+  //   // },
+  //   message: function (data) {
+  //     console.log("message", data);
+  //   },
+  //   notifications: function (data) {
+  //     console.log("notifications", data);
+  //   },
+  // },
   methods: {
-    sendMessage() {
-      if (this.text !== "") {
-        this.$socket.emit("sendMessage", this.text); // emit lên server
-        this.messages.push({
-          message: this.text,
-          type: "send",
-        });
-      }
-      this.text = "";
-    },
+    // sendMessage() {
+    //   if (this.text !== "") {
+    //     this.$socket.emit("sendMessage", this.text); // emit lên server
+    //     this.messages.push({
+    //       message: this.text,
+    //       type: "send",
+    //     });
+    //   }
+    //   this.text = "";
+    // },
     // getMessage() {
     //   return new Promise((resolve) => {
     //     this.socket.on("bds", (resp) => {

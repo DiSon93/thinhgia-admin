@@ -111,6 +111,7 @@ export default {
     childKey: 0,
     page: 1,
     rowPerPage: 10,
+    role_user: "",
     headers: [
       {
         text: "#",
@@ -176,8 +177,10 @@ export default {
     ...mapState("staffs", ["userList", "loading", "total"]),
     ...mapState("staffs", ["errorMessage"]),
     ...mapState("staffs", ["blockUser", "delete"]),
+    ...mapState("auth", ["currentUser"]),
   },
   mounted() {
+    this.role_user = this.currentUser ? this.currentUser.results.user.role_id : "";
     this.getUserListPerPage();
   },
 
@@ -215,6 +218,10 @@ export default {
       });
     },
     async handleCommand(command) {
+      if (this.role_user == 4) {
+        this.forbidden();
+        return;
+      }
       if (command == "edit") {
         this.updateUser();
       }
@@ -324,7 +331,11 @@ export default {
         this.showErrorNotification();
       }
     },
-
+    forbidden() {
+      this.$message.error(
+        "403, Forbidden. Can not do this function due to lacking of permission."
+      );
+    },
     openNotificationBlock() {
       this.$notify({
         title: "Success",

@@ -5,11 +5,14 @@
       style="width: 100%"
       ref="multipleTable"
       stripe
+      empty-text
       highlight-current-row
       @row-click="handdle"
       @selection-change="handleSelectionChange"
+      @sort-change="sortChangePrice"
       height="80vh"
     >
+      <div slot="empty">NO DATA CAN SHOW</div>
       <el-table-column type="selection" width="35" fixed> </el-table-column>
       <el-table-column prop="amount" label="#" sortable width="60" fixed>
       </el-table-column>
@@ -49,16 +52,29 @@
         <template slot-scope="scope">
           <div>{{ scope.row.address }}</div>
           <v-btn
-            v-if="scope.row.share_public == 1"
+            v-if="scope.row.share_public == 1 && scope.row.approve_public == 2"
             depressed
             color="primary"
             id="social_network"
           >
             Cộng đồng
           </v-btn>
-          <v-btn v-if="scope.row.share_web == 1" depressed color="success" id="web">
+          <v-btn
+            v-if="scope.row.share_web == 1 && scope.row.approve_web == 2"
+            depressed
+            color="success"
+            id="web"
+          >
             Web
           </v-btn>
+          <el-tag
+            type="danger"
+            v-if="
+              (scope.row.share_public == 1 && scope.row.approve_public == 1) ||
+              (scope.row.share_web == 1 && scope.row.approve_web == 1)
+            "
+            >Chờ duyệt</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -156,7 +172,7 @@ import EstateDetail from "@component/Form/EstateDetail";
 import { mapState, mapActions } from "vuex";
 
 export default {
-  props: ["is_public", "is_sell"],
+  props: ["is_public", "is_sell", "searchKey", "min_price", "max_price"],
   components: {
     EstateDetail,
   },
@@ -172,6 +188,8 @@ export default {
       realEstateTable: [],
       multipleSelection: [],
       currentPage: 1,
+      beforeSelectArr: [],
+      sort_price: "",
     };
   },
   created() {
@@ -186,10 +204,26 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      this.$emit("display-select");
+    },
+    handleSelectedChange() {
+      this.realEstateTable = this.multipleSelection;
+    },
+    removeSelected() {
+      this.$refs.multipleTable.clearSelection();
+      this.realEstateTable = this.beforeSelectArr;
+      this.$emit("display-nonselect");
     },
     filterHandler(value, row, column) {
+      console.log("property", value);
       const property = column["property"];
       return row[property] === value;
+    },
+    sortChangePrice(val) {
+      console.log("price", val);
+      this.sort_price =
+        val.order == "descending" ? "desc" : val.order == "ascending" ? "asc" : "";
+      this.getRealEstateListPerPage();
     },
     handdle(row, event, column) {
       this.drawer = true;
@@ -208,6 +242,10 @@ export default {
           await this.$store.dispatch("realEstate/getRealEstateList", {
             limit: this.rowPerPage,
             page: this.page,
+            search: this.searchKey,
+            sort_price: this.sort_price,
+            min_price: this.min_price,
+            max_price: this.max_price,
           });
           await this.showEstateList();
           this.loading = false;
@@ -258,7 +296,7 @@ export default {
           customer: item.customer?.name,
           phone: item.customer?.phone,
           fee: item.brokerage_amount,
-          brokerage_amount: item.brokerage_amount,
+          brokerage_amount: item.brokerage_rate,
           bedroom: item.bedroom_number,
           road_type: item.street_type_dict?.name,
           road: item.width_street,
@@ -272,8 +310,11 @@ export default {
           share_public: item.share_public,
           share_web: item.share_web,
           is_sell: item.is_sell,
+          approve_public: item.approve_public,
+          approve_web: item.approve_web,
         };
       });
+      this.beforeSelectArr = this.realEstateTable;
     },
 
     async handleSizeChange(val) {

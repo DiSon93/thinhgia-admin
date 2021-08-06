@@ -191,11 +191,11 @@ export default {
             trigger: "submit",
           },
           { validator: checkNumber, trigger: "blur" },
-          {
-            max: 12,
-            message: "Indentity Card must be not longer than 12",
-            trigger: "blur",
-          },
+          // {
+          //   max: 12,
+          //   message: "Indentity Card must be not longer than 12",
+          //   trigger: "blur",
+          // },
         ],
         user_id: [
           { required: true, message: "Please select staff name", trigger: "change" },

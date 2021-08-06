@@ -50,10 +50,11 @@
             <li class="content_items" v-for="item in blogListDetail" :key="item.id">
               <div class="content">
                 <div class="d-flex img_fix">
-                  <!-- <v-parallax height="200" :src="getImageUrl('house1.png')"></v-parallax> -->
-                  <!-- <img src="@image/layouts/house1.png" alt="" /> -->
-                  <div v-for="img in item.image.slice(0, 4)" :key="img.id">
+                  <!-- <div v-for="img in item.image.slice(0, 4)" :key="img.id">
                     <img :src="img.thumbnail" alt="" class="project_picture" />
+                  </div> -->
+                  <div>
+                    <CoolLightBoxNew :items="item ? item.image : []" />
                   </div>
 
                   <div>
@@ -130,10 +131,13 @@
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
 import { mapState, mapActions } from "vuex";
+import CoolLightBoxNew from "@component/CoolLightBoxNew.vue";
+
 export default {
   components: {
     UserDetail,
     ChangePassword,
+    CoolLightBoxNew,
   },
   data() {
     return {
@@ -199,7 +203,16 @@ export default {
         let scrollBlogList = this.blogList.map((u) => {
           return { ...u, read: true };
         });
-        this.blogListDetail = this.blogListDetail.concat(scrollBlogList);
+        this.blogListDetail = this.blogListDetail
+          .concat(scrollBlogList)
+          .map((item, index) => {
+            return {
+              ...item,
+              image: item.image.map((u) => {
+                return { ...u, src: u.main };
+              }),
+            };
+          });
         this.loading = false;
         this.loadingMore = false;
       } catch {

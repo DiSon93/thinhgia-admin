@@ -2,12 +2,9 @@
   <div class="login">
     <div class="login_form">
       <div class="logo">
-        <img src="@image/icons/logogroup.svg" alt="" />
-        <div class="login_header">
-          <div class="login_title">KHOBATDONGSANVIET.COM</div>
-          <div class="note">KÊNH GIAO DỊCH BẤT ĐỘNG SẢN</div>
-        </div>
+        <img src="@image/icons/icons8-password.png" alt="" />
       </div>
+      <div class="change_pass">ĐẶT LẠI MẬT KHẨU</div>
       <el-form
         :model="ruleForm"
         status-icon
@@ -28,14 +25,16 @@
             type="password"
             v-model="ruleForm.pass"
             autocomplete="off"
-            placeholder="Password"
+            placeholder="New Password"
           ></el-input>
         </el-form-item>
-        <el-form-item class="remember">
-          <el-checkbox label="Remember me" name="type" v-model="checked"></el-checkbox>
-          <a href="javascript:;" @click="$router.push('/admin/forgotpassword')"
-            >Forgot password?</a
-          >
+        <el-form-item prop="repass">
+          <el-input
+            type="password"
+            v-model="ruleForm.repass"
+            autocomplete="off"
+            placeholder="Confirm New Password"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')" :loading="loading"
@@ -57,7 +56,7 @@ export default {
       ruleForm: {
         email: "",
         pass: "",
-        type: [],
+        repass: "",
       },
       checked: false,
       loading: false,
@@ -74,7 +73,8 @@ export default {
             trigger: "submit",
           },
         ],
-        pass: [{ required: true, message: "Please input passwword", trigger: "change" }],
+        pass: [{ required: true, message: "Please input password", trigger: "change" }],
+        repass: [{ required: true, message: "Please input password", trigger: "change" }],
       },
     };
   },
@@ -101,7 +101,7 @@ export default {
   //   ...mapState("auth", ["currentUser"]),
   // },
   computed: {
-    ...mapState("auth", ["error"]),
+    ...mapState("auth", ["error", "resetPass"]),
     userLogin() {
       return this.$store.state.auth.currentUser;
     },
@@ -113,28 +113,41 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.loginIntoServer();
+          this.changePasswordIntoServer();
         } else {
           return false;
         }
       });
     },
-    async loginIntoServer() {
+    async changePasswordIntoServer() {
       this.loading = true;
       try {
-        await this.$store.dispatch("auth/loginIntoServer", {
+        await this.$store.dispatch("auth/changePasswordIntoServer", {
           email: this.ruleForm.email,
           password: this.ruleForm.pass,
-          remember_me: this.checked,
+          password_confirmation: this.ruleForm.repass,
+          reset_token: this.$route.query.resetToken,
         });
         this.loading = false;
+        this.openNotificationSuccess();
+        this.$router.push("/admin/changeSuccess");
       } catch {
         this.loading = false;
-        this.openNotification();
+        this.openNotificationError();
       }
     },
-    openNotification() {
-      let message = this.error.data.message;
+    openNotificationSuccess() {
+      let message = this.resetPass;
+      this.$notify({
+        title: "Success",
+        message,
+        type: "success",
+      });
+    },
+    openNotificationError() {
+      let message = this.error.message.password
+        ? this.error.message.password[0]
+        : this.error.message;
       this.$notify.error({
         title: "Error",
         message,
@@ -155,43 +168,23 @@ export default {
   .login_form {
     width: 598px;
     height: 598px;
-    padding: 90px 60px;
+    padding: 40px 60px;
     margin: 0 auto;
     background-color: #f6fbf9;
     border-radius: 20px;
     .logo {
-      display: flex;
-      margin-bottom: 30px;
-      img {
-        margin-right: 5px;
-      }
-      .login_header {
-      }
-      .login_title {
-        margin-top: 25px;
-
-        font-family: Lexend Deca;
-        font-style: normal;
-        font-weight: 700;
-        font-size: 26px;
-        line-height: 35px;
-        letter-spacing: -0.5px;
-        text-align: left;
-        color: #242d4a;
-      }
-      .note {
-        font-family: Lexend Deca;
-        font-style: normal;
-        font-weight: 300;
-        font-size: 20px;
-        line-height: 30px;
-        margin-bottom: 25px;
-        letter-spacing: -0.5px;
-        text-align: left;
-        color: #d4b59c;
-      }
+      margin-bottom: 20px;
+      text-align: center;
     }
-
+    .change_pass {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 35px;
+      line-height: 121.69%;
+      text-align: center;
+      color: #242d4a;
+      margin-bottom: 20px;
+    }
     .el-button {
       width: 100%;
       background: #fdc251;

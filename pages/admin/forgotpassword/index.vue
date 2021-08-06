@@ -2,11 +2,12 @@
   <div class="login">
     <div class="login_form">
       <div class="logo">
-        <img src="@image/icons/logogroup.svg" alt="" />
-        <div class="login_header">
-          <div class="login_title">KHOBATDONGSANVIET.COM</div>
-          <div class="note">KÊNH GIAO DỊCH BẤT ĐỘNG SẢN</div>
-        </div>
+        <img src="@image/icons/icons8-unlock.png" alt="" />
+      </div>
+      <div class="forgot_pass">QUÊN MẬT KHẨU</div>
+      <div class="content">
+        Vui lòng nhập địa chỉ Email. Chúng tôi sẽ gởi mật khẩu mới khôi phục tài khoản của
+        bạn!
       </div>
       <el-form
         :model="ruleForm"
@@ -23,23 +24,9 @@
             placeholder="Email Address"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="pass">
-          <el-input
-            type="password"
-            v-model="ruleForm.pass"
-            autocomplete="off"
-            placeholder="Password"
-          ></el-input>
-        </el-form-item>
-        <el-form-item class="remember">
-          <el-checkbox label="Remember me" name="type" v-model="checked"></el-checkbox>
-          <a href="javascript:;" @click="$router.push('/admin/forgotpassword')"
-            >Forgot password?</a
-          >
-        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')" :loading="loading"
-            >Login</el-button
+            >Send password reset link</el-button
           >
           <div class="message">{{ userLogin }}</div>
         </el-form-item>
@@ -56,8 +43,6 @@ export default {
     return {
       ruleForm: {
         email: "",
-        pass: "",
-        type: [],
       },
       checked: false,
       loading: false,
@@ -74,7 +59,6 @@ export default {
             trigger: "submit",
           },
         ],
-        pass: [{ required: true, message: "Please input passwword", trigger: "change" }],
       },
     };
   },
@@ -101,7 +85,7 @@ export default {
   //   ...mapState("auth", ["currentUser"]),
   // },
   computed: {
-    ...mapState("auth", ["error"]),
+    ...mapState("auth", ["error", "forgotPass"]),
     userLogin() {
       return this.$store.state.auth.currentUser;
     },
@@ -113,33 +97,39 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.loginIntoServer();
+          this.forgotPasswordSendEmail();
         } else {
           return false;
         }
       });
     },
-    async loginIntoServer() {
+    async forgotPasswordSendEmail() {
       this.loading = true;
       try {
-        await this.$store.dispatch("auth/loginIntoServer", {
+        await this.$store.dispatch("auth/forgotPasswordSendEmail", {
           email: this.ruleForm.email,
-          password: this.ruleForm.pass,
-          remember_me: this.checked,
         });
         this.loading = false;
+        this.openNotificationSuccess();
       } catch {
         this.loading = false;
-        this.openNotification();
+        this.openNotificationError();
       }
     },
-    openNotification() {
-      let message = this.error.data.message;
+    openNotificationSuccess() {
+      let message = this.forgotPass;
+      this.$notify({
+        title: "Success",
+        message,
+        type: "success",
+      });
+    },
+    openNotificationError() {
+      let message = this.error.message;
       this.$notify.error({
         title: "Error",
         message,
       });
-      this.loading = false;
     },
     // ...mapActions("auth", ["loginIntoServer"]),
   },
@@ -155,43 +145,38 @@ export default {
   .login_form {
     width: 598px;
     height: 598px;
-    padding: 90px 60px;
+    padding: 70px 60px;
     margin: 0 auto;
     background-color: #f6fbf9;
     border-radius: 20px;
     .logo {
-      display: flex;
       margin-bottom: 30px;
+      text-align: center;
       img {
-        margin-right: 5px;
-      }
-      .login_header {
-      }
-      .login_title {
-        margin-top: 25px;
-
-        font-family: Lexend Deca;
-        font-style: normal;
-        font-weight: 700;
-        font-size: 26px;
-        line-height: 35px;
-        letter-spacing: -0.5px;
-        text-align: left;
-        color: #242d4a;
-      }
-      .note {
-        font-family: Lexend Deca;
-        font-style: normal;
-        font-weight: 300;
-        font-size: 20px;
-        line-height: 30px;
-        margin-bottom: 25px;
-        letter-spacing: -0.5px;
-        text-align: left;
-        color: #d4b59c;
+        margin: 0 auto;
       }
     }
+    .forgot_pass {
+      font-style: normal;
+      font-weight: bold;
+      font-size: 35px;
+      line-height: 121.69%;
+      /* identical to box height, or 43px */
 
+      text-align: center;
+
+      color: #242d4a;
+    }
+    .content {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
+      line-height: 121.69%;
+      /* or 29px */
+
+      margin: 20px 0;
+      color: rgba(36, 45, 74, 0.8);
+    }
     .el-button {
       width: 100%;
       background: #fdc251;

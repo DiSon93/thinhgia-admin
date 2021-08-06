@@ -93,7 +93,7 @@ export default {
     actions: {
         getRealEstateList: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}`, method: "GET"}).then(response => {
+                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}&search=${data.search}&min_price=${data.min_price}&max_price=${data.max_price}&sort_price=${data.sort_price}`, method: "GET", data: data}).then(response => {
                     commit('getRealEstateList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {

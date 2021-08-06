@@ -159,7 +159,7 @@
     </div>
     <div class="tool">
       <div class="tool_item">
-        <div class="label">Số phòng ngủ tối thiểu <span style="color: red">*</span></div>
+        <div class="label">Số phòng ngủ tối thiểu</div>
         <el-input v-model="value11" id="input_price"></el-input>
         <p class="error_message" v-if="errorMessage">
           {{
@@ -168,14 +168,14 @@
         </p>
       </div>
       <div class="tool_item">
-        <div class="label">Số lầu tối thiểu <span style="color: red">*</span></div>
+        <div class="label">Số lầu tối thiểu</div>
         <el-input v-model="value12" id="input_price"></el-input>
         <p class="error_message" v-if="errorMessage">
           {{ errorMessage.floor_number_min ? errorMessage.floor_number_min[0] : null }}
         </p>
       </div>
       <div class="tool_item">
-        <div class="label">Diện tích tối thiểu <span style="color: red">*</span></div>
+        <div class="label">Diện tích tối thiểu</div>
         <el-input v-model="value13" id="input_price"></el-input>
         <p class="error_message" v-if="errorMessage">
           {{ errorMessage.land_area_min ? errorMessage.land_area_min[0] : null }}

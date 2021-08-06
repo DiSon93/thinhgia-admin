@@ -64,6 +64,7 @@ export default {
       page: 1,
       approveList: [],
       loading: false,
+      role_user: "",
     };
   },
   created() {
@@ -72,6 +73,10 @@ export default {
   },
   computed: {
     ...mapState("realEstate", ["approveRealList"]),
+    ...mapState("auth", ["currentUser"]),
+  },
+  mounted() {
+    this.role_user = this.currentUser ? this.currentUser.results.user.role_id : "";
   },
   methods: {
     async getApproveRealEstateList() {
@@ -97,6 +102,10 @@ export default {
       }
     },
     approveRealEstate(item) {
+      if (this.role_user != 1) {
+        this.forbidden();
+        return;
+      }
       this.$confirm(
         `Are you sure to approve to share this real estate. Continue?`,
         "Warning",
@@ -118,6 +127,10 @@ export default {
         });
     },
     deleteApproveRealEstate(item) {
+      if (this.role_user != 1) {
+        this.forbidden();
+        return;
+      }
       this.$confirm(
         `Are you sure to delete to share this real estate. Continue?`,
         "Warning",
@@ -185,6 +198,11 @@ export default {
         title: "Error",
         message: "Unsuccess require!!!",
       });
+    },
+    forbidden() {
+      this.$message.error(
+        "403, Forbidden. Can not do this function due to lacking of permission."
+      );
     },
   },
 };

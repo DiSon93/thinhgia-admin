@@ -93,9 +93,26 @@
           </el-popover>
         </div>
       </v-row>
+      <div class="selected_estate" v-if="isSelectedEstate">
+        <el-button type="primary" plain>Nhãn</el-button>
+        <el-button @click="removeSelectedEstate">Bỏ chọn</el-button>
+        <el-button @click="selestedEstateDisplay" type="warning" plain
+          >Hiển thị</el-button
+        >
+      </div>
 
       <v-row class="data_table">
-        <EstateTable :is_public="is_public" :is_sell="is_sell" :key="keyChild" />
+        <EstateTable
+          :is_public="is_public"
+          :is_sell="is_sell"
+          :key="keyChild"
+          :searchKey="input"
+          :min_price="min_price"
+          :max_price="max_price"
+          ref="childComponent"
+          v-on:display-select="isSelectedEstate = true"
+          v-on:display-nonselect="isSelectedEstate = false"
+        />
       </v-row>
       <el-dialog
         :visible.sync="centerDialogVisible02"
@@ -145,8 +162,11 @@ export default {
       value01: "",
       value02: "",
       keyChild: 0,
+      min_price: "",
+      max_price: "",
       is_public: null,
       is_sell: null,
+      isSelectedEstate: false,
       shares: [
         {
           id: 1,
@@ -165,60 +185,6 @@ export default {
         {
           id: 2,
           name: "Ngưng bán",
-        },
-      ],
-      desserts: [
-        {
-          id: 2971,
-          name: "18-04 30 tháng 04",
-          calories: 159,
-          web: true,
-        },
-        {
-          id: 2972,
-          name: "18-04 30 tháng 04",
-          calories: 237,
-        },
-        {
-          id: 2973,
-          name: "18-04 30 tháng 04",
-          calories: 262,
-          web: true,
-        },
-        {
-          id: 2974,
-          name: "18-04 30 tháng 04",
-          calories: 305,
-        },
-        {
-          id: 2975,
-          name: "18-04 30 tháng 04",
-          calories: 356,
-        },
-        {
-          id: 2976,
-          name: "18-04 30 tháng 04",
-          calories: 375,
-        },
-        {
-          id: 2977,
-          name: "18-04 30 tháng 04",
-          calories: 392,
-        },
-        {
-          id: 2978,
-          name: "18-04 30 tháng 04",
-          calories: 408,
-        },
-        {
-          id: 2979,
-          name: "18-04 30 tháng 04",
-          calories: 452,
-        },
-        {
-          id: 2980,
-          name: "18-04 30 tháng 04",
-          calories: 518,
         },
       ],
       search: [
@@ -243,11 +209,6 @@ export default {
           price: "10 tỷ",
         },
         {
-          value: "15",
-          label: "X",
-          price: "2 - 3 tỷ",
-        },
-        {
           value: "0",
           label: "0",
           price: "Tất cả",
@@ -258,6 +219,31 @@ export default {
   },
   computed: {
     ...mapState("realEstate", ["total"]),
+  },
+  watch: {
+    input: function (val) {
+      this.keyChild += 1;
+    },
+    value: function (val) {
+      console.log("val", val);
+      if (val == 1) {
+        this.min_price = 0;
+        this.max_price = 1;
+      } else if (val == 2) {
+        this.min_price = 1;
+        this.max_price = 2;
+      } else if (val == 5) {
+        this.min_price = 2;
+        this.max_price = 5;
+      } else if (val == 10) {
+        this.min_price = 5;
+        this.max_price = 10;
+      } else if (val == 0) {
+        this.min_price = "";
+        this.max_price = "";
+      }
+      this.keyChild += 1;
+    },
   },
   methods: {
     handleChangePassword() {
@@ -278,6 +264,12 @@ export default {
         this.is_public = "web";
         this.keyChild += 1;
       }
+    },
+    selestedEstateDisplay() {
+      this.$refs.childComponent.handleSelectedChange();
+    },
+    removeSelectedEstate() {
+      this.$refs.childComponent.removeSelected();
     },
     async handleChangeSell(e) {
       if (this.is_public == null) {
@@ -323,6 +315,16 @@ export default {
     letter-spacing: 0.5px;
     margin-left: 8px;
     margin-right: 8px;
+  }
+  .selected_estate {
+    position: absolute;
+    top: 0px;
+    left: 30px;
+    z-index: 99;
+    .el-button {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
   }
   .homepage {
     width: 100px;
