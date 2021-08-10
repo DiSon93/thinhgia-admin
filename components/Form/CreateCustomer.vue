@@ -27,9 +27,9 @@
             </v-col>
             <v-col cols="6">
               <div>Giới tính</div>
-              <el-form-item prop="sex">
+              <el-form-item prop="gender">
                 <!-- <el-input v-model="ruleForm.staff"></el-input> -->
-                <el-select v-model="ruleForm.sex" placeholder="Chọn giới tính">
+                <el-select v-model="ruleForm.gender" placeholder="Chọn giới tính">
                   <el-option
                     v-for="item in sexList"
                     :key="item.value"
@@ -106,9 +106,9 @@
         </v-col> -->
         <v-col cols="6">
           <div>Tỉnh</div>
-          <el-form-item prop="province">
+          <el-form-item prop="province_id">
             <el-select
-              v-model="ruleForm.province"
+              v-model="ruleForm.province_id"
               placeholder="Chọn tỉnh"
               @change="chooseProvince"
             >
@@ -124,10 +124,10 @@
         </v-col>
         <v-col cols="6">
           <div>Huyện/TP</div>
-          <el-form-item prop="district">
+          <el-form-item prop="district_id">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select
-              v-model="ruleForm.district"
+              v-model="ruleForm.district_id"
               placeholder="Chọn huyện/TP"
               @change="chooseDistrict"
               no-data-text="Vui lòng chọn tỉnh"
@@ -144,10 +144,10 @@
         </v-col>
         <v-col cols="6">
           <div>Phường/Xã</div>
-          <el-form-item prop="ward">
+          <el-form-item prop="ward_id">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select
-              v-model="ruleForm.ward"
+              v-model="ruleForm.ward_id"
               placeholder="Chọn phường/xã"
               no-data-text="Vui lòng chọn huyện"
             >
@@ -218,10 +218,10 @@ export default {
         address: "",
         note: "",
         avatar: "",
-        province: "",
-        district: "",
-        ward: "",
-        sex: "",
+        province_id: "",
+        district_id: "",
+        ward_id: "",
+        gender: "",
       },
       imageUrl: "",
       avatar_id: null,
@@ -418,14 +418,14 @@ export default {
       return isJPG && isLt2M;
     },
     chooseProvince() {
-      this.ruleForm.district = "";
-      this.ruleForm.ward = "";
+      this.ruleForm.district_id = "";
+      this.ruleForm.ward_id = "";
       this.$store.commit("global/setNoWardList");
-      this.$store.dispatch("global/getDictrictList", this.ruleForm.province);
+      this.$store.dispatch("global/getDictrictList", this.ruleForm.province_id);
     },
     chooseDistrict() {
-      this.ruleForm.ward = "";
-      this.$store.dispatch("global/getWardList", this.ruleForm.district);
+      this.ruleForm.ward_id = "";
+      this.$store.dispatch("global/getWardList", this.ruleForm.district_id);
     },
   },
 };

@@ -217,6 +217,9 @@ export default {
         await this.$store.dispatch("customers/createNewCustomer", {
           ...this.ruleForm,
           avatar: this.avatar_id ? this.avatar_id : 0,
+          province_id: 0,
+          district_id: 0,
+          ward_id: 0,
         });
 
         // if (!this.errorMessage) {

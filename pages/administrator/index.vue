@@ -407,7 +407,7 @@ export default {
       }, 100);
     },
     openExportConfirm() {
-      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Title", {
+      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Thông báo", {
         confirmButtonText: "OK",
         callback: (action) => {
           this.$message({

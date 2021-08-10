@@ -214,6 +214,10 @@ export default {
           status: item.is_block == 0 ? "Đang hoạt động" : "Khóa",
           position: item.role.name,
           image: item.avatar_image?.thumbnail,
+          province_id: item.province_id,
+          district_id: item.district_id,
+          ward_id: item.ward_id,
+          gender: item.gender,
         };
       });
     },

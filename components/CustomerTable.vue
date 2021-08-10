@@ -145,6 +145,10 @@ export default {
           user_id: item.user_id,
           avatar: item.avatar,
           phone: item.phone,
+          gender: item.gender,
+          province_id: item.province_id,
+          district_id: item.district_id,
+          ward_id: item.ward_id,
         };
       });
     },

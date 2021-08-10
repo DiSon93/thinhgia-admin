@@ -80,9 +80,9 @@
       <v-row>
         <v-col cols="6">
           <div>Giới tính</div>
-          <el-form-item prop="sex">
+          <el-form-item prop="gender">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
-            <el-select v-model="ruleForm.sex" placeholder="Chọn giới tính">
+            <el-select v-model="ruleForm.gender" placeholder="Chọn giới tính">
               <el-option
                 v-for="item in sexs"
                 :key="item.value"
@@ -114,9 +114,9 @@
         </v-col>
         <v-col cols="6">
           <div>Tỉnh</div>
-          <el-form-item prop="province">
+          <el-form-item prop="province_id">
             <el-select
-              v-model="ruleForm.province"
+              v-model="ruleForm.province_id"
               placeholder="Chọn tỉnh"
               @change="chooseProvince"
             >
@@ -132,10 +132,10 @@
         </v-col>
         <v-col cols="6">
           <div>Huyện/TP</div>
-          <el-form-item prop="district">
+          <el-form-item prop="district_id">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select
-              v-model="ruleForm.district"
+              v-model="ruleForm.district_id"
               placeholder="Chọn huyện/TP"
               @change="chooseDistrict"
               no-data-text="Vui lòng chọn tỉnh"
@@ -152,10 +152,10 @@
         </v-col>
         <v-col cols="6">
           <div>Phường/Xã</div>
-          <el-form-item prop="ward">
+          <el-form-item prop="ward_id">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select
-              v-model="ruleForm.ward"
+              v-model="ruleForm.ward_id"
               placeholder="Chọn phường/xã"
               no-data-text="Vui lòng chọn huyện"
             >
@@ -193,12 +193,15 @@ export default {
   data() {
     var checkNumber = (rule, value, callback) => {
       var regex = /^[0-9]*$/;
-      if (!value.match(regex)) {
+      if (!value) {
+        callback();
+      } else if (!value.match(regex)) {
         callback(new Error("Please input digits"));
       } else {
         callback();
       }
     };
+
     return {
       headers: null,
       ruleForm: {
@@ -211,10 +214,10 @@ export default {
         address: "",
         role_id: "",
         avatar: "",
-        sex: "",
-        province: "",
-        district: "",
-        ward: "",
+        province_id: "",
+        district_id: "",
+        ward_id: "",
+        gender: "",
       },
       role_user: "",
       avatar_image: null,
@@ -230,6 +233,10 @@ export default {
         {
           name: "Nữ",
           value: "Nữ",
+        },
+        {
+          name: "Khác",
+          value: "Khác",
         },
       ],
       rules: {
@@ -275,7 +282,7 @@ export default {
             message: "Please select at least one activity type",
             trigger: "change",
           },
-          // { validator: checkNumber, trigger: "blur" },
+          // { validator: checkNumber02, trigger: "blur" },
           // {
           //   max: 12,
           //   message: "Indentity Card must be not longer than 12",
@@ -295,12 +302,21 @@ export default {
         role_id: [
           { required: true, message: "Please select role of user", trigger: "blur" },
         ],
+        province_id: [
+          { required: true, message: "Please select province", trigger: "blur" },
+        ],
+        district_id: [
+          { required: true, message: "Please select district", trigger: "blur" },
+        ],
+        ward_id: [{ required: true, message: "Please select ward", trigger: "blur" }],
+        gender: [{ required: true, message: "Please select gender", trigger: "blur" }],
       },
     };
   },
   mounted() {
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
     this.role_user = this.currentUser ? this.currentUser.results.user.role_id : "";
+    this.getProvinceList();
   },
   beforeMount() {
     this.getUserDetail();
@@ -333,7 +349,13 @@ export default {
         avatar: this.userDetail.avatar,
         is_block: this.userDetail.is_block,
         id: this.userDetail.id,
+        gender: this.userDetail.gender,
+        province_id: this.userDetail.province_id,
+        district_id: this.userDetail.district_id,
+        ward_id: this.userDetail.ward_id,
       };
+      this.$store.dispatch("global/getDictrictList", this.ruleForm.province_id);
+      this.$store.dispatch("global/getWardList", this.ruleForm.district_id);
       this.avatar_image = this.userDetail.avatar_image?.main;
     },
     submitForm(formName) {
@@ -403,14 +425,14 @@ export default {
     },
 
     chooseProvince() {
-      this.ruleForm.district = "";
-      this.ruleForm.ward = "";
+      this.ruleForm.district_id = "";
+      this.ruleForm.ward_id = "";
       this.$store.commit("global/setNoWardList");
-      this.$store.dispatch("global/getDictrictList", this.ruleForm.province);
+      this.$store.dispatch("global/getDictrictList", this.ruleForm.province_id);
     },
     chooseDistrict() {
-      this.ruleForm.ward = "";
-      this.$store.dispatch("global/getWardList", this.ruleForm.district);
+      this.ruleForm.ward_id = "";
+      this.$store.dispatch("global/getWardList", this.ruleForm.district_id);
     },
   },
 };

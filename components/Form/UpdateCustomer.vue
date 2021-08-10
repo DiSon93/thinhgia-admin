@@ -27,9 +27,9 @@
             </v-col>
             <v-col cols="6">
               <div>Giới tính</div>
-              <el-form-item prop="sex">
+              <el-form-item prop="gender">
                 <!-- <el-input v-model="ruleForm.staff"></el-input> -->
-                <el-select v-model="ruleForm.sex" placeholder="Chọn giới tính">
+                <el-select v-model="ruleForm.gender" placeholder="Chọn giới tính">
                   <el-option
                     v-for="item in sexList"
                     :key="item.value"
@@ -98,9 +98,9 @@
         </v-col>
         <v-col cols="6">
           <div>Tỉnh</div>
-          <el-form-item prop="province">
+          <el-form-item prop="province_id">
             <el-select
-              v-model="ruleForm.province"
+              v-model="ruleForm.province_id"
               placeholder="Chọn tỉnh"
               @change="chooseProvince"
             >
@@ -116,10 +116,10 @@
         </v-col>
         <v-col cols="6">
           <div>Huyện/TP</div>
-          <el-form-item prop="district">
+          <el-form-item prop="district_id">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select
-              v-model="ruleForm.district"
+              v-model="ruleForm.district_id"
               placeholder="Chọn huyện/TP"
               @change="chooseDistrict"
               no-data-text="Vui lòng chọn tỉnh"
@@ -136,10 +136,10 @@
         </v-col>
         <v-col cols="6">
           <div>Phường/Xã</div>
-          <el-form-item prop="ward">
+          <el-form-item prop="ward_id">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select
-              v-model="ruleForm.ward"
+              v-model="ruleForm.ward_id"
               placeholder="Chọn phường/xã"
               no-data-text="Vui lòng chọn huyện"
             >
@@ -190,7 +190,9 @@ export default {
   data() {
     var checkNumber = (rule, value, callback) => {
       var regex = /^[0-9]*$/;
-      if (!value.match(regex)) {
+      if (!value) {
+        callback();
+      } else if (!value.match(regex)) {
         callback(new Error("Please input digits"));
       } else {
         callback();
@@ -212,10 +214,10 @@ export default {
         address: "",
         note: "",
         avatar: "",
-        province: "",
-        district: "",
-        ward: "",
-        sex: "",
+        province_id: "",
+        district_id: "",
+        ward_id: "",
+        gender: "",
       },
       avatar_image: null,
       imageUrl: "",
@@ -241,11 +243,11 @@ export default {
           { min: 2, max: 30, message: "Length should be 2 to 30", trigger: "blur" },
         ],
         email: [
-          {
-            required: true,
-            message: "Please input email",
-            trigger: "submit",
-          },
+          // {
+          //   required: true,
+          //   message: "Please input email",
+          //   trigger: "submit",
+          // },
           {
             type: "email",
             message: "Please input email address",
@@ -265,21 +267,21 @@ export default {
             trigger: "blur",
           },
         ],
-        fax: [{ validator: checkNumber, trigger: "blur" }],
+        // fax: [{ validator: checkNumber, trigger: "blur" }],
         birth_day: [
-          {
-            required: true,
-            message: "Please pick a time",
-            trigger: "submit",
-          },
+          // {
+          //   required: true,
+          //   message: "Please pick a time",
+          //   trigger: "submit",
+          // },
         ],
         identity_card: [
-          {
-            required: true,
-            message: "Please select at least one activity type",
-            trigger: "submit",
-          },
-          { validator: checkNumber, trigger: "blur" },
+          // {
+          //   required: true,
+          //   message: "Please select at least one activity type",
+          //   trigger: "submit",
+          // },
+          // { validator: checkNumber, trigger: "blur" },
           // {
           //   max: 12,
           //   message: "Indentity Card must be not longer than 12",
@@ -287,14 +289,14 @@ export default {
           // },
         ],
         user_id: [
-          { required: true, message: "Please select staff name", trigger: "change" },
+          // { required: true, message: "Please select staff name", trigger: "change" },
         ],
         address: [
-          {
-            required: true,
-            message: "Please select activity resource",
-            trigger: "change",
-          },
+          // {
+          //   required: true,
+          //   message: "Please select activity resource",
+          //   trigger: "change",
+          // },
         ],
       },
     };
@@ -312,8 +314,8 @@ export default {
     // };
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
     this.getCustomerDetail();
-    this.getStaffList();
     this.getProvinceList();
+    this.getStaffList();
   },
   computed: {
     ...mapState("staffs", ["loading", "staffList"]),
@@ -349,7 +351,13 @@ export default {
         user_id: this.customerDetail.user_id,
         fax: this.customerDetail.fax,
         note: this.customerDetail.note,
+        gender: this.customerDetail.gender,
+        province_id: this.customerDetail.province_id,
+        district_id: this.customerDetail.district_id,
+        ward_id: this.customerDetail.ward_id,
       };
+      this.$store.dispatch("global/getDictrictList", this.ruleForm.province_id);
+      this.$store.dispatch("global/getWardList", this.ruleForm.district_id);
       this.avatar_image = this.customerDetail.picture;
     },
     async updateCustomerToSystem() {
@@ -422,14 +430,14 @@ export default {
       return isJPG && isLt2M;
     },
     chooseProvince() {
-      this.ruleForm.district = "";
-      this.ruleForm.ward = "";
+      this.ruleForm.district_id = "";
+      this.ruleForm.ward_id = "";
       this.$store.commit("global/setNoWardList");
-      this.$store.dispatch("global/getDictrictList", this.ruleForm.province);
+      this.$store.dispatch("global/getDictrictList", this.ruleForm.province_id);
     },
     chooseDistrict() {
-      this.ruleForm.ward = "";
-      this.$store.dispatch("global/getWardList", this.ruleForm.district);
+      this.ruleForm.ward_id = "";
+      this.$store.dispatch("global/getWardList", this.ruleForm.district_id);
     },
   },
 };

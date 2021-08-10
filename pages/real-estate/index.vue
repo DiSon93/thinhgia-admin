@@ -287,7 +287,7 @@ export default {
       }
     },
     openExportConfirm() {
-      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Title", {
+      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Thông báo", {
         confirmButtonText: "OK",
         callback: (action) => {
           this.$message({
@@ -496,8 +496,8 @@ export default {
   .v-input--hide-details {
     display: none !important;
   }
-  .header_box{
-    .selected_estate{
+  .header_box {
+    .selected_estate {
       left: 200px;
       top: 5px;
     }

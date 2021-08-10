@@ -93,9 +93,9 @@
         </v-col> -->
         <v-col cols="6">
           <div>Giới tính</div>
-          <el-form-item prop="sex">
+          <el-form-item prop="gender">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
-            <el-select v-model="ruleForm.sex" placeholder="Chọn giới tính">
+            <el-select v-model="ruleForm.gender" placeholder="Chọn giới tính">
               <el-option
                 v-for="item in sexs"
                 :key="item.value"
@@ -133,9 +133,9 @@
         </v-col>
         <v-col cols="6">
           <div>Tỉnh</div>
-          <el-form-item prop="province">
+          <el-form-item prop="province_id">
             <el-select
-              v-model="ruleForm.province"
+              v-model="ruleForm.province_id"
               placeholder="Chọn tỉnh"
               @change="chooseProvince"
             >
@@ -151,10 +151,10 @@
         </v-col>
         <v-col cols="6">
           <div>Huyện/TP</div>
-          <el-form-item prop="district">
+          <el-form-item prop="district_id">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select
-              v-model="ruleForm.district"
+              v-model="ruleForm.district_id"
               placeholder="Chọn huyện/TP"
               @change="chooseDistrict"
               no-data-text="Vui lòng chọn tỉnh"
@@ -171,10 +171,10 @@
         </v-col>
         <v-col cols="6">
           <div>Phường/Xã</div>
-          <el-form-item prop="ward">
+          <el-form-item prop="ward_id">
             <!-- <el-input v-model="ruleForm.staff"></el-input> -->
             <el-select
-              v-model="ruleForm.ward"
+              v-model="ruleForm.ward_id"
               placeholder="Chọn phường/xã"
               no-data-text="Vui lòng chọn huyện"
             >
@@ -231,10 +231,10 @@ export default {
         issued_on: "",
         address: "",
         role_id: "",
-        sex: "",
-        province: "",
-        district: "",
-        ward: "",
+        province_id: "",
+        district_id: "",
+        ward_id: "",
+        gender: "",
       },
       role_user: "",
       imageUrl: "",
@@ -248,6 +248,10 @@ export default {
         {
           name: "Nữ",
           value: "Nữ",
+        },
+        {
+          name: "Khác",
+          value: "Khác",
         },
       ],
       rules: {
@@ -320,6 +324,14 @@ export default {
         role_id: [
           { required: true, message: "Please select role of user", trigger: "blur" },
         ],
+        province_id: [
+          { required: true, message: "Please select province", trigger: "blur" },
+        ],
+        district_id: [
+          { required: true, message: "Please select district", trigger: "blur" },
+        ],
+        ward_id: [{ required: true, message: "Please select ward", trigger: "blur" }],
+        gender: [{ required: true, message: "Please select gender", trigger: "blur" }],
       },
     };
   },
@@ -434,14 +446,14 @@ export default {
     },
 
     chooseProvince() {
-      this.ruleForm.district = "";
-      this.ruleForm.ward = "";
+      this.ruleForm.district_id = "";
+      this.ruleForm.ward_id = "";
       this.$store.commit("global/setNoWardList");
-      this.$store.dispatch("global/getDictrictList", this.ruleForm.province);
+      this.$store.dispatch("global/getDictrictList", this.ruleForm.province_id);
     },
     chooseDistrict() {
-      this.ruleForm.ward = "";
-      this.$store.dispatch("global/getWardList", this.ruleForm.district);
+      this.ruleForm.ward_id = "";
+      this.$store.dispatch("global/getWardList", this.ruleForm.district_id);
     },
   },
 };

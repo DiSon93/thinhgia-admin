@@ -223,7 +223,6 @@ export default {
               }),
             };
           });
-        console.log("blogListDetail", this.blogListDetail);
         this.loading = false;
         this.loadingMore = false;
       } catch {
