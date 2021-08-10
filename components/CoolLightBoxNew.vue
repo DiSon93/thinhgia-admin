@@ -1,28 +1,32 @@
 <template>
   <div class="house-img">
     <CoolLightBox
-      :items="items"
+      :items="imageList"
       :index="index"
       :fullScreen="true"
       :useZoomBar="true"
       @close="index = null"
-      v-if="items.length > 0"
+      v-if="imageList.length > 0"
     >
     </CoolLightBox>
 
     <div class="images-wrapper">
       <a href="javascript:;">
         <img
-          v-for="(image, imageIndex) in items.slice(0, 4)"
+          v-for="(image, imageIndex) in imageList.slice(0, 4)"
           :key="imageIndex"
           @click="index = imageIndex"
           :src="image.src"
         />
 
-        <div v-if="items.length > 4" class="overlay" @click="index = 3">
-          +{{ items.length - 4 }}
+        <div v-if="imageList.length > 4" class="overlay" @click="index = 3">
+          +{{ imageList.length - 4 }}
         </div>
       </a>
+      <video width="320" height="240" controls v-for="video in videoList" :key="video.id">
+        <source :src="video.src" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
     </div>
   </div>
 </template>
@@ -38,7 +42,13 @@ export default {
   data() {
     return {
       index: null,
+      imageList: [],
+      videoList: [],
     };
+  },
+  mounted() {
+    this.imageList = this.items.filter((u, i) => u.type != "video");
+    this.videoList = this.items.filter((u, i) => u.type == "video");
   },
 };
 </script>

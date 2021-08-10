@@ -26,6 +26,16 @@ export default {
   css: [
     '~/assets/scss/main.scss'
   ],
+
+  apps: [
+    {
+      name: 'NuxtAppName',
+      exec_mode: 'cluster',
+      instances: 'max', // Or a number of instances
+      script: './node_modules/nuxt/bin/nuxt.js',
+      args: 'start'
+    }
+  ],
   // target: 'static',
   loading: true,
   loading: {

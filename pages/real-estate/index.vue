@@ -116,7 +116,7 @@
       </v-row>
       <el-dialog
         :visible.sync="centerDialogVisible02"
-        width="25%"
+        :width="dialog"
         center
         id="user_detail_dialog"
       >
@@ -124,7 +124,7 @@
       </el-dialog>
       <el-dialog
         :visible.sync="centerDialogVisible03"
-        width="25%"
+        :width="dialog"
         center
         id="user_changePass_dialog"
         title="Đổi mật khẩu"
@@ -167,6 +167,7 @@ export default {
       is_public: null,
       is_sell: null,
       isSelectedEstate: false,
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
       shares: [
         {
           id: 1,
@@ -217,6 +218,7 @@ export default {
       value: "0",
     };
   },
+
   computed: {
     ...mapState("realEstate", ["total"]),
   },
@@ -493,6 +495,12 @@ export default {
   }
   .v-input--hide-details {
     display: none !important;
+  }
+  .header_box{
+    .selected_estate{
+      left: 200px;
+      top: 5px;
+    }
   }
 }
 </style>

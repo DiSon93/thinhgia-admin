@@ -53,6 +53,7 @@
                   <!-- <div v-for="img in item.image.slice(0, 4)" :key="img.id">
                     <img :src="img.thumbnail" alt="" class="project_picture" />
                   </div> -->
+
                   <div>
                     <CoolLightBoxNew :items="item ? item.image : []" />
                   </div>
@@ -107,7 +108,7 @@
 
       <el-dialog
         :visible.sync="centerDialogVisible02"
-        width="25%"
+        :width="dialog"
         center
         id="user_detail_dialog"
       >
@@ -115,7 +116,7 @@
       </el-dialog>
       <el-dialog
         :visible.sync="centerDialogVisible03"
-        width="25%"
+        :width="dialog"
         center
         id="user_changePass_dialog"
         title="Đổi mật khẩu"
@@ -151,6 +152,7 @@ export default {
       blogListDetail: [],
       loadingMore: false,
       count: 10,
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
     };
   },
   created() {
@@ -201,7 +203,15 @@ export default {
           page: this.page,
         });
         let scrollBlogList = this.blogList.map((u) => {
-          return { ...u, read: true };
+          return {
+            ...u,
+            read: true,
+            image: u.image.map((v) => {
+              return v.main.slice(-3) == "mp4"
+                ? { ...v, type: "video" }
+                : { ...v, type: "photo" };
+            }),
+          };
         });
         this.blogListDetail = this.blogListDetail
           .concat(scrollBlogList)
@@ -213,6 +223,7 @@ export default {
               }),
             };
           });
+        console.log("blogListDetail", this.blogListDetail);
         this.loading = false;
         this.loadingMore = false;
       } catch {

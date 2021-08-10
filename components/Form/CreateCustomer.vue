@@ -18,10 +18,30 @@
           <div class="select_img">Thêm ảnh</div>
         </v-col>
         <v-col cols="8">
-          <div>Tên</div>
-          <el-form-item prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
+          <v-row>
+            <v-col cols="6">
+              <div>Tên</div>
+              <el-form-item prop="name">
+                <el-input v-model="ruleForm.name"></el-input>
+              </el-form-item>
+            </v-col>
+            <v-col cols="6">
+              <div>Giới tính</div>
+              <el-form-item prop="sex">
+                <!-- <el-input v-model="ruleForm.staff"></el-input> -->
+                <el-select v-model="ruleForm.sex" placeholder="Chọn giới tính">
+                  <el-option
+                    v-for="item in sexList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </v-col>
+          </v-row>
+
           <v-row>
             <v-col cols="6">
               <div>SDT</div>
@@ -78,8 +98,71 @@
             </el-select>
           </el-form-item>
         </v-col>
-        <v-col cols="12">
+        <!-- <v-col cols="12">
           <div>Địa chỉ</div>
+          <el-form-item prop="address">
+            <el-input v-model="ruleForm.address"></el-input>
+          </el-form-item>
+        </v-col> -->
+        <v-col cols="6">
+          <div>Tỉnh</div>
+          <el-form-item prop="province">
+            <el-select
+              v-model="ruleForm.province"
+              placeholder="Chọn tỉnh"
+              @change="chooseProvince"
+            >
+              <el-option
+                v-for="item in provinceList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </v-col>
+        <v-col cols="6">
+          <div>Huyện/TP</div>
+          <el-form-item prop="district">
+            <!-- <el-input v-model="ruleForm.staff"></el-input> -->
+            <el-select
+              v-model="ruleForm.district"
+              placeholder="Chọn huyện/TP"
+              @change="chooseDistrict"
+              no-data-text="Vui lòng chọn tỉnh"
+            >
+              <el-option
+                v-for="item in dictrictList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </v-col>
+        <v-col cols="6">
+          <div>Phường/Xã</div>
+          <el-form-item prop="ward">
+            <!-- <el-input v-model="ruleForm.staff"></el-input> -->
+            <el-select
+              v-model="ruleForm.ward"
+              placeholder="Chọn phường/xã"
+              no-data-text="Vui lòng chọn huyện"
+            >
+              <el-option
+                v-for="item in wardList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </v-col>
+        <v-col cols="6">
+          <div>Số nhà/Tên đường</div>
           <el-form-item prop="address">
             <el-input v-model="ruleForm.address"></el-input>
           </el-form-item>
@@ -135,10 +218,28 @@ export default {
         address: "",
         note: "",
         avatar: "",
+        province: "",
+        district: "",
+        ward: "",
+        sex: "",
       },
       imageUrl: "",
       avatar_id: null,
       selectedFile: null,
+      sexList: [
+        {
+          label: "Nam",
+          value: "Nam",
+        },
+        {
+          label: "Nữ",
+          value: "Nữ",
+        },
+        {
+          label: "Khác",
+          value: "Khác",
+        },
+      ],
       rules: {
         name: [
           { required: true, message: "Please input name", trigger: "blur" },
@@ -191,11 +292,11 @@ export default {
             trigger: "submit",
           },
           { validator: checkNumber, trigger: "blur" },
-          // {
-          //   max: 12,
-          //   message: "Indentity Card must be not longer than 12",
-          //   trigger: "blur",
-          // },
+          {
+            max: 12,
+            message: "Indentity Card must be not longer than 12",
+            trigger: "blur",
+          },
         ],
         user_id: [
           { required: true, message: "Please select staff name", trigger: "change" },
@@ -223,14 +324,19 @@ export default {
     // };
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
     this.getStaffList();
+    this.getProvinceList();
   },
   computed: {
     ...mapState("staffs", ["staffList"]),
     ...mapState("auth", ["currentUser"]),
     ...mapState("customers", ["errorMessage"]),
+    ...mapState("global", ["dictrictList"]),
+    ...mapState("global", ["provinceList"]),
+    ...mapState("global", ["wardList"]),
   },
   methods: {
     ...mapActions("staffs", ["getStaffList"]),
+    ...mapActions("global", ["getProvinceList"]),
 
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -310,6 +416,16 @@ export default {
         this.$message.error("Avatar picture size can not exceed 2MB!");
       }
       return isJPG && isLt2M;
+    },
+    chooseProvince() {
+      this.ruleForm.district = "";
+      this.ruleForm.ward = "";
+      this.$store.commit("global/setNoWardList");
+      this.$store.dispatch("global/getDictrictList", this.ruleForm.province);
+    },
+    chooseDistrict() {
+      this.ruleForm.ward = "";
+      this.$store.dispatch("global/getWardList", this.ruleForm.district);
     },
   },
 };

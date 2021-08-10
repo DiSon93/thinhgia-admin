@@ -6,7 +6,7 @@
       <div class="address">
         <div class="overview">Tổng quan dự án</div>
         <v-row>
-          <v-col cols="3">
+          <v-col cols="12" sm="3">
             <div class="label">Tỉnh <span style="color: red">*</span></div>
             <el-select v-model="value01" placeholder="Chọn tỉnh" @change="chooseProvince">
               <el-option
@@ -21,7 +21,7 @@
               {{ errorMessage.province_id ? errorMessage.province_id[0] : null }}
             </p>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="12" sm="3">
             <div class="label">Huyện/TP <span style="color: red">*</span></div>
             <el-select
               v-model="value02"
@@ -41,7 +41,7 @@
               {{ errorMessage.district_id ? errorMessage.district_id[0] : null }}
             </p>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="12" sm="3">
             <div class="label">Phường/Xã <span style="color: red">*</span></div>
             <el-select
               v-model="value03"
@@ -60,11 +60,11 @@
               {{ errorMessage.ward_id ? errorMessage.ward_id[0] : null }}
             </p>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="12" sm="3">
             <div class="label">Tên đường/Số nhà</div>
             <el-input v-model="value04"></el-input>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="12" sm="3">
             <div class="label">Loại dự án <span style="color: red">*</span></div>
             <el-select v-model="value05" placeholder="Chọn loại dự án">
               <el-option
@@ -79,7 +79,7 @@
               {{ errorMessage.type ? errorMessage.type[0] : null }}
             </p>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="12" sm="3">
             <div class="label">Tiến độ</div>
             <!-- <el-input v-model="value06"></el-input> -->
             <el-select v-model="value06" placeholder="Chọn tiến độ">
@@ -92,11 +92,11 @@
               </el-option>
             </el-select>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="12" sm="3">
             <div class="label">Chủ đầu tư</div>
             <el-input v-model="value07"></el-input>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="12" sm="3">
             <div class="label">Tên dự án <span style="color: red">*</span></div>
             <el-input v-model="value08"></el-input>
           </v-col>
@@ -104,7 +104,7 @@
       </div>
 
       <v-row>
-        <v-col cols="6" class="cms">
+        <v-col cols="12" sm="6" class="cms">
           <div class="overlay overlay_left">
             <div class="overview">Vị trí dự án</div>
             <div class="tieude">
@@ -138,8 +138,8 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="6" class="cms">
-          <div class="overlay overlay_right">
+        <v-col cols="12" sm="6" class="cms">
+          <div class="overlay overlay_right tienich">
             <div class="overview">Tiện ích</div>
             <div class="tieude">
               <div class="form_label">Mô tả</div>
@@ -174,7 +174,7 @@
         </v-col>
       </v-row>
       <v-row class="cms_upload">
-        <v-col cols="6" class="cms">
+        <v-col cols="12" sm="6" class="cms">
           <div class="upload">
             <div class="upload_img">
               <div class="title_upload">Hình ảnh</div>
@@ -238,7 +238,7 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="6" class="cms">
+        <v-col cols="12" sm="6" class="cms">
           <div class="overlay overlay_right mathang">
             <div class="overview">Mặt bằng</div>
             <div class="tieude">
@@ -581,5 +581,38 @@ export default {
   font-size: 12px;
   margin-bottom: 0px;
   margin-top: 0px;
+}
+@media screen and (max-width: 1250px) {
+  .create_project {
+    .project_title {
+      margin-top: 0px;
+      margin-bottom: 10px;
+    }
+  }
+}
+@media screen and (max-width: 600px) {
+  .project_overview {
+    .overview {
+      margin-bottom: 20px;
+    }
+    .label {
+      margin-top: -20px;
+    }
+  }
+  .overlay_left {
+    margin-right: 0px !important;
+  }
+  .overlay_right {
+    margin-left: 0px !important;
+  }
+  .tienich {
+    margin-top: -10px;
+  }
+  .mathang {
+    margin-top: -10px;
+  }
+  .save {
+    margin-bottom: 60px;
+  }
 }
 </style>

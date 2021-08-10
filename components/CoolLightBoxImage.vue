@@ -81,4 +81,15 @@ export default {
     }
   }
 }
+@media screen and (max-width: 600px) {
+  .house-img {
+    max-height: 216px;
+  }
+  .images-wrapper {
+    .overlay {
+      top: 110px !important;
+      padding-top: 9% !important;
+    }
+  }
+}
 </style>

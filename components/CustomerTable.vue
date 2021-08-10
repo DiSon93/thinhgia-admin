@@ -152,7 +152,6 @@ export default {
       this.selectedCustomer = e;
       this.centerDialogVisible = true;
       this.childKey += 1;
-      console.log(e);
     },
     async handleSizeChange(val) {
       this.loading = true;

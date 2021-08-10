@@ -211,7 +211,7 @@
       <el-dialog
         title="Tạo người dùng mới"
         :visible.sync="centerDialogVisible"
-        width="40%"
+        :width="modal"
         center
         destroy-on-close
       >
@@ -220,7 +220,7 @@
           v-on:reload-page="reload"
         />
       </el-dialog>
-      <el-dialog :visible.sync="dialogVisible" width="30%" destroy-on-close>
+      <el-dialog :visible.sync="dialogVisible" :width="modalDic" destroy-on-close>
         <CreateDictionaries
           :select_dic="dicSelected[0]"
           v-on:close-modals="dialogVisible = false"
@@ -249,7 +249,7 @@
       <v-row class="data_table" v-if="isUser"> </v-row>
       <el-dialog
         :visible.sync="centerDialogVisible02"
-        width="25%"
+        :width="dialog"
         center
         id="user_detail_dialog"
       >
@@ -257,7 +257,7 @@
       </el-dialog>
       <el-dialog
         :visible.sync="centerDialogVisible03"
-        width="25%"
+        :width="dialog"
         center
         id="user_changePass_dialog"
         title="Đổi mật khẩu"
@@ -302,6 +302,10 @@ export default {
       centerDialogVisible: false,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
+      modal: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "40%",
+      modalDic:
+        window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "60%" : "30%",
       dialogVisible: false,
       saw_noti: false,
       dicSelected: "",

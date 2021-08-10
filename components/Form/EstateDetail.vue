@@ -609,4 +609,9 @@ export default {
     border-radius: 50%;
   }
 }
+@media screen and (max-width: 600px){
+  .detail {
+  width: 300px;
+  }
+}
 </style>

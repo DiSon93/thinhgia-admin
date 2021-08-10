@@ -5,8 +5,8 @@
         box-sizing: border-box;
         border-radius: 16px;
     }
-    .el-select{
-        width: 100%!important;
+    .el-select {
+        width: 100% !important;
     }
 }
 #huy_createUser.el-button {
@@ -27,7 +27,11 @@
 .avatar_img.el-icon-user-solid {
     width: 100px !important;
     &:before {
-      font-size: 80px!important;
-      color: rgba(0, 0, 255, 0.699)
+        font-size: 80px !important;
+        color: rgba(0, 0, 255, 0.699);
     }
-  }
+}
+
+.createUser .el-dialog.el-dialog--center {
+    margin-top: 10vh !important;
+}

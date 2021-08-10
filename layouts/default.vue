@@ -278,7 +278,7 @@ export default {
       // dialog: false,
       clipped: false,
       isWidth: window.innerWidth > 600 ? true : false,
-      drawer: true,
+      drawer: false,
       fixed: false,
       value: "recent",
       centerDialogVisible02: false,
@@ -380,7 +380,11 @@ export default {
     this.drawer = this.isWidth;
     this.role_user = this.currentUser ? this.currentUser.results.user.role_id : "";
   },
-  mounted() {},
+  mounted() {
+    if (window.innerWidth > 600 && window.innerWidth < 1200) {
+      this.drawer = false;
+    }
+  },
   methods: {
     handleCommand(command) {
       if (command == "logout") {
@@ -528,7 +532,6 @@ export default {
     right: 70px;
     bottom: -1px;
     padding: 4px;
-
     // &:hover {
     //   border: 1px solid blue;
     //   transition: 0.5s;
@@ -612,6 +615,13 @@ export default {
   }
   .app-bar-icon {
     display: none;
+  }
+}
+@media screen and (max-width: 900px) {
+  .header_box {
+    .search {
+      margin-left: -30px !important;
+    }
   }
 }
 @media screen and (max-width: 600px) {

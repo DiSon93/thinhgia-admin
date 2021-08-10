@@ -18,7 +18,7 @@
     </div>
     <div class="form_content">
       <v-row class="content_01">
-        <v-col cols="3">
+        <v-col cols="12" sm="3">
           <div class="position">
             <div class="form_label">Nhân viên</div>
             <el-select v-model="value" placeholder="Chọn nhân viên" id="staff">
@@ -55,10 +55,12 @@
             </p>
           </div>
         </v-col>
-        <v-col cols="9">
+        <v-col cols="12" sm="9">
           <v-row class="address">
-            <v-col cols="4">
-              <div class="form_label">Tỉnh <span style="color: red">*</span></div>
+            <v-col cols="12" sm="4">
+              <div class="form_label province_od">
+                Tỉnh <span style="color: red">*</span>
+              </div>
               <el-select
                 v-model="value03"
                 placeholder="Chọn tỉnh"
@@ -75,23 +77,11 @@
               <p class="error_message" v-if="errorMessage">
                 {{ errorMessage.province_id ? errorMessage.province_id[0] : null }}
               </p>
-              <div class="form_label">Dự án</div>
-              <el-select
-                v-model="value06"
-                placeholder="Chọn dự án"
-                @change="shownmore = true"
-              >
-                <el-option
-                  v-for="item in allProject"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                >
-                </el-option>
-              </el-select>
             </v-col>
-            <v-col cols="4">
-              <div class="form_label">Huyện/TP <span style="color: red">*</span></div>
+            <v-col cols="12" sm="4">
+              <div class="form_label dictrict_id">
+                Huyện/TP <span style="color: red">*</span>
+              </div>
               <el-select
                 v-model="value04"
                 placeholder="Chọn huyện/TP"
@@ -109,14 +99,11 @@
               <p class="error_message" v-if="errorMessage">
                 {{ errorMessage.district_id ? errorMessage.district_id[0] : null }}
               </p>
-              <div class="form_label">Tên đường/Số nhà</div>
-              <el-input v-model="value07" id="input_stress"></el-input>
-              <p class="error_message street_name" v-if="errorMessage">
-                {{ errorMessage.street_name ? errorMessage.street_name[0] : null }}
-              </p>
             </v-col>
-            <v-col cols="4">
-              <div class="form_label">Phường/Xã <span style="color: red">*</span></div>
+            <v-col cols="12" sm="4">
+              <div class="form_label ward_id">
+                Phường/Xã <span style="color: red">*</span>
+              </div>
               <el-select
                 v-model="value05"
                 placeholder="Chọn phường/xã"
@@ -132,6 +119,31 @@
               </el-select>
               <p class="error_message" v-if="errorMessage">
                 {{ errorMessage.ward_id ? errorMessage.ward_id[0] : null }}
+              </p>
+            </v-col>
+            <v-col cols="12" sm="4">
+              <div class="form_label project_id">Dự án</div>
+              <el-select
+                v-model="value06"
+                placeholder="Chọn dự án"
+                @change="shownmore = true"
+              >
+                <el-option
+                  v-for="item in allProject"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </v-col>
+            <v-col cols="12" sm="4">
+              <div class="form_label street_name">
+                Tên đường/Số nhà <span style="color: red">*</span>
+              </div>
+              <el-input v-model="value07" id="input_stress"></el-input>
+              <p class="error_message street_name" v-if="errorMessage">
+                {{ errorMessage.street_name ? errorMessage.street_name[0] : null }}
               </p>
             </v-col>
           </v-row>
@@ -282,7 +294,7 @@
       </div>
       <div class="content_estate_options">
         <div class="options">
-          <div class="content_03 d-flex">
+          <div class="content_03">
             <div class="items">
               <div class="form_label">Diện tích đất/Tìm đường</div>
               <el-input v-model="value20" id="input_estate"></el-input>
@@ -305,7 +317,7 @@
               </p>
             </div>
           </div>
-          <div class="content_03 d-flex">
+          <div class="content_03">
             <div class="items">
               <div class="form_label">Diện tích sàn/Thông thủy</div>
               <el-input v-model="value23" id="input_estate"></el-input>
@@ -333,7 +345,7 @@
               </p>
             </div>
           </div>
-          <div class="content_03 d-flex">
+          <div class="content_03">
             <div class="items">
               <div class="form_label">Hướng <span style="color: red">*</span></div>
               <el-select v-model="value26" placeholder="Chọn hướng">
@@ -474,7 +486,7 @@
     <el-dialog
       title="Tạo khách hàng mới"
       :visible.sync="centerDialogVisible"
-      width="25%"
+      :width="dialog"
       center
       destroy-on-close
       id="createCustomersSimple"
@@ -594,6 +606,7 @@ export default {
       image_id_public: [],
       purpose: "",
       is_save: "",
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
     };
   },
   created() {
@@ -997,6 +1010,7 @@ export default {
       padding: 0px;
     }
     .content_03 {
+      display: flex;
       .items {
         width: 33.33%;
         margin: 0 10px;
@@ -1080,5 +1094,73 @@ export default {
 }
 .street_name {
   margin-top: 0px;
+}
+@media screen and (max-width: 1250px) {
+  .createBDS {
+    margin-top: 0px;
+  }
+  .v-btn.v-btn.v-size--default {
+    width: 80px !important;
+  }
+  .content_estate_options {
+    display: flex;
+    width: 100.8%;
+    .options {
+      height: 400px;
+    }
+  }
+}
+@media screen and (max-width: 600px) {
+  .more_info {
+    display: none;
+  }
+  .dictrict_id,
+  .ward_id {
+    margin-top: -25px;
+  }
+  .content_02 {
+    .typeOfEstate {
+      display: block;
+      .estate_item {
+        width: 94%;
+      }
+    }
+  }
+  .content_estate_options {
+    display: block;
+    width: 100.8%;
+    .options {
+      width: 104%;
+      padding: 10px 0;
+      margin: -10px;
+      margin-top: 20px !important;
+      height: 600px;
+      .col-4 {
+        padding: 0px;
+      }
+      .content_03 {
+        display: block;
+
+        .items {
+          width: 94%;
+          margin: 0 10px;
+        }
+      }
+    }
+    .cms {
+      width: 104%;
+      margin-left: -10px;
+      margin-top: 20px;
+      .tieude {
+        .el-input__inner {
+          width: 100%;
+        }
+        padding: 10px;
+      }
+    }
+  }
+  .luunhap {
+    margin-bottom: 60px;
+  }
 }
 </style>

@@ -62,7 +62,7 @@
       </v-row>
       <el-dialog
         :visible.sync="centerDialogVisible02"
-        width="25%"
+        :width="dialog"
         center
         id="user_detail_dialog"
       >
@@ -70,7 +70,7 @@
       </el-dialog>
       <el-dialog
         :visible.sync="centerDialogVisible03"
-        width="25%"
+        :width="dialog"
         center
         id="user_changePass_dialog"
         title="Đổi mật khẩu"
@@ -101,6 +101,7 @@ export default {
       resolved: 0,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
       options: [
         {
           value: "0",

@@ -142,4 +142,15 @@ export default {
     margin-bottom: -10px;
   }
 }
+@media screen and (max-width: 600px) {
+  .changePass {
+    #changePass {
+      font-size: 14px !important;
+    }
+  }
+
+  #logout {
+    font-size: 14px !important;
+  }
+}
 </style>

@@ -301,11 +301,11 @@ export default {
             trigger: "change",
           },
           { validator: checkNumber, trigger: "blur" },
-          // {
-          //   max: 12,
-          //   message: "Indentity Card must be not longer than 12",
-          //   trigger: "blur",
-          // },
+          {
+            max: 12,
+            message: "Indentity Card must be not longer than 12",
+            trigger: "blur",
+          },
         ],
         issued_on: [
           { required: true, message: "Please input activity form", trigger: "change" },

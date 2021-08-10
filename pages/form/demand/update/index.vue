@@ -187,7 +187,7 @@
     <el-dialog
       title="Tạo khách hàng mới"
       :visible.sync="centerDialogVisible"
-      width="25%"
+      :width="dialog"
       center
       destroy-on-close
       id="createCustomersSimple"
@@ -230,6 +230,7 @@ export default {
       houses: [],
       loading: false,
       centerDialogVisible: false,
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
       customers: [
         {
           id: 1,
@@ -513,5 +514,50 @@ export default {
   font-size: 12px;
   margin-bottom: 0px;
   margin-top: 0px;
+}
+@media screen and (max-width: 1250px) {
+  .create_demand {
+    .demand_title {
+      margin-top: 0px;
+    }
+  }
+}
+@media screen and (max-width: 600px) {
+  .address,
+  .estate,
+  .direction,
+  .tool {
+    display: block;
+  }
+  .addres_items,
+  .tool_item {
+    width: 100% !important;
+    .label {
+      margin-top: 4px;
+    }
+  }
+  .estate_items {
+    width: 100%;
+    .label {
+      margin-top: 4px;
+    }
+  }
+  .price_staff {
+    display: block;
+    margin-bottom: 15px;
+    .label {
+      margin-top: 10px;
+    }
+    .price {
+      width: 100%;
+    }
+    .staff {
+      margin-top: 15px;
+      width: 100%;
+    }
+  }
+  .save {
+    margin-bottom: 60px;
+  }
 }
 </style>

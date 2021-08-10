@@ -28,7 +28,7 @@
         fixed
       >
       </el-table-column>
-      <el-table-column prop="price" label="Giá" width="80" sortable fixed>
+      <el-table-column prop="price" label="Giá" width="80" sortable>
         <template slot-scope="scope">
           {{ scope.row.price }} {{ scope.row.unit_price }}
         </template>
@@ -146,7 +146,7 @@
       title="I am the title"
       :visible.sync="drawer"
       :with-header="false"
-      size="418px"
+      :size="drawer_size"
     >
       <EstateDetail
         :estateId="selected_id"
@@ -190,6 +190,8 @@ export default {
       currentPage: 1,
       beforeSelectArr: [],
       sort_price: "",
+      drawer_size: window.innerWidth < 600 ? "318px" : "418px",
+      
     };
   },
   created() {

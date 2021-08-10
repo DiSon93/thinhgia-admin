@@ -1,13 +1,7 @@
 <template>
   <div v-loading="loading">
-    <div class="infinite-list-wrapper" style="overflow: auto">
-      <ul
-        class="list"
-        v-infinite-scroll="load"
-        infinite-scroll-disabled="disabled"
-        infinite-scroll-delay="1000"
-      >
-        <li class="action" v-for="item in actionList" :key="item.id">
+    <div class="newAction" >
+        <div class="action" v-for="item in actionList" :key="item.id">
           <div class="d-flex username">
             <div class="name_info d-flex">
               <img
@@ -207,9 +201,9 @@
               </div>
             </div>
           </el-collapse-transition>
-        </li>
-      </ul>
-      <ZaloPlugin :key="keyChild" />
+        </div>
+        <el-button type="warning" round @click="readMoreActions" v-if="readMore">Xem thêm</el-button>
+      <script src="https://sp.zalo.me/plugins/sdk.js"></script>
       <p v-if="loadingMore">Loading...</p>
       <p v-if="noMore">No more</p>
     </div>
@@ -222,14 +216,12 @@ import "vue-cool-lightbox/dist/vue-cool-lightbox.min.css";
 import { mapState, mapActions } from "vuex";
 import CoolLightBoxImage from "@component/CoolLightBoxImage.vue";
 import ShareSocialNetwork from "@component/ShareSocialNetwork";
-import ZaloPlugin from "@component/ZaloPlugin";
 import moment from "moment";
 export default {
   components: {
     CoolLightBox,
     CoolLightBoxImage,
     ShareSocialNetwork,
-    ZaloPlugin,
   },
   data: function () {
     return {
@@ -249,7 +241,7 @@ export default {
       loadingComment: false,
       is_display: 0,
       realID: 0,
-      keyChild: 0,
+      readMore: true,
       items: [
         {
           title: "In nature, nothing is perfect and everything is perfect",
@@ -304,9 +296,19 @@ export default {
       }
       try {
         this.getNewActionList();
-        this.keyChild += 1;
       } catch {
         this.loadingMore = false;
+      }
+    },
+  async  readMoreActions(){
+ this.page += 1;
+      if (this.page == this.lastPage) {
+        this.readMore = false;
+      }
+      try{
+ this.getNewActionList();
+      }catch{
+
       }
     },
     selectCommen(_id, is_display, realID) {

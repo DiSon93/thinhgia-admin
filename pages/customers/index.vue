@@ -42,7 +42,7 @@
       <el-dialog
         title="Tạo khách hàng mới"
         :visible.sync="centerDialogVisible"
-        width="40%"
+        :width="modal"
         center
         destroy-on-close
         id="createCustomers"
@@ -54,7 +54,7 @@
       </el-dialog>
       <el-dialog
         :visible.sync="centerDialogVisible02"
-        width="25%"
+        :width="dialog"
         center
         id="user_detail_dialog"
       >
@@ -62,7 +62,7 @@
       </el-dialog>
       <el-dialog
         :visible.sync="centerDialogVisible03"
-        width="25%"
+        :width="dialog"
         center
         id="user_changePass_dialog"
         title="Đổi mật khẩu"
@@ -100,6 +100,8 @@ export default {
       centerDialogVisible03: false,
       textContent: "",
       input: "",
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
+      modal: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "40%",
     };
   },
   watch: {

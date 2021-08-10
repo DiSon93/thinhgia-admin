@@ -29,16 +29,100 @@
             ><img src="@image/icons/Vector.svg" />Tạo BĐS
           </v-btn>
 
-          <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
-          <v-btn class="notifiaction" fab
-            ><img src="@image/icons/bell-badge-noti.jpg" alt=""
-          /></v-btn>
+          <el-button
+            type="info"
+            circle
+            icon="el-icon-user-solid"
+            @click="centerDialogVisible02 = true"
+            class="account"
+          >
+          </el-button>
+
+          <el-popover
+            placement="bottom-end"
+            width="500"
+            trigger="click"
+            id="notification"
+          >
+            <NuxtLink :to="`/detail/house/${bds_id}`" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">a few seconds ago</div>
+            </NuxtLink>
+            <el-divider><i class="el-icon-star-on"></i></el-divider>
+            <NuxtLink :to="`/detail/house/${bds_id}`" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">26 minutes ago</div>
+            </NuxtLink>
+
+            <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">39 minutes ago</div>
+            </NuxtLink>
+            <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">39 minutes ago</div>
+            </NuxtLink>
+            <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+              <div class="d-flex">
+                <img src="@image/icons/user.svg" alt="" />
+                <div class="name">
+                  <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động sản
+                  lên cộng đồng
+                </div>
+              </div>
+              <div class="time">39 minutes ago</div>
+            </NuxtLink>
+
+            <el-button
+              slot="reference"
+              circle
+              class="btn_notification"
+              @click="saw_noti = true"
+              ><img v-if="!saw_noti" src="@image/icons/bell-badge-noti.jpg" alt="" />
+              <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
+            </el-button>
+          </el-popover>
         </v-col>
       </v-row>
       <v-row no-gutters v-if="isWidth">
         <v-col cols="12" md="7" class="action" v-bind:style="{ height: height1 + 'px' }">
           <div class="pt-0 new-action">Hoạt động mới cập nhật</div>
-          <NewAction />
+          <div v-if="isMobile">
+            <NewActionMobile />
+          </div>
+          <div v-else>
+            <NewAction />
+          </div>
         </v-col>
         <v-col
           cols="12"
@@ -78,6 +162,24 @@
           <Special />
         </v-col>
       </v-row>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        width="80%"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible"
+        width="80%"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible = false" />
+      </el-dialog>
     </v-container>
   </v-lazy>
 </template>
@@ -85,27 +187,37 @@
 <script>
 import RealEstateChart from "@component/Real-esstate-chart.vue";
 import NewAction from "@component/NewAction.vue";
+import NewActionMobile from "@component/NewActionMobile.vue";
 import Overview from "@component/Overview.vue";
 import Notification from "@component/Notification.vue";
 import Special from "@component/Special.vue";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
 import io from "socket.io-client";
 // var socket = io.connect("https://thinhgiacore.demo.fit/socket.io");
 export default {
   components: {
     RealEstateChart,
     NewAction,
+    NewActionMobile,
     Overview,
     Notification,
     Special,
+    UserDetail,
+    ChangePassword,
   },
   data() {
     return {
       isActive: false,
       isWidth: window.innerWidth > 1263 ? true : false,
+      isMobile: window.innerWidth < 600 ? true : false,
       height1: window.innerHeight - 130,
       height2: window.innerHeight - 110,
       text: "",
-      // messages: [],
+      centerDialogVisible02: false,
+      centerDialogVisible: false,
+      saw_noti: false,
+      bds_id: 13,
     };
   },
   // created() {
@@ -119,7 +231,6 @@ export default {
       this.$nuxt.$loading.start();
       setTimeout(() => this.$nuxt.$loading.finish(), 500);
     });
-
     // use "main" socket defined in nuxt.config.js
     // this.socket = this.$nuxtSocket({
     //   name: "main", // select "main" socket from nuxt.config.js - we could also skip this because "main" is the default socket
@@ -201,6 +312,12 @@ export default {
     //     });
     //   });
     // },
+    handleChangePassword() {
+      this.centerDialogVisible = true;
+      setTimeout(() => {
+        this.centerDialogVisible02 = false;
+      }, 100);
+    },
   },
 };
 </script>
@@ -303,39 +420,37 @@ div::-webkit-scrollbar {
     height: 15px;
   }
 }
-.account {
+.account.el-button {
   position: absolute;
   right: 70px;
-  padding: 0;
-  bottom: 0px;
-  width: 24px !important;
+  bottom: -1px;
+  padding: 4px;
   height: 24px !important;
-  border-radius: 50%;
-  background-color: #fff !important;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
-  &:hover {
-    border: 1px solid blue;
-    transition: 0.5s;
-  }
+
+  // &:hover {
+  //   border: 1px solid blue;
+  //   transition: 0.5s;
+  // }
 }
-.notifiaction {
-  position: absolute;
-  right: 30px;
-  bottom: 0px;
-  border: none;
-  box-shadow: none;
+.btn_notification {
   background-color: #eff5f9 !important;
-  width: 24px !important;
-  height: 24px !important;
+  border: none;
   img {
     width: 18px;
     height: 20.57px;
     border-radius: 50%;
   }
-  &:hover {
-    border: 1px solid blue;
-    transition: 0.5s;
+  img.saw_noti {
+    margin-top: 27px;
+    width: 16px;
+    height: 22px;
+    margin-top: 0px;
   }
+  position: absolute;
+  right: 25px;
+  top: 8px;
+  bottom: -4px;
+  padding: 4px;
 }
 
 @media screen and (max-width: 1263px) {
@@ -343,7 +458,7 @@ div::-webkit-scrollbar {
     height: 260px;
   }
 }
-@media screen and (min-width: 763px) {
+@media screen and (min-width: 600px) {
   .res_homapage {
     display: none;
   }

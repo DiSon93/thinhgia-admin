@@ -1,7 +1,13 @@
 <template>
   <div class="createUser" v-loading="loadingChild">
     <!-- <div class="create_title"></div> -->
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="ruleForm"
+      class="demo-ruleForm"
+      v-if="userId"
+    >
       <v-row>
         <v-col cols="4" class="img_user">
           <el-upload
@@ -273,7 +279,7 @@ export default {
           // {
           //   max: 12,
           //   message: "Indentity Card must be not longer than 12",
-          //   trigger: "blur",
+          //   trigger: "change",
           // },
         ],
         issued_on: [
