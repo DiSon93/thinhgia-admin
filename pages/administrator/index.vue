@@ -202,7 +202,7 @@
             >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
-            <v-btn class="export" fab v-if="isUser" @click="openExportConfirm"
+            <v-btn class="export" fab v-if="isUser" @click="exportUserList"
               ><img src="@image/icons/export.png" alt=""
             /></v-btn>
           </div>
@@ -227,7 +227,7 @@
           v-on:close-add-modals="reloadDic"
         />
       </el-dialog>
-      <v-row class="data_table" v-show="isUser">
+      <v-row class="data_table" v-show="isUser" v-loading="loading">
         <AdminTable
           :key="keyChild"
           @getTotal="getTotalUser"
@@ -278,6 +278,7 @@ import CreateDictionaries from "@component/Form/CreateDictionaries";
 import { mapState, mapActions } from "vuex";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
+import { exportFileList } from "../../utils/exportFile";
 
 export default {
   components: {
@@ -315,6 +316,7 @@ export default {
       totalUser: 0,
       role_id: 0,
       role_user: "",
+      loading: false,
       estate: [
         {
           value: "Cộng Đồng",
@@ -406,15 +408,21 @@ export default {
         this.centerDialogVisible02 = false;
       }, 100);
     },
-    openExportConfirm() {
-      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Thông báo", {
-        confirmButtonText: "OK",
-        callback: (action) => {
-          this.$message({
-            type: "info",
-            message: `Please wait`,
-          });
-        },
+
+    async exportUserList() {
+      this.loading = true;
+      try {
+        await exportFileList("/admin/users/export", "Danh Sách Nhân Viên");
+        this.loading = false;
+      } catch {
+        this.showErrorExportNotification();
+        this.loading = false;
+      }
+    },
+    showErrorExportNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Cannot export Customer List!!!",
       });
     },
     user: function () {

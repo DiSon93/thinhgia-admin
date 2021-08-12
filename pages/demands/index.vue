@@ -52,7 +52,7 @@
               </el-select>
             </div>
             <v-btn class="export" fab
-              ><img src="@image/icons/export.png" alt="" @click="openExportConfirm"
+              ><img src="@image/icons/export.png" alt="" @click="exportDemandList"
             /></v-btn>
           </div>
         </v-col>
@@ -87,6 +87,7 @@ import { mapState } from "vuex";
 import Demand from "@component/Demand";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
+import { exportFileList } from "../../utils/exportFile";
 
 export default {
   components: {
@@ -129,15 +130,17 @@ export default {
         this.centerDialogVisible02 = false;
       }, 100);
     },
-    openExportConfirm() {
-      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Title", {
-        confirmButtonText: "OK",
-        callback: (action) => {
-          this.$message({
-            type: "info",
-            message: `Please wait`,
-          });
-        },
+    async exportDemandList() {
+      try {
+        await exportFileList("/admin/needs/export", "Danh Sách Nhu Cầu Khách Hàng");
+      } catch {
+        this.showErrorNotification();
+      }
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Cannot export Customer List!!!",
       });
     },
   },

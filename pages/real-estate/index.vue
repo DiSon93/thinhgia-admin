@@ -50,7 +50,7 @@
           <v-btn class="account" fab @click="centerDialogVisible02 = true"
             ><v-icon dark small>mdi-account</v-icon></v-btn
           >
-          <v-btn class="export" fab @click="openExportConfirm"
+          <v-btn class="export" fab @click="exportRealEstateList"
             ><img src="@image/icons/export.png" alt=""
           /></v-btn>
 
@@ -101,7 +101,7 @@
         >
       </div>
 
-      <v-row class="data_table">
+      <v-row class="data_table" v-loading="loading">
         <EstateTable
           :is_public="is_public"
           :is_sell="is_sell"
@@ -142,7 +142,7 @@ import EstateTable from "@component/EstateTable.vue";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
 import { mapState, mapActions } from "vuex";
-
+import { exportFileList } from "../../utils/exportFile";
 export default {
   components: {
     RealEstateTable,
@@ -157,6 +157,7 @@ export default {
       drawer: true,
       fixed: false,
       isActive: false,
+      loading: false,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
       value01: "",
@@ -286,15 +287,20 @@ export default {
         this.keyChild += 1;
       }
     },
-    openExportConfirm() {
-      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Thông báo", {
-        confirmButtonText: "OK",
-        callback: (action) => {
-          this.$message({
-            type: "info",
-            message: `Please wait`,
-          });
-        },
+    async exportRealEstateList() {
+      this.loading = true;
+      try {
+        await exportFileList("/admin/real-estates/export", "Danh sách Bất Động Sản");
+        this.loading = false;
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Cannot export Customer List!!!",
       });
     },
   },

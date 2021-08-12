@@ -34,7 +34,7 @@
           <v-btn class="account" fab @click="centerDialogVisible02 = true"
             ><v-icon dark small>mdi-account</v-icon></v-btn
           >
-          <v-btn class="export" fab @click="openExportConfirm"
+          <v-btn class="export" fab @click="exportCustomerList"
             ><img src="@image/icons/export.png" alt=""
           /></v-btn>
         </div>
@@ -70,7 +70,7 @@
       >
         <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
       </el-dialog>
-      <v-row class="data_table">
+      <v-row class="data_table" v-loading="loading">
         <CustomerTable :key="keyChild" :searchKey="input" />
       </v-row>
     </div>
@@ -83,6 +83,7 @@ import CreateCustomer from "@component/Form/CreateCustomer";
 import { mapState } from "vuex";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
+import { exportFileList } from "../../utils/exportFile";
 
 export default {
   components: {
@@ -100,6 +101,7 @@ export default {
       centerDialogVisible03: false,
       textContent: "",
       input: "",
+      loading: false,
       dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
       modal: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "40%",
     };
@@ -110,7 +112,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("customers", ["total"]),
+    ...mapState("customers", ["total", "exportList"]),
   },
   methods: {
     reload() {
@@ -128,15 +130,21 @@ export default {
         this.centerDialogVisible02 = false;
       }, 100);
     },
-    openExportConfirm() {
-      this.$alert("Bộ phận kỹ thuật đang cập nhật", "Thông báo", {
-        confirmButtonText: "OK",
-        callback: (action) => {
-          this.$message({
-            type: "info",
-            message: `Please wait`,
-          });
-        },
+
+    async exportCustomerList() {
+      this.loading = true;
+      try {
+        await exportFileList("/admin/customers/export", "Danh Sách Khách Hàng");
+        this.loading = false;
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Cannot export Customer List!!!",
       });
     },
   },

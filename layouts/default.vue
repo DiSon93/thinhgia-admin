@@ -134,7 +134,7 @@
 
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+            <NuxtLink :to="`/detail/house/${bds_id}`" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -146,7 +146,7 @@
             </NuxtLink>
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+            <NuxtLink :to="`/detail/house/${bds_id}`" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -158,7 +158,7 @@
             </NuxtLink>
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+            <NuxtLink :to="`/detail/house/${bds_id}`" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -284,7 +284,7 @@ export default {
       centerDialogVisible02: false,
       centerDialogVisible: false,
       saw_noti: false,
-      bds_id: 13,
+      bds_id: 25,
       items: [
         {
           icon: "mdi-home-edit",

@@ -424,7 +424,7 @@
             <i>Kéo và thả nhiều tệp để tải lên</i>
             <el-upload
               v-if="headers"
-              action="https://thinhgiacore.demo.fit/api/admin/projects/image"
+              action="https://thinhgiacore.demo.fit/api/admin/real-estates/image"
               list-type="picture-card"
               drag
               multiple
@@ -451,7 +451,7 @@
             <i>Kéo và thả nhiều tệp để tải lên</i>
             <el-upload
               v-if="headers"
-              action="https://thinhgiacore.demo.fit/api/admin/projects/image"
+              action="https://thinhgiacore.demo.fit/api/admin/real-estates/image"
               list-type="picture-card"
               drag
               multiple

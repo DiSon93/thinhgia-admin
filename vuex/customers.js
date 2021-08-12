@@ -9,6 +9,7 @@ export default {
         updateCustomer: null,
         total: null,
         errorMessage: null,
+        exportList: [],
     },
     mutations: {
         getCustomerList(state, data) {
@@ -31,6 +32,10 @@ export default {
         showError(state, data) {
             state.errorMessage = data;
         },
+        exportCustomerList(state, data){
+            state.exportList = data;
+            state.errorMessage = null
+        }
     },
     actions: {
         getCustomerList: ({ commit }) => {
@@ -77,5 +82,28 @@ export default {
                 })
             })
         }, 
+        exportCustomerList:  () => {
+            // return new Promise((resolve, reject) => {
+                axiosClient.get( '/admin/customers/export', {
+                    responseType: 'blob'
+                }).then(response => {
+                    commit('exportCustomerList', response.data);
+                    console.log(response.data);
+
+                    const url = URL.createObjectURL(new Blob([response.data], {
+                        type: 'application/vnd.ms-excel'
+                      }));
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.setAttribute('download', "customerList");
+                      document.body.appendChild(link);
+                      link.click();
+        
+                }).catch(e => {
+                    // commit('showError', e.response.data);
+                    // reject(e);
+                })
+            // })
+        },
     }
 }

@@ -191,7 +191,6 @@ export default {
       beforeSelectArr: [],
       sort_price: "",
       drawer_size: window.innerWidth < 600 ? "318px" : "418px",
-      
     };
   },
   created() {
@@ -223,10 +222,13 @@ export default {
     },
     sortChangePrice(val) {
       console.log("price", val);
-      this.sort_price =
-        val.order == "descending" ? "desc" : val.order == "ascending" ? "asc" : "";
-      this.getRealEstateListPerPage();
+      if (val.column.label == "Giá") {
+        this.sort_price =
+          val.order == "descending" ? "desc" : val.order == "ascending" ? "asc" : "";
+        this.getRealEstateListPerPage();
+      }
     },
+
     handdle(row, event, column) {
       this.drawer = true;
       this.selected_id = row.id;

@@ -117,7 +117,9 @@
     </div>
     <div class="img_title">
       <div>{{ estateItem.image_private.length }} ảnh</div>
-      <v-btn> <img src="@image/icons/taixuong.svg" alt="" /> Tải xuống</v-btn>
+      <v-btn @click="downLoadPhotoList">
+        <img src="@image/icons/taixuong.svg" alt="" /> Tải xuống</v-btn
+      >
     </div>
     <div class="img_main">
       <img
@@ -214,6 +216,8 @@
 </template>
 
 <script>
+import axiosClient from "~/utils/axiosClient";
+
 export default {
   props: ["estateId", "estateItem"],
   data() {
@@ -446,6 +450,31 @@ export default {
         type: "success",
       });
     },
+    downLoadPhotoList() {
+      this.loading = true;
+      let image_ids = this.estateItem.image_private.map((u) => u.id).join(",");
+      console.log("image_ids", image_ids);
+      axiosClient
+        .get(`/admin/real-estates/download-zip?image_ids=${image_ids}`, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: "application/zip",
+            })
+          );
+          this.loading = false;
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "photoList");
+          document.body.appendChild(link);
+          link.click();
+        })
+        .catch((e) => {
+          this.showErrorNotification();
+        });
+    },
   },
 };
 </script>
@@ -609,9 +638,9 @@ export default {
     border-radius: 50%;
   }
 }
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
   .detail {
-  width: 300px;
+    width: 300px;
   }
 }
 </style>

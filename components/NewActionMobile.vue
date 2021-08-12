@@ -1,208 +1,206 @@
 <template>
   <div v-loading="loading">
-    <div class="newAction" >
-        <div class="action" v-for="item in actionList" :key="item.id">
-          <div class="d-flex username">
-            <div class="name_info d-flex">
-              <img
-                v-if="item.staff.image[0]"
-                :src="item.staff.image[0].thumbnail"
-                alt=""
-              />
-              <img v-else src="@image/icons/username.png" alt="" />
-              <div class="name">
-                {{ item.staff.name }}
-                <div class="seconds">
-                  {{ item.fromNow }}
-                </div>
+    <div class="newAction">
+      <div class="action" v-for="item in actionList" :key="item.id">
+        <div class="d-flex username">
+          <div class="name_info d-flex">
+            <img v-if="item.staff.image[0]" :src="item.staff.image[0].thumbnail" alt="" />
+            <img v-else src="@image/icons/username.png" alt="" />
+            <div class="name">
+              {{ item.staff.name }}
+              <div class="seconds">
+                {{ item.fromNow }}
               </div>
             </div>
-            <!-- <div>
+          </div>
+          <!-- <div>
               <img src="@image/icons/i.png" alt="" @click=""/>
             </div> -->
-            <el-popover placement="bottom" title="Chi tiết" width="280" trigger="click">
-              <el-divider></el-divider>
-              <div class="dimention">
-                <div class="detail_small">
-                  <div>Loại BĐS</div>
-                  <div class="hightlight">{{ item.real_estate_type_dict.name }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Pháp Lý</div>
-                  <div class="hightlight">{{ item.ownership_dict.name }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Loại Nhà</div>
-                  <div class="hightlight">{{ item.house_type_dict.name }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Ngang</div>
-                  <div class="hightlight">{{ item.width }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Dài</div>
-                  <div class="hightlight">{{ item.length }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Nở hậu</div>
-                  <div class="hightlight">{{ item.end_open == 0 ? "Không" : "Có" }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Hướng</div>
-                  <div class="hightlight">{{ item.house_orientation_dict.name }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Hướng ban công</div>
-                  <div class="hightlight">{{ item.directions_dict.name }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Mục đích</div>
-                  <div class="hightlight">{{ item.purpose == 1 ? "Thuê" : "Bán" }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>SĐT</div>
-                  <div class="hightlight">{{ item.customer.phone }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Dự án</div>
-                  <div class="hightlight">{{ item.project.name }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Phí môi giới</div>
-                  <div class="hightlight">{{ item.brokerage_amount }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Tỷ lệ môi giới</div>
-                  <div class="hightlight">{{ item.brokerage_rate }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Loại đường</div>
-                  <div class="hightlight">{{ item.street_type_dict.name }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>Diện tích sàn</div>
-                  <div class="hightlight">{{ item.land_area }}m2</div>
-                </div>
-                <div class="detail_small">
-                  <div>Đăng ký ngày</div>
-                  <div class="hightlight">{{ item.created_at.slice(0, 10) }}</div>
-                </div>
-                <div class="detail_small">
-                  <div>NGÀY CẬP NHẬT</div>
-                  <div class="hightlight">{{ item.updated_at.slice(0, 10) }}</div>
-                </div>
+          <el-popover placement="bottom" title="Chi tiết" width="280" trigger="click">
+            <el-divider></el-divider>
+            <div class="dimention">
+              <div class="detail_small">
+                <div>Loại BĐS</div>
+                <div class="hightlight">{{ item.real_estate_type_dict.name }}</div>
               </div>
-              <el-button slot="reference"
-                ><img src="@image/icons/i.png" alt=""
-              /></el-button>
-            </el-popover>
-          </div>
-          <div class="sell-department">
-            {{ item.title ? item.title.toUpperCase() : null }}
-          </div>
-          <div class="d-flex address">
-            <img src="@image/icons/nam.png" alt="" />
-            <span>{{ item.house_orientation_dict.name }}</span>
-            <img src="@image/icons/address.png" alt="" />
-            <span
-              >{{ item.street_name }}, {{ item.ward.name }}, {{ item.district.name }},
-              {{ item.province.name }}</span
+              <div class="detail_small">
+                <div>Pháp Lý</div>
+                <div class="hightlight">{{ item.ownership_dict.name }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Loại Nhà</div>
+                <div class="hightlight">{{ item.house_type_dict.name }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Ngang</div>
+                <div class="hightlight">{{ item.width }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Dài</div>
+                <div class="hightlight">{{ item.length }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Nở hậu</div>
+                <div class="hightlight">{{ item.end_open == 0 ? "Không" : "Có" }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Hướng</div>
+                <div class="hightlight">{{ item.house_orientation_dict.name }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Hướng ban công</div>
+                <div class="hightlight">{{ item.directions_dict.name }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Mục đích</div>
+                <div class="hightlight">{{ item.purpose == 1 ? "Thuê" : "Bán" }}</div>
+              </div>
+              <div class="detail_small">
+                <div>SĐT</div>
+                <div class="hightlight">{{ item.customer.phone }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Dự án</div>
+                <div class="hightlight">{{ item.project.name }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Phí môi giới</div>
+                <div class="hightlight">{{ item.brokerage_amount }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Tỷ lệ môi giới</div>
+                <div class="hightlight">{{ item.brokerage_rate }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Loại đường</div>
+                <div class="hightlight">{{ item.street_type_dict.name }}</div>
+              </div>
+              <div class="detail_small">
+                <div>Diện tích sàn</div>
+                <div class="hightlight">{{ item.land_area }}m2</div>
+              </div>
+              <div class="detail_small">
+                <div>Đăng ký ngày</div>
+                <div class="hightlight">{{ item.created_at.slice(0, 10) }}</div>
+              </div>
+              <div class="detail_small">
+                <div>NGÀY CẬP NHẬT</div>
+                <div class="hightlight">{{ item.updated_at.slice(0, 10) }}</div>
+              </div>
+            </div>
+            <el-button slot="reference"
+              ><img src="@image/icons/i.png" alt=""
+            /></el-button>
+          </el-popover>
+        </div>
+        <div class="sell-department">
+          {{ item.title ? item.title.toUpperCase() : null }}
+        </div>
+        <div class="d-flex address">
+          <img src="@image/icons/nam.png" alt="" />
+          <span>{{ item.house_orientation_dict.name }}</span>
+          <img src="@image/icons/address.png" alt="" />
+          <span
+            >{{ item.street_name }}, {{ item.ward.name }}, {{ item.district.name }},
+            {{ item.province.name }}</span
+          >
+        </div>
+        <div class="adjust" v-bind:class="{ estate_content: item.read }">
+          <div v-html="item.descriptions"></div>
+          <br />
+        </div>
+        <button class="more-info" @click="item.read = !item.read">
+          {{ item.read ? "Xem thêm" : "Rút gọn" }}
+        </button>
+        <CoolLightBoxImage :items="item ? item.image_private : []" />
+        <v-row no-gutters class="comment_like">
+          <v-col cols="4" align="center">
+            <button
+              @click="updateLikeStatus(item.id, item.user_like_status.status)"
+              v-bind:class="{ highlight: item.user_like_status.status == 1 }"
             >
-          </div>
-          <div class="adjust" v-bind:class="{ estate_content: item.read }">
-            <div v-html="item.descriptions"></div>
-            <br />
-          </div>
-          <button class="more-info" @click="item.read = !item.read">
-            {{ item.read ? "Xem thêm" : "Rút gọn" }}
-          </button>
-          <CoolLightBoxImage :items="item ? item.image_private : []" />
-          <v-row no-gutters class="comment_like">
-            <v-col cols="4" align="center">
-              <button
-                @click="updateLikeStatus(item.id, item.user_like_status.status)"
-                v-bind:class="{ highlight: item.user_like_status.status == 1 }"
-              >
-                <img src="@image/icons/heart.png" alt="" />
-                <span class="touch">Thích</span>
-                <span>{{ item.likes.length }}</span>
-              </button>
-            </v-col>
-            <v-col cols="4" align="center">
-              <button @click="item.isComment = !item.isComment">
-                <img src="@image/icons/comment.png" alt="" />
-                <span class="touch">Bình luận</span>
-                <span>{{ item.comments.length }}</span>
-              </button>
-            </v-col>
-            <v-col cols="4" align="center">
-              <ShareSocialNetwork />
-            </v-col>
-          </v-row>
-          <el-collapse-transition>
-            <div v-if="item.isComment" class="connect" v-loading="loadingComment">
-              <div
-                class="d-flex comment_status"
-                v-for="slot in item.comments"
-                :key="slot.id"
-              >
-                <div class="d-flex">
-                  <div class="avatar_user" v-if="slot.user_avatar">
-                    <img :src="slot.user_avatar" alt="" />
-                  </div>
-                  <div class="avatar_user" v-else>
-                    <img src="@image/icons/username.png" alt="" />
-                  </div>
-                  <div class="users">
-                    <div class="name">
-                      {{ slot.user_name }}
-                      <span class="time_comment">{{ slot.fromNowComment }}</span>
-                    </div>
-                    <div class="comment">{{ slot.content }}</div>
-                  </div>
+              <img src="@image/icons/heart.png" alt="" />
+              <span class="touch">Thích</span>
+              <span>{{ item.likes.length }}</span>
+            </button>
+          </v-col>
+          <v-col cols="4" align="center">
+            <button @click="item.isComment = !item.isComment">
+              <img src="@image/icons/comment.png" alt="" />
+              <span class="touch">Bình luận</span>
+              <span>{{ item.comments.length }}</span>
+            </button>
+          </v-col>
+          <v-col cols="4" align="center">
+            <ShareSocialNetwork />
+          </v-col>
+        </v-row>
+        <el-collapse-transition>
+          <div v-if="item.isComment" class="connect" v-loading="loadingComment">
+            <div
+              class="d-flex comment_status"
+              v-for="slot in item.comments"
+              :key="slot.id"
+            >
+              <div class="d-flex">
+                <div class="avatar_user" v-if="slot.user_avatar">
+                  <img :src="slot.user_avatar" alt="" />
                 </div>
-
-                <div class="d-flex">
-                  <el-tag type="info" v-if="slot.is_display == 0">Đã ẩn</el-tag>
-                  <el-dropdown trigger="click" @command="handleCommand">
-                    <el-button
-                      class="btn_hide"
-                      icon="el-icon-more"
-                      circle
-                      @click="selectCommen(slot.id, slot.is_display, item.id)"
-                    ></el-button>
-                    <el-dropdown-menu slot="dropdown" placement="left">
-                      <el-dropdown-item icon="el-icon-circle-plus" command="hide">
-                        {{ slot.is_display == 0 ? "Bỏ Ẩn" : "Ẩn" }}</el-dropdown-item
-                      >
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                <div class="avatar_user" v-else>
+                  <img src="@image/icons/username.png" alt="" />
+                </div>
+                <div class="users">
+                  <div class="name">
+                    {{ slot.user_name }}
+                    <span class="time_comment">{{ slot.fromNowComment }}</span>
+                  </div>
+                  <div class="comment">{{ slot.content }}</div>
                 </div>
               </div>
 
               <div class="d-flex">
-                <el-input
-                  v-model="comment"
-                  @keyup.enter.native="createNewComment(item.id)"
-                  id="myInput"
-                >
-                  <i
-                    slot="suffix"
-                    class="el-input__icon el-icon-date"
-                    @click="uploadPhoto"
-                  ></i>
-                </el-input>
-                <el-button
-                  class="btn_send"
-                  type="primary"
-                  @click="createNewComment(item.id)"
-                  >Gửi</el-button
-                >
+                <el-tag type="info" v-if="slot.is_display == 0">Đã ẩn</el-tag>
+                <el-dropdown trigger="click" @command="handleCommand">
+                  <el-button
+                    class="btn_hide"
+                    icon="el-icon-more"
+                    circle
+                    @click="selectCommen(slot.id, slot.is_display, item.id)"
+                  ></el-button>
+                  <el-dropdown-menu slot="dropdown" placement="left">
+                    <el-dropdown-item icon="el-icon-circle-plus" command="hide">
+                      {{ slot.is_display == 0 ? "Bỏ Ẩn" : "Ẩn" }}</el-dropdown-item
+                    >
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
             </div>
-          </el-collapse-transition>
-        </div>
-        <el-button type="warning" round @click="readMoreActions" v-if="readMore">Xem thêm</el-button>
+
+            <div class="d-flex">
+              <el-input
+                v-model="comment"
+                @keyup.enter.native="createNewComment(item.id)"
+                id="myInput"
+              >
+                <i
+                  slot="suffix"
+                  class="el-input__icon el-icon-date"
+                  @click="uploadPhoto"
+                ></i>
+              </el-input>
+              <el-button
+                class="btn_send"
+                type="primary"
+                @click="createNewComment(item.id)"
+                >Gửi</el-button
+              >
+            </div>
+          </div>
+        </el-collapse-transition>
+      </div>
+      <el-button type="warning" round @click="readMoreActions" v-if="readMore"
+        >Xem thêm</el-button
+      >
       <script src="https://sp.zalo.me/plugins/sdk.js"></script>
       <p v-if="loadingMore">Loading...</p>
       <p v-if="noMore">No more</p>
@@ -300,16 +298,14 @@ export default {
         this.loadingMore = false;
       }
     },
-  async  readMoreActions(){
- this.page += 1;
+    async readMoreActions() {
+      this.page += 1;
       if (this.page == this.lastPage) {
         this.readMore = false;
       }
-      try{
- this.getNewActionList();
-      }catch{
-
-      }
+      try {
+        this.getNewActionList();
+      } catch {}
     },
     selectCommen(_id, is_display, realID) {
       this.select_commentID = _id;
@@ -331,6 +327,7 @@ export default {
           sort_price: "",
           min_price: "",
           max_price: "",
+          approve_public: 2,
         });
         // await this.renderAcitonList();
         console.log("realEstate", this.realEstateList);

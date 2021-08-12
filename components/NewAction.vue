@@ -329,6 +329,7 @@ export default {
           sort_price: "",
           min_price: "",
           max_price: "",
+          approve_public: 2,
         });
         // await this.renderAcitonList();
         console.log("realEstate", this.realEstateList);
