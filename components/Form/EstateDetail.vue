@@ -472,6 +472,7 @@ export default {
           link.click();
         })
         .catch((e) => {
+          this.loading = false;
           this.showErrorNotification();
         });
     },
