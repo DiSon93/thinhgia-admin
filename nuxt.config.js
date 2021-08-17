@@ -128,7 +128,8 @@ export default {
     '@lang': resolve(__dirname, './lang'),
     '@scss': resolve(__dirname, './assets/scss'),
     '@asset': resolve(__dirname, './assets'),
-    '@lib': resolve(__dirname, './library')
+    '@lib': resolve(__dirname, './library'),
+    '@utils': resolve(__dirname, './utils')
   },
 
   extensions: ['*', '.js', '.vue', '.json']

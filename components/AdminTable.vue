@@ -205,7 +205,7 @@ export default {
         return {
           index: index + 1,
           id: item.id,
-          name: item.name,
+          name: item?.name,
           sdt: item.phone,
           email: item.email,
           birthday: item.birth_day,
@@ -222,7 +222,7 @@ export default {
       });
     },
     async handleCommand(command) {
-      if (this.role_user == 4) {
+      if (this.role_user == 4 || this.role_user == 3) {
         this.forbidden();
         return;
       }
@@ -365,9 +365,10 @@ export default {
       });
     },
     showErrorNotification() {
+      let message = this.errorMessage;
       this.$notify.error({
         title: "Error",
-        message: "Unsuccess require!!!",
+        message,
       });
     },
 

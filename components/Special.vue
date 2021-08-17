@@ -2,7 +2,7 @@
   <div>
     <div class="special_title">Bất động sản nổi bật</div>
     <div class="data_table">
-      <v-simple-table fixed-header height="620px" id="table_special">
+      <v-simple-table fixed-header id="table_special">
         <template v-slot:default>
           <thead>
             <tr>
@@ -11,24 +11,30 @@
               <th class="text-left">Lượt xem</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="item in desserts" :key="item.id">
+          <tbody v-if="specialList.length != 0">
+            <tr
+              v-for="item in specialList"
+              :key="item.id"
+              @click="$router.push(`/detail/house/${item.id}`)"
+            >
               <td>{{ item.id }}</td>
               <td>
-                {{ item.name }}
+                {{ item.updated_at.slice(0, 10) }} {{ item.updated_at.slice(11, 19) }}
                 <div d-flex>
-                  <v-btn depressed color="primary" id="social_network"> Cộng đồng </v-btn>
                   <v-btn
-                    v-if="item.web ? true : false"
                     depressed
-                    color="success"
-                    id="web"
+                    color="primary"
+                    id="social_network"
+                    v-if="item.share_public"
                   >
+                    Cộng đồng
+                  </v-btn>
+                  <v-btn v-if="item.share_web" depressed color="success" id="web">
                     Web
                   </v-btn>
                 </div>
               </td>
-              <td>{{ item.calories }}</td>
+              <td>{{ item.viewed }}</td>
             </tr>
           </tbody>
         </template>
@@ -38,64 +44,28 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
-    return {
-      desserts: [
-        {
-          id: 2971,
-          name: "18-04 30 tháng 04",
-          calories: 159,
-          web: true,
-        },
-        {
-          id: 2972,
-          name: "18-04 30 tháng 04",
-          calories: 237,
-        },
-        {
-          id: 2973,
-          name: "18-04 30 tháng 04",
-          calories: 262,
-          web: true,
-        },
-        {
-          id: 2974,
-          name: "18-04 30 tháng 04",
-          calories: 305,
-        },
-        {
-          id: 2975,
-          name: "18-04 30 tháng 04",
-          calories: 356,
-        },
-        {
-          id: 2976,
-          name: "18-04 30 tháng 04",
-          calories: 375,
-        },
-        {
-          id: 2977,
-          name: "18-04 30 tháng 04",
-          calories: 392,
-        },
-        {
-          id: 2978,
-          name: "18-04 30 tháng 04",
-          calories: 408,
-        },
-        {
-          id: 2979,
-          name: "18-04 30 tháng 04",
-          calories: 452,
-        },
-        {
-          id: 2980,
-          name: "18-04 30 tháng 04",
-          calories: 518,
-        },
-      ],
-    };
+    return {};
+  },
+  mounted() {
+    this.getSpecialList();
+  },
+  computed: {
+    ...mapState("realEstate", ["specialList"]),
+  },
+  methods: {
+    async getSpecialList() {
+      try {
+        await this.$store.dispatch("realEstate/getRealEstateSpecialList", {
+          sort_view: 1,
+          limit: 10,
+          page: 1,
+        });
+        console.log("realEstateListSpecail", this.specialList);
+      } catch {}
+    },
   },
 };
 </script>
@@ -110,10 +80,10 @@ export default {
   margin-top: 30px;
 }
 .data_table {
-  height: 620px;
+  // height: 620px;
   background: #ffffff;
   border-radius: 15px;
-  overflow: hidden;
+  // overflow: hidden;
   #table_special {
     border-radius: 15px !important;
     td {
@@ -143,6 +113,7 @@ export default {
     }
     .v-data-table__wrapper {
       border-radius: 15px !important;
+      height: auto !important;
     }
   }
 }
@@ -166,8 +137,8 @@ export default {
       font-size: 12px !important;
     }
   }
-  .data_table{
-    margin-bottom: 60px
+  .data_table {
+    margin-bottom: 60px;
   }
 }
 </style>

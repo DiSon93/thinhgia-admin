@@ -10,11 +10,12 @@ export default {
         loading: false,
         blockUser: "",
         addUser: "",
-        userDetail: null,
+        userDetail: {},
         delete: "",
         avatar: null,
         resetPass: null,
         updateUser: null,
+        updateAvatar: null,
     },
     mutations: {
         getStaffList(state, data) {
@@ -61,6 +62,10 @@ export default {
             state.updateUser = data;
             state.errorMessage = null
         },
+        updatePhotoUser(state, data){
+            state.updateAvatar = data;
+            state.errorMessage = null
+        }
     },
     actions: {
         getStaffList: ({ commit }) => {
@@ -94,7 +99,7 @@ export default {
                     commit('blockUser', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
-                    commit('showError', e.response.data);
+                    commit('showError', e.response.data.message);
                     reject(e);
                 })
             })
@@ -129,7 +134,7 @@ export default {
                     commit('deleteUser', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
-                    commit('showError', e.response.data);
+                    commit('showError', e.response.data.message);
                     reject(e);
                 })
             })
@@ -157,7 +162,7 @@ export default {
                     commit('resetPassword', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
-                    commit('showError', e.response.data);
+                    commit('showError', e.response.data.message);
                     reject(e);
                 })
             })
@@ -168,6 +173,19 @@ export default {
                     url: `/admin/users/${data.id}?_method=PATCH`, method: "POST", data: data
                 }).then(response => {
                     commit('updateUser', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        updateAvatarUser: ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({
+                    url: `/admin/users/update-avatar`, method: "POST", data: data
+                }).then(response => {
+                    commit('updatePhotoUser', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showError', e.response.data);

@@ -1,26 +1,31 @@
 <template>
-  <div class="user_detail">
+  <div class="user_detail" v-if="userDetail">
     <div class="avatar">
-      <img
-        v-if="currentUser.results.user.avatar_image"
-        :src="currentUser.results.user.avatar_image.thumbnail"
-        alt=""
-      />
-      <img v-else src="@image/icons/user.svg" alt="" />
+      <el-upload
+        v-if="headers"
+        class="avatar-uploader"
+        action="https://thinhgiacore.demo.fit/api/admin/users/upload-avatar"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :headers="headers"
+      >
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <img v-else src="@image/icons/user.svg" alt="" />
+      </el-upload>
       <div>Chọn ảnh</div>
     </div>
-    <div class="name">{{ currentUser.results.user.name.toUpperCase() }}</div>
+    <div class="name">{{ userDetail.name ? userDetail.name.toUpperCase() : null }}</div>
     <div class="sdt d-flex">
       <div>SĐT</div>
-      <div>{{ currentUser.results.user.phone }}</div>
+      <div>{{ userDetail.phone }}</div>
     </div>
     <div class="sdt d-flex">
       <div>Quyền</div>
-      <div>{{ role }}</div>
+      <div>{{ userDetail.role ? userDetail.role.name : null }}</div>
     </div>
     <div class="sdt d-flex">
       <div>Ngày sinh</div>
-      <div>{{ currentUser.results.user.birth_day }}</div>
+      <div>{{ userDetail.birth_day }}</div>
     </div>
     <div class="d-flex changePass">
       <el-button id="changePass" @click="handleChangePassword">Đổi mật khẩu</el-button>
@@ -37,22 +42,34 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      role: "",
+      headers: null,
+      token: "",
+      imageUrl: "",
     };
   },
   computed: {
     ...mapState("auth", ["currentUser"]),
     ...mapState("role", ["roleList"]),
+    ...mapState("staffs", ["userDetail"]),
+  },
+  created() {
+    this.getUserDetail();
   },
   mounted() {
-    this.getRole();
+    this.token = `bearer ${this.currentUser.results.access_token}`;
+    this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
   },
   methods: {
-    getRole() {
-      let rollFilled = this.roleList.find(
-        (u) => u.id == this.currentUser.results.user.role_id
-      );
-      this.role = rollFilled.name;
+    async getUserDetail() {
+      try {
+        await this.$store.dispatch(
+          "staffs/showUserDetail",
+          this.currentUser.results.user.id
+        );
+        this.imageUrl = this.userDetail.avatar_image.thumbnail;
+      } catch {
+        console.log("Error");
+      }
     },
     openLogout() {
       this.$confirm("Are you sure to logout. Continue?", "Warning", {
@@ -84,6 +101,15 @@ export default {
     },
     handleChangePassword() {
       this.$emit("close-modals");
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      console.log("res", res);
+      this.$store.dispatch("staffs/updateAvatarUser", {
+        avatar: res.results.id,
+      });
+      // this.avatar_id = res.results.id;
+      // console.log(this.avatar_id);
     },
   },
 };

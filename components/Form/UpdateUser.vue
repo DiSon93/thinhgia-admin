@@ -282,11 +282,11 @@ export default {
             message: "Please select at least one activity type",
             trigger: "change",
           },
-          // { validator: checkNumber02, trigger: "blur" },
+          // { validator: checkNumber, trigger: "blur" },
           // {
           //   max: 12,
           //   message: "Indentity Card must be not longer than 12",
-          //   trigger: "change",
+          //   trigger: "blur",
           // },
         ],
         issued_on: [

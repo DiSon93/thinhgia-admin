@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-dropdown class="account" @command="handleCommand" trigger="click">
+    <el-dropdown
+      class="account"
+      @command="handleCommand"
+      trigger="click"
+      placement="bottom"
+    >
       <button class="share">
         <img src="@image/icons/share.png" alt="" />
         <span>Chia sẻ</span>
@@ -74,5 +79,6 @@ export default {
 }
 .zalo-share-button {
   margin-bottom: -10px;
+  margin-top: 5px;
 }
 </style>

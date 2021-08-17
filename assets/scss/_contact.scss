@@ -1,0 +1,28 @@
+.contact{
+
+    #contact {
+      
+          .v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
+          .v-data-table > .v-data-table__wrapper > table > thead > tr > td,
+          .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
+              font-size: 14px !important;
+              text-align: center;
+          }
+          tr th {
+              color: teal !important;
+              text-align: center;
+              font-size: 14px !important;
+
+          }
+          tr td:nth-child(4) .v-icon.mdi-pencil{
+              color: red;
+          }
+      }
+}
+@media screen and (max-width: 600px) {
+    .contact{
+    overflow-x: auto;
+
+    }
+}
+

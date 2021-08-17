@@ -37,7 +37,12 @@
         <v-icon>mdi-account</v-icon>
         <div>{{ estateItem.customer }}</div>
       </div>
-      <el-dropdown class="account" @command="handleCommand" trigger="click">
+      <el-dropdown
+        class="account"
+        @command="handleCommand"
+        trigger="click"
+        placement="bottom"
+      >
         <v-btn class="chiase"> <v-icon>mdi-share</v-icon> Chia sẻ</v-btn>
         <el-dropdown-menu slot="dropdown" id="dropdown_social">
           <el-dropdown-item>
@@ -94,7 +99,7 @@
           <el-dropdown-item command="public">
             {{ estateItem.share_public == 1 ? "Thu hồi cộng đồng" : "Upload cộng đồng" }}
           </el-dropdown-item>
-          <el-dropdown-item divided command="web">
+          <el-dropdown-item divided command="web" id="uploadWeb">
             {{
               estateItem.share_web == 1 ? "Thu hồi web" : "Upload web"
             }}</el-dropdown-item
@@ -216,7 +221,7 @@
 </template>
 
 <script>
-import axiosClient from "~/utils/axiosClient";
+import { downLoadPhoto } from "@utils/exportFile";
 
 export default {
   props: ["estateId", "estateItem"],
@@ -450,31 +455,16 @@ export default {
         type: "success",
       });
     },
-    downLoadPhotoList() {
+    async downLoadPhotoList() {
       this.loading = true;
       let image_ids = this.estateItem.image_private.map((u) => u.id).join(",");
-      console.log("image_ids", image_ids);
-      axiosClient
-        .get(`/admin/real-estates/download-zip?image_ids=${image_ids}`, {
-          responseType: "blob",
-        })
-        .then((response) => {
-          const url = URL.createObjectURL(
-            new Blob([response.data], {
-              type: "application/zip",
-            })
-          );
-          this.loading = false;
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", "photoList");
-          document.body.appendChild(link);
-          link.click();
-        })
-        .catch((e) => {
-          this.loading = false;
-          this.showErrorNotification();
-        });
+      try {
+        await downLoadPhoto(image_ids);
+        this.loading = false;
+      } catch {
+        this.loading = false;
+        this.showErrorNotification();
+      }
     },
   },
 };
@@ -638,6 +628,10 @@ export default {
     width: 20px;
     border-radius: 50%;
   }
+}
+.zalo-share-button {
+  margin-bottom: -10px;
+  margin-top: 5px;
 }
 @media screen and (max-width: 600px) {
   .detail {

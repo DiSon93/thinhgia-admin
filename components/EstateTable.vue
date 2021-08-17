@@ -294,7 +294,7 @@ export default {
           direction: item.house_orientation_dict?.name,
           loby: item.directions_dict?.name,
           iron: item.end_open == 0 ? "Không có" : "Có",
-          viewer: 12,
+          viewer: item.viewed,
           staff: item.staff?.name,
           avatar: item.staff?.image[0]?.main,
           customer: item.customer?.name,

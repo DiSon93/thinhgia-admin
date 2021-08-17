@@ -8,7 +8,7 @@
     }
     .el-dropdown-menu__item {
         font-size: 13px !important;
-        height: 36px;
+        height: 36px !important;
         overflow-y: hidden;
         &:hover {
             color: teal;
@@ -19,7 +19,11 @@
             }
         }
     }
+    #uploadWeb {
+        height: 42px !important;
+    }
 }
+
 .el-popover {
     min-width: 20px !important;
 }
@@ -189,7 +193,7 @@ body .el-table th.gutter {
     }
 }
 @media screen and (max-width: 600px) {
-     .el-message-box {
+    .el-message-box {
         width: 300px !important;
     }
 }

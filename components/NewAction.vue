@@ -210,6 +210,7 @@
         </li>
       </ul>
       <ZaloPlugin :key="keyChild" />
+
       <p v-if="loadingMore">Loading...</p>
       <p v-if="noMore">No more</p>
     </div>
@@ -278,10 +279,14 @@ export default {
   created() {
     this.getNewActionList();
   },
+  mounted() {
+    this.getUserDetail();
+  },
   computed: {
     ...mapState("realEstate", ["realEstateList", "lastPage"]),
     ...mapState("homepage", ["updateLike", "newComment"]),
     ...mapState("auth", ["currentUser"]),
+    ...mapState("staffs", ["userDetail"]),
 
     noMore() {
       return this.page >= this.lastPage;
@@ -317,6 +322,16 @@ export default {
     uploadPhoto() {
       console.log("TEXT");
     },
+    async getUserDetail() {
+      try {
+        await this.$store.dispatch(
+          "staffs/showUserDetail",
+          this.currentUser.results.user.id
+        );
+      } catch {
+        console.log("Error");
+      }
+    },
     async getNewActionList() {
       if (this.page == 1) {
         this.loading = true;
@@ -332,7 +347,7 @@ export default {
           approve_public: 2,
         });
         // await this.renderAcitonList();
-        console.log("realEstate", this.realEstateList);
+        // console.log("realEstate", this.realEstateList);
         let actionListSroll = this.realEstateList.map((item, index) => {
           // console.log("update_at", moment(item.updated_at).startOf("day").fromNow());
           return {
@@ -404,8 +419,8 @@ export default {
         });
         let newCommentAdded = {
           ...this.newComment,
-          user_name: this.currentUser.results.user.name,
-          user_avatar: this.currentUser.results.user.avatar_image?.thumbnail,
+          user_name: this.userDetail.name,
+          user_avatar: this.userDetail.avatar_image?.thumbnail,
           fromNowComment: moment(this.newComment.updated_at).startOf("minute").fromNow(),
         };
         this.loadingComment = false;

@@ -10,6 +10,8 @@ export default {
         updateLike: null,
         newComment: "",
         hide: null,
+        comments: [],
+        totalComemt: '',
     },
     mutations: {
         getCountLikeEstate(state, data){
@@ -25,13 +27,18 @@ export default {
         createNewComment(state, data){
             state.newComment = data;
             state.errorMessage = null;
-            console.log(data);
         },
         showError(state, data){
             state.errorMessage = data;
         },
         hideComment(state, data){
             state.hide = data;
+            state.errorMessage = null;
+        },
+        getCommentItem(state, data){
+            state.comments = data.data;
+            state.totalComemt = data.total;
+            state.lastPage  = data.last_page;
             state.errorMessage = null;
         }
     },
@@ -73,6 +80,17 @@ export default {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/real-estates/comments/${data.id}`, method: "PATCH", data: data}).then(response => {
                     commit('hideComment', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        getCommentItem:  ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/comments?real_estate_id=${data.id}&limit=${data.limit}&page=${data.page}`, method: "GET"}).then(response => {
+                    commit('getCommentItem', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showError', e.response.data);

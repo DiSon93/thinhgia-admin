@@ -222,4 +222,35 @@ export default {
 .message {
   display: none;
 }
+@media screen and (max-width: 600px) {
+  .login {
+    .login_form {
+      margin-top: 30px;
+      width: 90%;
+      .logo {
+        margin-top: -60px;
+        display: block;
+        text-align: center;
+        .login_title {
+          font-size: 16px;
+        }
+        .note {
+          font-size: 14px;
+        }
+      }
+      .el-input {
+        font-size: 12px !important;
+      }
+      .remember {
+        a {
+          font-size: 14px;
+          margin-top: 5px;
+        }
+      }
+      .el-button {
+        font-size: 16px;
+      }
+    }
+  }
+}
 </style>

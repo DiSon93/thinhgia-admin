@@ -8,7 +8,7 @@ export default {
       createNew: null,
       deleteImage: null,
       errorMessage: null,
-      showDetail: null,
+      detailEstate: null,
       detailEstate: null,
       updateEstate: null,
       deleteEstate: null,
@@ -20,6 +20,7 @@ export default {
       listOnDemand: [],
       deleteApprove: null,
       lastPage: 0,
+      specialList: [],
     },
     mutations: {
         getRealEstateList(state, data) {
@@ -27,6 +28,10 @@ export default {
             state.total = data.total;
             state.lastPage = data.last_page;
             state.errorMessage = null
+        },
+        getRealEstateSpecialList(state, data){
+            state.specialList = data.data;
+           state.errorMessage = null
         },
         createNewRealEstate(state, data){
            state.createNew = data;
@@ -40,7 +45,7 @@ export default {
             state.errorMessage = data;
         },
         showDetail(state, data){
-            state.showDetail = data;
+            state.detailEstate = data;
             state.errorMessage = null
         },
         getRealEstateDetail(state, data){
@@ -93,8 +98,19 @@ export default {
     actions: {
         getRealEstateList: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}&search=${data.search}&min_price=${data.min_price}&max_price=${data.max_price}&sort_price=${data.sort_price}&approve_public=${data.approve_public}`, method: "GET", data: data}).then(response => {
+                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}&search=${data.search}&min_price=${data.min_price}&max_price=${data.max_price}&sort_price=${data.sort_price}&approve_public=${data.approve_public}&sort_view=${data.sort_view}`, method: "GET", data: data}).then(response => {
                     commit('getRealEstateList', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        getRealEstateSpecialList: ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}&sort_view=${data.sort_view}`, method: "GET", data: data}).then(response => {
+                    commit('getRealEstateSpecialList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showError', e.response.data);

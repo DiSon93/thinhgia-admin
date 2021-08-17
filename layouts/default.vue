@@ -34,6 +34,14 @@
             <v-list-item-title>Khách hàng</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item v-else>
+          <v-list-item-action>
+            <v-icon>mdi-account-switch</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Khách hàng</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item to="/demands" router exact>
           <v-list-item-action>
             <v-icon>mdi-email-multiple</v-icon>
@@ -64,6 +72,22 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Quản trị</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/contact" router>
+          <v-list-item-action>
+            <v-icon>mdi-account-details</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Liên hệ</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/web" router exact>
+          <v-list-item-action>
+            <v-icon>mdi-web-clock</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Thông tin web</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -248,6 +272,7 @@
         </el-dialog>
       </v-container>
     </v-main>
+
     <v-bottom-navigation v-model="value" shift>
       <v-list class="d-flex">
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
@@ -320,6 +345,16 @@ export default {
           icon: "mdi-account-cog",
           title: "Quản trị",
           to: "/administrator",
+        },
+        {
+          icon: "mdi-account-details",
+          title: "Liên lạc",
+          to: "/contact",
+        },
+        {
+          icon: "mdi-web-clock",
+          title: "Thông tin web",
+          to: "/web",
         },
       ],
       miniVariant: false,
@@ -632,7 +667,8 @@ export default {
     padding-top: 0 !important;
   }
   .v-bottom-navigation {
-    // background: orange !important;
+    background: #ffc107 !important;
+    overflow-x: auto;
     height: auto !important;
     display: block;
     position: fixed;

@@ -26,7 +26,7 @@
           <span>Người dùng</span>
         </div>
         <div class="figures">53</div>
-        <div class="user_share">20 đã chia sẻ</div>
+        <div class="user_share">20 nhân viên</div>
       </div>
       <div class="customers data_items right">
         <div d-flex>
@@ -34,7 +34,7 @@
           <span>Khách hàng</span>
         </div>
         <div class="figures">977</div>
-        <div class="user_share">3 đã chia sẻ</div>
+        <div class="user_share">3 khách hàng mới</div>
       </div>
     </div>
   </div>

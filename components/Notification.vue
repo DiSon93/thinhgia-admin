@@ -2,35 +2,40 @@
   <div>
     <div class="notification d-flex">
       <div class="title">Thông báo</div>
-      <v-btn color="warning" dark id="btn_readmore"> Xem tất cả </v-btn>
+      <v-btn
+        color="warning"
+        dark
+        id="btn_readmore"
+        @click="$router.push('/notifications')"
+      >
+        Xem tất cả
+      </v-btn>
     </div>
-    <div class="noti_content">
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-      </div>
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-      </div>
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-      </div>
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-      </div>
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
+    <div class="noti_content" v-if="realEstateList.length != 0">
+      <div
+        class="d-flex user_noti"
+        v-for="item in realEstateList.slice(0, 4)"
+        :key="item.id"
+        @click="$router.push(`/detail/house/${item.id}`)"
+      >
+        <img v-if="item.staff.image[0]" :src="item.staff.image[0].thumbnail" alt="" />
+        <img src="@image/icons/username.png" alt="" v-else />
+        <span
+          >{{ item.staff.name.toUpperCase() }} đã chia sẻ bđs lên trang cộng đồng</span
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState, mapActions } from "vuex";
+
+export default {
+  computed: {
+    ...mapState("realEstate", ["realEstateList", "lastPage", "total"]),
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -73,6 +78,7 @@ export default {};
       width: 30px;
       height: 30px;
       margin: 0 25px;
+      border-radius: 50%;
     }
     span {
       font-size: 13px;
@@ -80,10 +86,10 @@ export default {};
     }
   }
 }
-@media screen and (max-width: 600px){
-  .user_noti{
-    span{
-      font-size: 11px!important;
+@media screen and (max-width: 600px) {
+  .user_noti {
+    span {
+      font-size: 11px !important;
     }
   }
 }

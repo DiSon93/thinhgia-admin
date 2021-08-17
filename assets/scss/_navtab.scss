@@ -18,6 +18,9 @@
 .v-bottom-navigation {
     display: none !important;
 }
+.theme--light.v-navigation-drawer{
+    background-color: #f8f8f8!important;
+}
 @media screen and (max-width: 600px) {
     .v-bottom-navigation {
         display: block !important;
