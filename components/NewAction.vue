@@ -22,6 +22,9 @@
                   {{ item.fromNow }}
                 </div>
               </div>
+              <div v-if="item.is_sell == 0" class="stop_selling">
+                <img src="@image/layouts/NotSelling.png" />
+              </div>
             </div>
             <!-- <div>
               <img src="@image/icons/i.png" alt="" @click=""/>
@@ -569,6 +572,14 @@ export default {
         height: 25px;
         margin-right: 15px;
         border-radius: 50%;
+      }
+      .stop_selling {
+        img {
+          width: 30px;
+          height: 30px;
+          margin-left: 20px;
+          opacity: 0.5;
+        }
       }
       .name {
         font-size: 13px;
