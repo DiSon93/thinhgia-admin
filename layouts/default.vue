@@ -470,7 +470,7 @@ export default {
   // z-index: 99999;
   line-height: 24px;
   img {
-    width: 208px;
+    width: 100%;
     height: 60px;
     left: 0px;
     top: 0px;

@@ -12,15 +12,15 @@
     </div>
     <div class="form">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <div class="label">Địa chỉ</div>
+        <div class="label">Địa chỉ <span style="color: red">*</span></div>
         <el-form-item prop="address">
           <el-input v-model="ruleForm.address"></el-input>
         </el-form-item>
-        <div class="label">Email</div>
+        <div class="label">Email <span style="color: red">*</span></div>
         <el-form-item prop="email">
           <el-input type="email" v-model="ruleForm.email"></el-input>
         </el-form-item>
-        <div class="label">Email liên hệ</div>
+        <div class="label">Email liên hệ <span style="color: red">*</span></div>
         <el-form-item prop="contact">
           <el-input type="email" v-model.number="ruleForm.contact"></el-input>
         </el-form-item>
@@ -28,7 +28,7 @@
         <el-form-item prop="web">
           <el-input v-model="ruleForm.web"></el-input>
         </el-form-item>
-        <div class="label">Điện thoại</div>
+        <div class="label">Điện thoại <span style="color: red">*</span></div>
         <el-form-item prop="phone">
           <el-input v-model.number="ruleForm.phone"></el-input>
         </el-form-item>

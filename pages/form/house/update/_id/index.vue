@@ -771,7 +771,7 @@ export default {
         // console.log("after", this.image_id);
       } else {
         this.$store.dispatch(
-          "projects/deleteImageInProject",
+          "realEstate/deleteImageInProject",
           file.response.results[0].id
         );
         this.image_id_private = this.image_id_private.filter((u) => {
@@ -795,7 +795,7 @@ export default {
         });
       } else {
         this.$store.dispatch(
-          "projects/deleteImageInProject",
+          "realEstate/deleteImageInProject",
           file.response.results[0].id
         );
         this.image_id_public = this.image_id_public.filter((u) => {

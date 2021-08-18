@@ -1,0 +1,14 @@
+.action,.detail{
+    .el-upload-list.el-upload-list--picture {
+        margin-top: -24px !important;
+        word-wrap: break-word;
+        max-width: 200px;
+      }
+}
+@media screen and (max-width: 600px) {
+  .action,.detail{
+    .el-upload-list.el-upload-list--picture {
+      max-width: 90px;
+    }
+  }
+}

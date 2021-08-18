@@ -723,7 +723,7 @@ export default {
       // console.log("before", this.image_id);
       if (file.response) {
         this.$store.dispatch(
-          "projects/deleteImageInProject",
+          "realEstate/deleteImageInProject",
           file.response.results[0].id
         );
         this.image_id_public = this.image_id_public.filter((u) => {

@@ -5,10 +5,7 @@
         <div class="header_detail">
           <div class="d-flex">
             <span class="staff_number">Nhân viên {{ showDetail.staff.id }}:</span>
-            <span class="time" v-if="showDetail"
-              >{{ showDetail.created_at.slice(0, 10) }}
-              {{ showDetail.created_at.slice(11, 19) }}</span
-            >
+            <span class="time" v-if="showDetail">{{ showDetail.updated_at }}</span>
           </div>
           <div class="d-flex">
             <v-btn
@@ -66,8 +63,10 @@
         <div>
           <div class="address">{{ showDetail.street_name }}</div>
           <div>
-            <button id="congdong" disabled>Cộng Đồng</button>
-            <button id="web" disabled>Web</button>
+            <button id="congdong" disabled v-if="showDetail.share_public == 1">
+              Cộng Đồng
+            </button>
+            <button id="web" disabled v-if="showDetail.share_web == 1">Web</button>
           </div>
           <div class="sell_estate">
             {{ showDetail.title ? showDetail.title.toUpperCase() : null }}
@@ -234,8 +233,7 @@
       <v-col cols="4" sm="3">
         <div class="hightlight">Đăng ký ngày</div>
         <div>
-          {{ showDetail.created_at.slice(0, 10) }}
-          {{ showDetail.created_at.slice(11, 19) }}
+          {{ showDetail.created_at }}
         </div>
       </v-col>
       <v-col cols="4" sm="3">
@@ -245,8 +243,7 @@
       <v-col cols="4" sm="3">
         <div class="hightlight">NGÀY CẬP NHẬT</div>
         <div>
-          {{ showDetail.updated_at.slice(0, 10) }}
-          {{ showDetail.updated_at.slice(11, 19) }}
+          {{ showDetail.updated_at }}
         </div>
       </v-col>
     </v-row>
@@ -289,8 +286,8 @@
       Khách hàng: <span class="highName">{{ showDetail.customer.name }}</span>
     </div>
     <div class="commentUser">
-      <div class="name_title">Bình luận ({{ totalComemt }})</div>
-      <div v-if="commentList.length != 0" class="connect" v-loading="loadingComment">
+      <div class="name_title">Bình luận ({{ commentList.length }})</div>
+      <div class="connect" v-loading="loadingComment">
         <div class="d-flex comment_status" v-for="slot in commentList" :key="slot.id">
           <div class="d-flex">
             <div class="avatar_user" v-if="slot.user_avatar">
@@ -305,6 +302,9 @@
                 <span class="time_comment">{{ slot.fromNowComment }}</span>
               </div>
               <div class="comment">{{ slot.content }}</div>
+              <div class="comment" v-if="slot.thumbnail">
+                <img :src="slot.thumbnail" alt="" />
+              </div>
             </div>
           </div>
 
@@ -335,8 +335,27 @@
             @keyup.enter.native="createNewComment()"
             id="myInput"
           >
-            <i slot="suffix" class="el-input__icon el-icon-date" @click="uploadPhoto"></i>
           </el-input>
+          <el-upload
+            v-if="headers"
+            class="avatar-uploader"
+            action="https://thinhgiacore.demo.fit/api/admin/real-estates/image"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :on-success="handleAvatarSuccess"
+            :headers="headers"
+            name="file"
+            list-type="picture"
+            ref="upload"
+          >
+            <el-button
+              size="small"
+              icon="el-icon-date"
+              v-if="!file"
+              class="btn_upload"
+            ></el-button>
+          </el-upload>
           <el-button class="btn_send" type="primary" @click="createNewComment()" round
             >Gửi</el-button
           >
@@ -347,6 +366,9 @@
         <el-button class="receive">Gửi</el-button>
       </div> -->
     </div>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="" />
+    </el-dialog>
     <div class="time_change">
       <div class="time_title">Số lần thay đổi (5)</div>
       <el-table :data="tableData" style="width: 100%">
@@ -407,6 +429,12 @@ export default {
       comment: "",
       commentList: [],
       btn_readMore: true,
+      token: "",
+      headers: null,
+      fileList: [],
+      file: null,
+      dialogVisible: false,
+      dialogImageUrl: "",
       tableData: [
         {
           name: "Tom",
@@ -443,10 +471,12 @@ export default {
     this.getRealEstateDetail();
     this.getCommentList();
     this.getUserDetail();
+    this.token = `bearer ${this.currentUser.results.access_token}`;
+    this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
   },
   computed: {
     ...mapState("realEstate", ["detailEstate"]),
-    ...mapState("homepage", ["comments", "newComment", "totalComemt", "lastPage"]),
+    ...mapState("homepage", ["comments", "newComment", "lastPage"]),
     ...mapState("staffs", ["userDetail"]),
     ...mapState("auth", ["currentUser"]),
   },
@@ -456,6 +486,16 @@ export default {
     },
     handleDelete(index, row) {
       console.log(index, row);
+    },
+    handleRemove(file, fileList) {
+      this.file = null;
+    },
+    handlePreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleAvatarSuccess(res, file) {
+      this.file = file.raw;
     },
     async getUserDetail() {
       try {
@@ -480,6 +520,12 @@ export default {
           image_private: this.detailEstate.image_private.map((item) => {
             return { ...item, src: item.main, title: "", description: "" };
           }),
+          updated_at: moment(this.detailEstate.updated_at).format(
+            "YYYY-MM-DD, h:mm:ss a"
+          ),
+          created_at: moment(this.detailEstate.created_at).format(
+            "YYYY-MM-DD, h:mm:ss a"
+          ),
         };
       } catch {}
     },
@@ -507,17 +553,33 @@ export default {
           return u.id == this.select_commentID ? { ...u, is_display: !u.is_display } : u;
         });
         this.loadingComment = false;
-      } catch {}
+      } catch {
+        this.showHideCommentError();
+        this.loadingComment = false;
+      }
     },
-    async createNewComment(_id) {
+    async createNewComment() {
       this.loadingComment = true;
+      var formData = null;
+      if (this.file) {
+        formData = new FormData();
+        formData.append("file", this.file);
+        formData.append("title", this.comment);
+        formData.append("content", this.comment);
+        formData.append("real_estate_id", this.$route.params.id);
+      }
       try {
-        await this.$store.dispatch("homepage/createNewComment", {
-          title: this.comment,
-          content: this.comment,
-          real_estate_id: this.$route.params.id,
-          // file: null,
-        });
+        await this.$store.dispatch(
+          "homepage/createNewComment",
+          formData
+            ? formData
+            : {
+                title: this.comment,
+                content: this.comment,
+                real_estate_id: this.$route.params.id,
+                file: this.file,
+              }
+        );
         let newCommentAdded = {
           ...this.newComment,
           user_name: this.userDetail.name,
@@ -525,6 +587,8 @@ export default {
           fromNowComment: moment(this.newComment.updated_at).startOf("minute").fromNow(),
         };
         this.loadingComment = false;
+        this.fileList = [];
+        this.file = null;
         this.comment = "";
         this.commentList.push(newCommentAdded);
       } catch {}
@@ -578,6 +642,11 @@ export default {
         title: "Error",
         message: "Unsuccess require!!!",
       });
+    },
+    showHideCommentError() {
+      this.$message.error(
+        "403, Forbidden. Can not do this function due to lacking of permission."
+      );
     },
     uploadPhoto() {
       console.log("TEXT");
@@ -646,6 +715,14 @@ export default {
   .col.col-3 {
     padding: 6px 12px !important;
     max-width: 100% !important;
+  }
+  .avatar-uploader {
+    .btn_upload.el-button {
+      margin-top: 11px;
+    }
+    .el-upload-list.el-upload-list--picture {
+      margin-top: -24px !important;
+    }
   }
   .contents {
     justify-content: space-between;
@@ -744,7 +821,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 10px 0;
+      margin-bottom: 10px;
       font-weight: 700;
       .v-btn {
         text-transform: capitalize;

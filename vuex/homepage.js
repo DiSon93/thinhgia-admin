@@ -12,6 +12,7 @@ export default {
         hide: null,
         comments: [],
         totalComemt: '',
+        overview: null,
     },
     mutations: {
         getCountLikeEstate(state, data){
@@ -39,6 +40,10 @@ export default {
             state.comments = data.data;
             state.totalComemt = data.total;
             state.lastPage  = data.last_page;
+            state.errorMessage = null;
+        },
+        getOverview(state, data){
+            state.overview = data;
             state.errorMessage = null;
         }
     },
@@ -98,5 +103,17 @@ export default {
                 })
             })
         },
+        getOverviewInSystem:  ({ commit }) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: "/admin/global/overview", method: "GET"}).then(response => {
+                    commit('getOverview', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+
     } 
 }

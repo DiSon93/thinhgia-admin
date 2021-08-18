@@ -83,6 +83,8 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 import UpdateDictionaries from "@component/Form/UpdateDictionaries";
+import moment from "moment";
+
 export default {
   props: ["select_dic"],
   components: {
@@ -167,8 +169,12 @@ export default {
         return {
           index: index + 1,
           valid: item.name,
-          create_date: `${item.created_at.slice(0, 10)} ${item.created_at.slice(11, 19)}`,
-          update_date: `${item.updated_at.slice(0, 10)} ${item.updated_at.slice(11, 19)}`,
+          create_date: `${moment(item.created_at).format("L")} ${moment(
+            item.created_at
+          ).format("LTS")}`,
+          update_date: `${moment(item.updated_at).format("L")} ${moment(
+            item.updated_at
+          ).format("LTS")}`,
           id: item.id,
           dictionary_type_id: item.dictionary_type_id,
         };

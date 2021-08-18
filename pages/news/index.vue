@@ -83,8 +83,7 @@
                   Tạo bởi
                   <span class="username">{{ item.user ? item.user.name : null }}</span>
                   lúc
-                  {{ item.created_at.slice(0, 10) }}
-                  {{ item.created_at.slice(11, 19) }}
+                  {{ item.updated_at }}
                 </div>
                 <div class="blog">
                   Loại blog: {{ item.blog_type ? item.blog_type.name : null }}
@@ -133,7 +132,7 @@ import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
 import { mapState, mapActions } from "vuex";
 import CoolLightBoxNew from "@component/CoolLightBoxNew.vue";
-
+import moment from "moment";
 export default {
   components: {
     UserDetail,
@@ -211,6 +210,7 @@ export default {
                 ? { ...v, type: "video" }
                 : { ...v, type: "photo" };
             }),
+            updated_at: moment(u.updated_at).format("YYYY-MM-DD, h:mm:ss a"),
           };
         });
         this.blogListDetail = this.blogListDetail
@@ -419,7 +419,7 @@ export default {
 .header_option {
   position: sticky;
   top: 0;
-  z-index: 99;
+  z-index: 9;
   background: #eff5f9 !important;
 }
 div::-webkit-scrollbar {

@@ -43,7 +43,12 @@
         </tr>
       </template>
     </v-data-table>
-    <el-dialog title="BĐS" :visible.sync="dialogTableVisible" class="suitableEstate">
+    <el-dialog
+      title="BĐS"
+      :visible.sync="dialogTableVisible"
+      class="suitableEstate"
+      :width="modal"
+    >
       <el-table :data="gridData" v-loading="loadingChild">
         <el-table-column property="id" label="#" width="50"></el-table-column>
         <el-table-column property="name" label="KHÁCH HÀNG" width="150"></el-table-column>
@@ -92,6 +97,7 @@
 </template>
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
+import moment from "moment";
 export default {
   data: () => ({
     dialog: false,
@@ -103,6 +109,7 @@ export default {
     page: 1,
     gridData: [],
     dialogTableVisible: false,
+    modal: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "50%",
     headers: [
       { text: "#", value: "id", width: "80px", sortable: false },
       {
@@ -163,10 +170,10 @@ export default {
           ],
           estate: item.real_estates.length,
           real_estates: item.real_estates,
-          create_date: item.created_at.slice(0, 10),
-          create_time: item.created_at.slice(11, 19),
-          update_date: item.updated_at.slice(0, 10),
-          update_time: item.updated_at.slice(11, 19),
+          create_date: `${moment(item.created_at).format("L")}`,
+          create_time: `${moment(item.created_at).format("LTS")}`,
+          update_date: `${moment(item.updated_at).format("L")}`,
+          update_time: `${moment(item.updated_at).format("LTS")}`,
           province_id: item.province_id,
           district_id: item.district_id,
           ward_id: item.ward_id,

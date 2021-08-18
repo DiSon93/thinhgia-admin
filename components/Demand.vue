@@ -82,7 +82,12 @@
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
       </template> -->
     </v-data-table>
-    <el-dialog title="BĐS" :visible.sync="dialogTableVisible" class="suitableEstate">
+    <el-dialog
+      title="BĐS"
+      :visible.sync="dialogTableVisible"
+      class="suitableEstate"
+      :width="modal"
+    >
       <el-table :data="gridData" v-loading="loadingChild">
         <el-table-column property="id" label="#" width="50"></el-table-column>
         <el-table-column property="name" label="KHÁCH HÀNG" width="150"></el-table-column>
@@ -145,6 +150,7 @@ export default {
     dialogTableVisible: false,
     loadingChild: false,
     gridData: [],
+    modal: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "50%",
     headers: [
       {
         text: "#",

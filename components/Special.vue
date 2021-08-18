@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="special_realEstate">
     <div class="special_title">Bất động sản nổi bật</div>
     <div class="data_table">
       <v-simple-table fixed-header id="table_special">

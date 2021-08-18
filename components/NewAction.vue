@@ -141,8 +141,14 @@
                 <span>{{ item.comments.length }}</span>
               </button>
             </v-col>
-            <v-col cols="4" align="center">
+            <v-col cols="4" align="center" v-if="item.approve_web == 2">
               <ShareSocialNetwork />
+            </v-col>
+            <v-col cols="4" align="center" v-else>
+              <button class="share" disabled>
+                <img src="@image/icons/share.png" alt="" />
+                <span>Chia sẻ</span>
+              </button>
             </v-col>
           </v-row>
           <el-collapse-transition>
@@ -165,6 +171,9 @@
                       <span class="time_comment">{{ slot.fromNowComment }}</span>
                     </div>
                     <div class="comment">{{ slot.content }}</div>
+                    <div class="comment" v-if="slot.thumbnail">
+                      <img :src="slot.thumbnail" alt="" />
+                    </div>
                   </div>
                 </div>
 
@@ -192,12 +201,32 @@
                   @keyup.enter.native="createNewComment(item.id)"
                   id="myInput"
                 >
-                  <i
+                  <!-- <i
                     slot="suffix"
                     class="el-input__icon el-icon-date"
                     @click="uploadPhoto"
-                  ></i>
+                  ></i> -->
                 </el-input>
+                <el-upload
+                  v-if="headers"
+                  class="avatar-uploader"
+                  action="https://thinhgiacore.demo.fit/api/admin/real-estates/image"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :file-list="fileList"
+                  :on-success="handleAvatarSuccess"
+                  :headers="headers"
+                  name="file"
+                  list-type="picture"
+                  ref="upload"
+                >
+                  <el-button
+                    size="small"
+                    icon="el-icon-date"
+                    v-if="!file"
+                    class="btn_upload"
+                  ></el-button>
+                </el-upload>
                 <el-button
                   class="btn_send"
                   type="primary"
@@ -205,6 +234,9 @@
                   >Gửi</el-button
                 >
               </div>
+              <el-dialog :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt="" />
+              </el-dialog>
             </div>
           </el-collapse-transition>
         </li>
@@ -251,6 +283,12 @@ export default {
       is_display: 0,
       realID: 0,
       keyChild: 0,
+      token: "",
+      headers: null,
+      fileList: [],
+      file: null,
+      dialogVisible: false,
+      dialogImageUrl: "",
       items: [
         {
           title: "In nature, nothing is perfect and everything is perfect",
@@ -281,6 +319,8 @@ export default {
   },
   mounted() {
     this.getUserDetail();
+    this.token = `bearer ${this.currentUser.results.access_token}`;
+    this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
   },
   computed: {
     ...mapState("realEstate", ["realEstateList", "lastPage"]),
@@ -296,6 +336,16 @@ export default {
     },
   },
   methods: {
+    handleRemove(file, fileList) {
+      this.file = null;
+    },
+    handlePreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleAvatarSuccess(res, file) {
+      this.file = file.raw;
+    },
     readMore: function () {
       this.read = !this.read;
     },
@@ -318,9 +368,6 @@ export default {
       this.select_commentID = _id;
       this.is_display = is_display;
       this.realID = realID;
-    },
-    uploadPhoto() {
-      console.log("TEXT");
     },
     async getUserDetail() {
       try {
@@ -410,13 +457,26 @@ export default {
 
     async createNewComment(_id) {
       this.loadingComment = true;
+      var formData = null;
+      if (this.file) {
+        formData = new FormData();
+        formData.append("file", this.file);
+        formData.append("title", this.comment);
+        formData.append("content", this.comment);
+        formData.append("real_estate_id", _id);
+      }
       try {
-        await this.$store.dispatch("homepage/createNewComment", {
-          title: this.comment,
-          content: this.comment,
-          real_estate_id: _id,
-          // file: null,
-        });
+        await this.$store.dispatch(
+          "homepage/createNewComment",
+          formData
+            ? formData
+            : {
+                title: this.comment,
+                content: this.comment,
+                real_estate_id: _id,
+                file: this.file,
+              }
+        );
         let newCommentAdded = {
           ...this.newComment,
           user_name: this.userDetail.name,
@@ -424,6 +484,8 @@ export default {
           fromNowComment: moment(this.newComment.updated_at).startOf("minute").fromNow(),
         };
         this.loadingComment = false;
+        this.fileList = [];
+        this.file = null;
         this.comment = "";
         this.actionList = this.actionList.map((item) =>
           item.id == _id
@@ -462,7 +524,15 @@ export default {
             : item
         );
         this.loadingComment = false;
-      } catch {}
+      } catch {
+        this.showHideCommentError();
+        this.loadingComment = false;
+      }
+    },
+    showHideCommentError() {
+      this.$message.error(
+        "403, Forbidden. Can not do this function due to lacking of permission."
+      );
     },
     copyURLNotification() {
       // var copyText = document.getElementById("myInput");
@@ -620,6 +690,9 @@ export default {
         height: 25px;
       }
     }
+    .btn_upload {
+      margin-top: 5px;
+    }
     .users {
       margin-left: 10px;
       .name {
@@ -651,12 +724,21 @@ export default {
       margin-left: 10px;
     }
   }
+  .avatar-uploader {
+    .btn_upload.el-button {
+      margin-top: 11px;
+    }
+    .el-upload-list.el-upload-list--picture {
+      margin-top: -24px !important;
+    }
+  }
   .comment_like {
     font-style: normal;
     font-weight: 300;
     font-size: 11px;
     .share {
       font-size: 11px;
+      text-decoration: line-through;
     }
     span {
       margin: 0 3px;
@@ -669,6 +751,7 @@ export default {
     margin-top: 3px;
   }
 }
+
 .big_img {
   width: 500px;
   height: auto;

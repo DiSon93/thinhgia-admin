@@ -27,7 +27,9 @@
               {{ row.item.type }}
             </td>
             <td>
-              <v-icon small class="mr-2" @click="editItem(row.item)"> mdi-pencil </v-icon>
+              <v-icon small class="mr-2" @click="$router.push('/form/contact')">
+                mdi-pencil
+              </v-icon>
             </td>
           </tr>
         </template>
