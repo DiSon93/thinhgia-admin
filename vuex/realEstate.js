@@ -21,6 +21,7 @@ export default {
       deleteApprove: null,
       lastPage: 0,
       specialList: [],
+      listChange: [],
     },
     mutations: {
         getRealEstateList(state, data) {
@@ -92,6 +93,10 @@ export default {
         },
         deleteAprrove(state, data){
             state.deleteApprove = data;
+            state.errorMessage = null;
+        },
+        listChangeEstate(state, data){
+            state.listChange = data;
             state.errorMessage = null;
         }
     },
@@ -266,6 +271,17 @@ export default {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/real-estates/${data.id}?share=${data.share}`, method: "DELETE"}).then(response => {
                     commit('deleteAprrove', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        listChangeRealEstateUpToDay:({ commit }, _id)  => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/list-changes/${_id}`, method: "GET"}).then(response => {
+                    commit('listChangeEstate', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showError', e.response.data);

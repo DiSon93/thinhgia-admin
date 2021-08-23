@@ -63,7 +63,6 @@ export default {
           limit: 10,
           page: 1,
         });
-        console.log("realEstateListSpecail", this.specialList);
       } catch {}
     },
   },

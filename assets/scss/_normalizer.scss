@@ -187,6 +187,24 @@ body .el-table th.gutter {
 //     }
 // }
 
+#search_all{
+    width: 100%;
+.el-select{
+    width: 100%;
+    border-radius: 10px;
+    .el-input__inner{
+        border-radius: 10px;
+        height: 30px;
+    }
+    .el-input__icon {
+        line-height:30px!important;
+    }
+    .el-icon-arrow-up:before{
+        content: "\e778"!important;
+    }
+}
+}
+
 @media screen and (max-width: 800px) {
     #search {
         margin-left: 10px;

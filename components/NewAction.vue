@@ -22,9 +22,9 @@
                   {{ item.fromNow }}
                 </div>
               </div>
-              <div v-if="item.is_sell == 0" class="stop_selling">
-                <img src="@image/layouts/NotSelling.png" />
-              </div>
+            </div>
+            <div v-if="item.is_sell == 0" class="stop_selling">
+              <el-tag type="danger">Ngưng bán</el-tag>
             </div>
             <!-- <div>
               <img src="@image/icons/i.png" alt="" @click=""/>
@@ -509,6 +509,13 @@ export default {
       }
     },
     async hideThisComment() {
+      if (
+        this.currentUser.results.user.id == 3 ||
+        this.currentUser.results.user.id == 4
+      ) {
+        this.forbidden();
+        return;
+      }
       this.loadingComment = true;
       try {
         this.$store.dispatch("homepage/hideCommentDisplay", {
@@ -549,6 +556,11 @@ export default {
         type: "success",
       });
     },
+    forbidden() {
+      this.$message.error(
+        "403, Forbidden. Can not do this function due to lacking of permission."
+      );
+    },
   },
 };
 </script>
@@ -574,12 +586,12 @@ export default {
         border-radius: 50%;
       }
       .stop_selling {
-        img {
-          width: 30px;
-          height: 30px;
-          margin-left: 20px;
-          opacity: 0.5;
-        }
+        // img {
+        //   width: 30px;
+        //   height: 30px;
+        //   margin-left: 20px;
+        //   opacity: 0.5;
+        // }
       }
       .name {
         font-size: 13px;

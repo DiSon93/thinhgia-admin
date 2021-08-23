@@ -9,9 +9,10 @@ export default {
        addProject: null,
        deleteProject: null,
        deleteImage: null,
-       selectedProject: null,
+       selectedProject: {},
        updateProject: null,
        errorMessage: null,
+       detailProject: {},
     },
     mutations: {
         getProjectList(state, data){
@@ -49,6 +50,10 @@ export default {
          },
          showErrorr(state, data){
              state.errorMessage = data;
+         },
+         showProjectDetail(state, data){
+             state.detailProject = data;
+           state.errorMessage = null;
          }
     },
     actions: {
@@ -109,6 +114,17 @@ export default {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/projects/${data.id}`, method: "PATCH", data: data}).then(response => {
                     commit('updateNewProject', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showErrorr', e.response.data)
+                    reject(e);
+                })
+            })
+        },
+        showProjectDetail:({ commit }, _id) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/projects/${_id}`, method: "GET" }).then(response => {
+                    commit('showProjectDetail', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showErrorr', e.response.data)

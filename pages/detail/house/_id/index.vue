@@ -63,10 +63,18 @@
         <div>
           <div class="address">{{ showDetail.street_name }}</div>
           <div>
-            <button id="congdong" disabled v-if="showDetail.share_public == 1">
+            <button id="congdong" disabled v-if="showDetail.share_public == 1 && showDetail.approve_public == 2">
               Cộng Đồng
             </button>
-            <button id="web" disabled v-if="showDetail.share_web == 1">Web</button>
+            <button id="web" disabled v-if="showDetail.share_web == 1 && showDetail.approve_web == 2">Web</button>
+             <el-tag
+            type="danger"
+            v-if="
+              (showDetail.share_public == 1 && showDetail.approve_public == 1) ||
+              (showDetail.share_web == 1 && showDetail.approve_web == 1)
+            "
+            >Chờ duyệt</el-tag
+          >
           </div>
           <div class="sell_estate">
             {{ showDetail.title ? showDetail.title.toUpperCase() : null }}
@@ -370,7 +378,7 @@
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
     <div class="time_change">
-      <div class="time_title">Số lần thay đổi (5)</div>
+      <div class="time_title">Số lần thay đổi ({{listChange.length}})</div>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="Người sửa" width="180">
           <template slot-scope="scope">
@@ -436,34 +444,6 @@ export default {
       dialogVisible: false,
       dialogImageUrl: "",
       tableData: [
-        {
-          name: "Tom",
-          column: "Đã đưa lên Web",
-          old: "Chưa",
-          new: "Có",
-          times: "5/26/2021, 7:54:00 AM",
-        },
-        {
-          name: "SALE ADMIN",
-          column: "Mô tả",
-          old: "Gia chủ cần vốn làm ăn bán căn hộ 2 phòng ngủ chung cư DIC Phoenix",
-          new: "Gia chủ cần vốn làm ăn bán căn hộ 2 phòng ngủ chung cư DIC Phoenix",
-          times: "5/26/2021, 7:54:00 AM",
-        },
-        {
-          name: "Vũ Nguyễn Lệ Chi",
-          column: "Tình trạng",
-          old: "Chưa",
-          new: "Có",
-          times: "5/26/2021, 7:54:00 AM",
-        },
-        {
-          name: "Tom",
-          column: "Đã đưa lên Web",
-          old: "Gia chủ cần vốn làm ăn bán căn hộ 2 phòng ngủ chung cư DIC Phoenix",
-          new: "Có",
-          times: "12/26/2021, 7:54:00 AM",
-        },
       ],
     };
   },
@@ -471,11 +451,12 @@ export default {
     this.getRealEstateDetail();
     this.getCommentList();
     this.getUserDetail();
+    this.getListChangeRealEstate();
     this.token = `bearer ${this.currentUser.results.access_token}`;
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
   },
   computed: {
-    ...mapState("realEstate", ["detailEstate"]),
+    ...mapState("realEstate", ["detailEstate", "listChange"]),
     ...mapState("homepage", ["comments", "newComment", "lastPage"]),
     ...mapState("staffs", ["userDetail"]),
     ...mapState("auth", ["currentUser"]),
@@ -528,6 +509,23 @@ export default {
           ),
         };
       } catch {}
+    },
+    async getListChangeRealEstate(){
+        try{
+          await this.$store.dispatch("realEstate/listChangeRealEstateUpToDay", this.$route.params.id);
+          console.log("real", this.listChange);
+          this.tableData = this.listChange.map((item, index) => {
+            return {
+              name: item.user?.name,
+          column: item.column,
+          old: item.old_value,
+          new: item.new_value,
+          times: moment(item.updated_at).format("YYYY-MM-DD, h:mm:ss a"),
+            }
+          }) 
+        }catch{
+
+        }
     },
     selectCommen(_id, is_display) {
       this.select_commentID = _id;

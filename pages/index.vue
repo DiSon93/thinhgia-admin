@@ -14,18 +14,37 @@
           <button class="homepage" disabled>Trang chủ</button>
         </v-col>
         <v-col cols="12" sm="4" class="col_search">
-          <b-input-group class="search">
-            <b-input-group-prepend is-text>
-              <b-icon icon="search"></b-icon>
-            </b-input-group-prepend>
-            <b-form-input
+          <div id="search_all">
+            <el-select
+              v-model="value"
+              filterable
               placeholder="Tìm kiếm tất cả thông tin"
-              type="search"
-            ></b-form-input>
-          </b-input-group>
+              class="el-input--prefix"
+              @change="chooseSearchAll($event)"
+              remote
+              reserve-keyword
+              :remote-method="remoteMethod"
+              :loading="loading"
+            >
+              <el-option-group
+                v-for="group in options"
+                :key="group.label"
+                :label="group.label"
+              >
+                <el-option
+                  v-for="item in group.options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-option-group>
+            </el-select>
+            <i class="el-icon-search"></i>
+          </div>
         </v-col>
         <v-col cols="12" sm="4">
-          <v-btn color="warning" dark id="createBDS"
+          <v-btn color="warning" dark id="createBDS" @click="$router.push('/form/house')"
             ><img src="@image/icons/Vector.svg" />Tạo BĐS
           </v-btn>
 
@@ -180,6 +199,33 @@
       >
         <ChangePassword v-on:close-modals="centerDialogVisible = false" />
       </el-dialog>
+      <el-dialog
+        title="Update thông tin người dùng"
+        :visible.sync="centerDialogVisible03"
+        width="40%"
+        center
+        destroy-on-close
+      >
+        <UpdateUser
+          :userId="selectedUser"
+          v-on:close-modals="centerDialogVisible03 = false"
+          :key="childKey"
+        />
+      </el-dialog>
+      <el-dialog
+        title="Update thông tin người dùng"
+        :visible.sync="centerDialogVisible04"
+        width="40%"
+        center
+        destroy-on-close
+        id="createCustomers"
+      >
+        <UpdateCustomerSearch
+          :customerId="selectedCustomer"
+          v-on:close-modals="centerDialogVisible04 = false"
+          :key="childKey02"
+        />
+      </el-dialog>
     </v-container>
   </v-lazy>
 </template>
@@ -194,6 +240,10 @@ import Special from "@component/Special.vue";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
 import io from "socket.io-client";
+import UpdateUser from "@component/Form/UpdateUser.vue";
+import UpdateCustomerSearch from "@component/Form/UpdateCustomerSearch.vue";
+import { mapState, mapActions } from "vuex";
+
 // var socket = io.connect("https://thinhgiacore.demo.fit/socket.io");
 export default {
   components: {
@@ -205,6 +255,8 @@ export default {
     Special,
     UserDetail,
     ChangePassword,
+    UpdateUser,
+    UpdateCustomerSearch,
   },
   data() {
     return {
@@ -216,8 +268,17 @@ export default {
       text: "",
       centerDialogVisible02: false,
       centerDialogVisible: false,
+      centerDialogVisible03: false,
+      centerDialogVisible04: false,
       saw_noti: false,
       bds_id: 13,
+      loading: false,
+      value: "",
+      options: [],
+      selectedUser: "",
+      selectedCustomer: "",
+      childKey: 0,
+      childKey02: 0,
     };
   },
   // created() {
@@ -292,6 +353,9 @@ export default {
   //     console.log("notifications", data);
   //   },
   // },
+  computed: {
+    ...mapState("homepage", ["searchList"]),
+  },
   methods: {
     // sendMessage() {
     //   if (this.text !== "") {
@@ -317,6 +381,66 @@ export default {
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
+    },
+    async remoteMethod(query) {
+      if (query !== "") {
+        this.loading = true;
+        await this.$store.dispatch("homepage/searchAllList", query);
+        console.log("searchList", this.searchList);
+        let projects = this.searchList.projects.map((u) => {
+          return { value: `project:${u.id}`, label: u.name, id: u.id };
+        });
+        let real_estates = this.searchList.real_estates.map((u) => {
+          return { value: `bds:${u.id}`, label: u.title, id: u.id };
+        });
+        let customers = this.searchList.customers.map((u) => {
+          return { value: `customer:${u.id}`, label: u.name, id: u.id };
+        });
+        let users = this.searchList.users.map((u) => {
+          return { value: `user:${u.id}`, label: u.name, id: u.id };
+        });
+        this.options = [
+          {
+            label: "Dự án",
+            options: projects,
+          },
+          {
+            label: "Bất động sản",
+            options: real_estates,
+          },
+          {
+            label: "Khách hàng",
+            options: customers,
+          },
+          {
+            label: "Nhân viên",
+            options: users,
+          },
+        ];
+      } else {
+        this.options = [];
+        this.loading = false;
+      }
+      this.loading = false;
+    },
+    chooseSearchAll(e) {
+      let keyWord = e.split(":");
+      console.log("key", keyWord);
+      if (keyWord[0] == "bds") {
+        this.$router.push(`/detail/house/${keyWord[1]}`);
+      } else if (keyWord[0] == "user") {
+        this.selectedUser = keyWord[1];
+        this.childKey += 1;
+        this.centerDialogVisible03 = true;
+      } else if (keyWord[0] == "customer") {
+        this.selectedCustomer = keyWord[1];
+        this.childKey02 += 1;
+        this.centerDialogVisible04 = true;
+      } else if (keyWord[0] == "project") {
+        // this.$store.commit("homepage/selectedSearch", this.searchList);
+        this.routeId = keyWord[1];
+        this.$router.push(`/search/${keyWord[1]}`);
+      }
     },
   },
 };

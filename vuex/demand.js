@@ -10,6 +10,7 @@ export default {
         convert: null,
         total: 0,
        errorMessage: null,
+       demandDetail: {},
     },
     mutations: {
         getDemandList(state, data) {
@@ -37,6 +38,9 @@ export default {
         },
         showErrorr(state, data){
             state.errorMessage = data;
+        },
+        showDemanDetail(state, data){
+            state.demandDetail = data;
         }
     },
     actions: {
@@ -88,6 +92,16 @@ export default {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/needs/update-resolve/${data.id}?resolved=${data.resolved}`, method: "PATCH"}).then(response => {
                     commit('convertDemands', response.data.results.data);
+                    resolve(response.data);
+                }).catch(e => {
+                    reject(e);
+                })
+            })
+        },
+        showDemanDetail:({ commit }, _id) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/needs/${_id}`, method: "GET"}).then(response => {
+                    commit('showDemanDetail', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     reject(e);

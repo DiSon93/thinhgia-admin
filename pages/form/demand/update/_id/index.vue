@@ -209,7 +209,7 @@ export default {
   },
   data() {
     return {
-      checked01: true,
+      checked01: false,
       checked02: false,
       value01: "",
       value02: "",
@@ -262,7 +262,7 @@ export default {
     ...mapState("dictionaries", ["dictionaryList"]),
     ...mapState("demand", ["selected"]),
     ...mapState("customers", ["customerList"]),
-    ...mapState("demand", ["errorMessage"]),
+    ...mapState("demand", ["errorMessage", "demandDetail"]),
   },
   methods: {
     ...mapActions("customers", ["getCustomerList"]),
@@ -272,24 +272,28 @@ export default {
       this.getCustomerList();
     },
     async getUpdateList() {
-      this.value01 = this.selected.province_id;
+      await this.$store.dispatch("demand/showDemanDetail", this.$route.params.id)
+      console.log("demand", this.demandDetail);
+      this.value01 = this.demandDetail.province_id;
       await this.$store.dispatch("global/getDictrictList", this.value01);
-      this.value02 = this.selected.dictrict_id;
+      this.value02 = this.demandDetail.district_id;
       await this.$store.dispatch("global/getWardList", this.value02);
-      this.value03 = this.selected.wards_id;
-      this.value04 = this.selected.type_estate_id;
-      this.value05 = this.selected.type_house_id;
-      this.value06 = this.selected.price_min;
-      this.value07 = this.selected.price_max;
-      this.value08 = this.selected.user_id;
-      this.value09 = this.selected.customer_id;
-      this.value10 = this.selected.direction_id;
-      this.value11 = this.selected.bedroom;
-      this.value12 = this.selected.floor;
-      this.value13 = this.selected.square;
-      this.value14 = this.selected.discription;
-      this.checked01 = this.selected.side == "Mua" ? true : false;
-      this.checked02 = this.selected.side == "Thuê" ? true : false;
+      this.value03 = this.demandDetail.ward_id?.split(",");
+      this.value03 = this.value03?.map(u => parseInt(u));
+      this.value04 = this.demandDetail.real_estate_type;
+      this.value05 = this.demandDetail.house_type;
+      this.value06 = this.demandDetail.price_min;
+      this.value07 = this.demandDetail.price_max;
+      this.value08 = this.demandDetail.user_id;
+      this.value09 = this.demandDetail.customer_id;
+      this.value10 = this.demandDetail.house_orientation.split(",");
+      this.value10 = this.value10?.map(u =>  parseInt(u));
+      this.value11 = this.demandDetail.bedroom_number_min;
+      this.value12 = this.demandDetail.floor_number_min;
+      this.value13 = this.demandDetail.land_area_min;
+      this.value14 = this.demandDetail.descriptions;
+      this.checked01 = this.demandDetail.purpose == 0 ? true : false;
+      this.checked02 = this.demandDetail.purpose == 1 ? true : false;
     },
 
     async updateDemandOffCustomer(e) {
@@ -297,7 +301,7 @@ export default {
       try {
         await this.$store.dispatch("demand/updateDemandOfCustomer", {
           is_save: e,
-          id: this.selected.id,
+          id: this.$route.params.id,
           user_id: this.value08,
           customer_id: this.value09,
           province_id: this.value01,

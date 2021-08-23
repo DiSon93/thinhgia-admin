@@ -13,6 +13,9 @@ export default {
         comments: [],
         totalComemt: '',
         overview: null,
+        searchList: {},
+        selectedSearch: null,
+        dataTable: [],
     },
     mutations: {
         getCountLikeEstate(state, data){
@@ -44,6 +47,18 @@ export default {
         },
         getOverview(state, data){
             state.overview = data;
+            state.errorMessage = null;
+        },
+        searchAllList(state, data){
+            state.searchList = data;
+            state.errorMessage = null;
+        },
+        selectedSearch(state, data){
+            state.selectedSearch = data;
+            state.errorMessage = null;
+        },
+        getTableDataList(state, data){
+            state.dataTable = data;
             state.errorMessage = null;
         }
     },
@@ -114,6 +129,27 @@ export default {
                 })
             })
         },
-
+        searchAllList:  ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/global/search-all?search=${data}`, method: "GET"}).then(response => {
+                    commit('searchAllList', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        getTableDataList:   ({ commit }, data) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/map?code=${data.code}&min_times=${data.min_times}&max_times=${data.max_times}`, method: "GET"}).then(response => {
+                    commit('getTableDataList', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
     } 
 }

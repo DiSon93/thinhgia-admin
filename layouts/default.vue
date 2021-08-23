@@ -97,25 +97,44 @@
       fixed
       app
       class="header_box"
-      v-if="this.$route.path == '/'"
+      v-if="this.$route.path == '/' || this.$route.path == `/search/${routeId}`"
     >
       <v-row align="center">
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="3">
           <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="app-bar-icon" />
           <button class="homepage" disabled>Trang chủ</button>
         </v-col>
         <v-col cols="12" sm="4" class="col_search">
-          <b-input-group class="search">
-            <b-input-group-prepend is-text>
-              <b-icon icon="search"></b-icon>
-            </b-input-group-prepend>
-            <b-form-input
+          <div id="search_all">
+            <el-select
+              v-model="value"
+              filterable
               placeholder="Tìm kiếm tất cả thông tin"
-              type="search"
-            ></b-form-input>
-          </b-input-group>
+              class="el-input--prefix"
+              @change="chooseSearchAll($event)"
+              remote
+              reserve-keyword
+              :remote-method="remoteMethod"
+              :loading="loading"
+            >
+              <el-option-group
+                v-for="group in options"
+                :key="group.label"
+                :label="group.label"
+              >
+                <el-option
+                  v-for="item in group.options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-option-group>
+            </el-select>
+            <i class="el-icon-search"></i>
+          </div>
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="5">
           <v-btn color="warning" dark id="createBDS" @click="$router.push('/form/house')"
             ><img src="@image/icons/Vector.svg" />Tạo BĐS
           </v-btn>
@@ -270,6 +289,33 @@
         >
           <ChangePassword v-on:close-modals="centerDialogVisible = false" />
         </el-dialog>
+        <el-dialog
+          title="Update thông tin người dùng"
+          :visible.sync="centerDialogVisible03"
+          width="40%"
+          center
+          destroy-on-close
+        >
+          <UpdateUser
+            :userId="selectedUser"
+            v-on:close-modals="centerDialogVisible03 = false"
+            :key="childKey"
+          />
+        </el-dialog>
+        <el-dialog
+          title="Update thông tin người dùng"
+          :visible.sync="centerDialogVisible04"
+          width="40%"
+          center
+          destroy-on-close
+          id="createCustomers"
+        >
+          <UpdateCustomerSearch
+            :customerId="selectedCustomer"
+            v-on:close-modals="centerDialogVisible04 = false"
+            :key="childKey02"
+          />
+        </el-dialog>
       </v-container>
     </v-main>
 
@@ -292,11 +338,15 @@ import { mapState, mapActions } from "vuex";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
 import moment from "moment";
+import UpdateUser from "@component/Form/UpdateUser.vue";
+import UpdateCustomerSearch from "@component/Form/UpdateCustomerSearch.vue";
 export default {
   components: {
     SelectBox,
     UserDetail,
     ChangePassword,
+    UpdateUser,
+    UpdateCustomerSearch,
   },
   data() {
     return {
@@ -308,8 +358,14 @@ export default {
       value: "recent",
       centerDialogVisible02: false,
       centerDialogVisible: false,
+      centerDialogVisible03: false,
+      centerDialogVisible04: false,
       saw_noti: false,
       bds_id: 25,
+      selectedUser: "",
+      selectedCustomer: "",
+      childKey: 0,
+      childKey02: 0,
       items: [
         {
           icon: "mdi-home-edit",
@@ -363,11 +419,16 @@ export default {
       title: "Vuetify.js",
       noti: null,
       role_user: "",
+      options: [],
+      value: "",
+      loading: false,
+      routeId: "",
     };
   },
   computed: {
     ...mapState("auth", ["currentUser"]),
     ...mapState("role", ["roleList"]),
+    ...mapState("homepage", ["searchList"]),
   },
   sockets: {
     // initRoom: function (message) {
@@ -419,8 +480,74 @@ export default {
     if (window.innerWidth > 600 && window.innerWidth < 1200) {
       this.drawer = false;
     }
+    this.getHandleBarRole();
   },
   methods: {
+    getHandleBarRole() {
+      if (this.currentUser.results.user.id == 2) {
+        this.items.splice(2, 1);
+      }
+    },
+    chooseSearchAll(e) {
+      let keyWord = e.split(":");
+      console.log("key", keyWord);
+      if (keyWord[0] == "bds") {
+        this.$router.push(`/detail/house/${keyWord[1]}`);
+      } else if (keyWord[0] == "user") {
+        this.selectedUser = keyWord[1];
+        this.childKey += 1;
+        this.centerDialogVisible03 = true;
+      } else if (keyWord[0] == "customer") {
+        this.selectedCustomer = keyWord[1];
+        this.childKey02 += 1;
+        this.centerDialogVisible04 = true;
+      } else if (keyWord[0] == "project") {
+        // this.$store.commit("homepage/selectedSearch", this.searchList);
+        this.routeId = keyWord[1];
+        this.$router.push(`/search/${keyWord[1]}`);
+      }
+    },
+    async remoteMethod(query) {
+      if (query !== "") {
+        this.loading = true;
+        await this.$store.dispatch("homepage/searchAllList", query);
+        console.log("searchList", this.searchList);
+        let projects = this.searchList.projects.map((u) => {
+          return { value: `project:${u.id}`, label: u.name, id: u.id };
+        });
+        let real_estates = this.searchList.real_estates.map((u) => {
+          return { value: `bds:${u.id}`, label: u.title, id: u.id };
+        });
+        let customers = this.searchList.customers.map((u) => {
+          return { value: `customer:${u.id}`, label: u.name, id: u.id };
+        });
+        let users = this.searchList.users.map((u) => {
+          return { value: `user:${u.id}`, label: u.name, id: u.id };
+        });
+        this.options = [
+          {
+            label: "Dự án",
+            options: projects,
+          },
+          {
+            label: "Bất động sản",
+            options: real_estates,
+          },
+          {
+            label: "Khách hàng",
+            options: customers,
+          },
+          {
+            label: "Nhân viên",
+            options: users,
+          },
+        ];
+      } else {
+        this.options = [];
+        this.loading = false;
+      }
+      this.loading = false;
+    },
     handleCommand(command) {
       if (command == "logout") {
         this.openLogout();
@@ -489,6 +616,7 @@ export default {
   .v-list-item__title {
     font-size: 14px !important;
     text-decoration: none;
+    font-weight: 500 !important;
   }
   .v-list-item__action {
     margin-left: 20px;
@@ -610,6 +738,7 @@ export default {
     padding: 4px;
   }
 }
+
 .v-main {
   // padding: 64px 0px 36px 209px !important;
   background: #eff5f9;

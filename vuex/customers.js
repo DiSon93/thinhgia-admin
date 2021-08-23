@@ -10,6 +10,7 @@ export default {
         total: null,
         errorMessage: null,
         exportList: [],
+        customerDetail: {},
     },
     mutations: {
         getCustomerList(state, data) {
@@ -34,6 +35,10 @@ export default {
         },
         exportCustomerList(state, data){
             state.exportList = data;
+            state.errorMessage = null
+        },
+        getCustomerDetail(state, data){
+                  state.customerDetail = data;
             state.errorMessage = null
         }
     },
@@ -105,5 +110,16 @@ export default {
                 })
             // })
         },
+        getCustomerDetail: ({ commit }, _id) => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/customers/${_id}`, method: "GET"}).then(response => {
+                    commit('getCustomerDetail', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        }, 
     }
 }

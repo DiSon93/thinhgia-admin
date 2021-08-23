@@ -16,7 +16,8 @@
 <script>
 // Chart.defaults.global.legend.display = false;
 import LineChart from "@lib/LineChart.js";
-
+import { mapState, mapActions } from "vuex";
+import moment from "moment";
 export default {
   components: {
     LineChart,
@@ -24,36 +25,39 @@ export default {
   data() {
     return {
       datacollection: {},
-      toggle_exclusive: undefined,
+      toggle_exclusive: 2,
     };
   },
   mounted() {
-    this.fillData();
+    // this.fillData();
+    this.getTableData();
+  },
+  watch: {
+    toggle_exclusive: function () {
+      this.getTableData();
+    },
+  },
+  computed: {
+    ...mapState("homepage", ["dataTable"]),
   },
   methods: {
-    fillData() {
+    renderDataTable() {
+      if (this.toggle_exclusive == 2) {
+        this.datacollection.labels = this.dataTable.map((u) => `T${u.month}`);
+      } else if (this.toggle_exclusive == 1) {
+        this.datacollection.labels = this.dataTable.map((u) => `Tuần${u.week}-${u.year}`);
+      } else if (this.toggle_exclusive == 0) {
+        this.datacollection.labels = this.dataTable.map((u) => `${u.day}/${u.month}`);
+      }
       this.datacollection = {
-        labels: [
-          "T1",
-          "T2",
-          "T3",
-          "T4",
-          "T5",
-          "T6",
-          "T7",
-          "T8",
-          "T9",
-          "T10",
-          "T11",
-          "T12",
-        ],
+        ...this.datacollection,
         datasets: [
           {
             label: "BĐS",
             borderColor: "#2DB7F5",
             pointBorderColor: "#2DB7F5",
-            pointBorderWidth: 2,
-            data: [34, 45, 34, 56, 35, 56, 54, 23, 43, 45, 34, 56],
+            pointBorderWidth: 1,
+            data: this.dataTable.map((u) => u.count),
             tension: 0.1,
             fill: false,
           },
@@ -62,8 +66,58 @@ export default {
           legend: {
             display: false,
           },
+          // tooltips: {
+          //   callbacks: {
+          //     labelColor: function (context) {
+          //       return {
+          //         borderColor: "rgb(0, 0, 255)",
+          //         backgroundColor: "rgb(255, 0, 0)",
+          //         borderWidth: 2,
+          //         borderDash: [2, 2],
+          //         borderRadius: 2,
+          //       };
+          //     },
+          //     labelTextColor: function (context) {
+          //       return "#fffff";
+          //     },
+          //   },
+          // },
         },
       };
+      // };
+    },
+    async getTableData() {
+      let min_times = "";
+      let max_times;
+      if (this.toggle_exclusive == 2) {
+        min_times = moment().subtract(1, "years").format("YYYY-MM").replace("-", "/");
+        max_times = moment().format("YYYY-MM").replace("-", "/");
+      } else if (this.toggle_exclusive == 1) {
+        min_times =
+          moment().subtract(210, "days").format("YYYY") +
+          "/" +
+          moment().subtract(210, "days").week();
+        max_times = moment().format("YYYY") + "/" + moment().week();
+      } else if (this.toggle_exclusive == 0) {
+        min_times = moment()
+          .subtract(30, "days")
+          .format("YYYY-MM-DD")
+          .replaceAll("-", "/");
+        max_times = moment().format("YYYY-MM-DD").replace("-", "/");
+      }
+      try {
+        await this.$store.dispatch("homepage/getTableDataList", {
+          code:
+            this.toggle_exclusive == 2
+              ? "month"
+              : this.toggle_exclusive == 1
+              ? "week"
+              : "day",
+          min_times,
+          max_times,
+        });
+        this.renderDataTable();
+      } catch {}
     },
   },
 };

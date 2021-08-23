@@ -306,8 +306,8 @@ export default {
     },
 
     updateDemandCustomer(val) {
-      this.$store.commit("demand/selectedDemand", { ...val, resolved: this.selected_op });
-      this.$router.push("/form/demand/update");
+      // this.$store.commit("demand/selectedDemand", { ...val, resolved: this.selected_op });
+      this.$router.push(`/form/demand/update/${val.id}`);
     },
 
     convertStatus(item) {

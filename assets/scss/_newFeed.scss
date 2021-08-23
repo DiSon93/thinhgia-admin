@@ -5,10 +5,34 @@
         max-width: 200px;
       }
 }
+
+.col_search{
+position: relative;
+
+// .search_all{
+.el-icon-search{
+position: absolute;
+top: 19px;
+left: 20px;
+z-index: 4;
+opacity: 0.6;
+}
+// }
+}
 @media screen and (max-width: 600px) {
   .action,.detail{
     .el-upload-list.el-upload-list--picture {
       max-width: 90px;
     }
   }
+  .col_search{
+    position: relative;
+    .el-icon-search{
+    position: absolute;
+    top: 22px;
+    left: 25px;
+    z-index: 4;
+    opacity: 0.6;
+    }
+    }
 }

@@ -374,8 +374,8 @@ export default {
       this.value12 = this.selectedProject.ground;
       this.value13 = this.selectedProject.title;
       this.value14 = this.selectedProject.descriptions;
-      this.image_id = this.selectedProject.image_id.split(",");
-      this.fileList = this.selectedProject.images.map((item, index) => {
+      this.image_id = this.selectedProject?.image_id?.split(",");
+      this.fileList = this.selectedProject?.images?.map((item, index) => {
         return { ...item, url: item.thumbnail };
       });
     },
@@ -394,6 +394,7 @@ export default {
 
     async updateNewProject() {
       this.loading = true;
+      console.log("AAAA");
       try {
         await this.$store.dispatch("projects/updateNewProject", {
           province_id: this.value01,

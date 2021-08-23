@@ -18,10 +18,18 @@
       <div class="d-flex small">
         <div class="price">VNĐ {{ estateItem.price }} {{ estateItem.unit_price }}</div>
         <div>
-          <button id="congdong" v-if="estateItem.share_public == 1" disabled>
+          <button id="congdong" v-if="estateItem.share_public == 1 && estateItem.approve_public == 2" disabled>
             Cộng Đồng
           </button>
-          <button id="web" v-if="estateItem.share_web == 1" disabled>Web</button>
+          <button id="web" v-if="estateItem.share_web == 1  && estateItem.approve_web == 2" disabled>Web</button>
+          <el-tag
+            type="danger"
+            v-if="
+              (estateItem.share_public == 1 && estateItem.approve_public == 1) ||
+              (estateItem.share_web == 1 && estateItem.approve_web == 1)
+            "
+            >Chờ duyệt</el-tag
+          >
           <NuxtLink :to="`detail/house/${estateId}`">
             <img src="@image/icons/views.svg" alt="" />
           </NuxtLink>
