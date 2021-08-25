@@ -639,7 +639,7 @@ export default {
 @media screen and (max-width: 600px) {
   .project_overview {
     .overview {
-      margin-bottom: 20px;
+      margin-bottom: 20px !important;
     }
     .label {
       margin-top: -20px;

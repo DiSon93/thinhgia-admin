@@ -113,6 +113,7 @@ export default {
   },
   computed: {
     ...mapState("customers", ["total", "exportList"]),
+    ...mapState("auth", ["currentUser"]),
   },
   methods: {
     reload() {
@@ -133,6 +134,10 @@ export default {
 
     async exportCustomerList() {
       this.loading = true;
+      if (this.currentUser.results.user.role_id === 2) {
+        this.loading = false;
+        return;
+      }
       try {
         await exportFileList("/admin/customers/export", "Danh Sách Khách Hàng");
         this.loading = false;

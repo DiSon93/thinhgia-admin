@@ -8,7 +8,7 @@
       :mobile-breakpoint="0"
       hide-default-footer
       fixed-header
-      height="80vh"
+      :height="currentUser.results.user.role_id != 2 ? '80vh' : auto"
     >
       <template v-slot:item="row">
         <tr>
@@ -23,6 +23,7 @@
             <img v-else src="@image/icons/user.svg" alt="" id="customer_img" />
           </td>
           <td>{{ row.item.name }}</td>
+          <td>{{ row.item.phone }}</td>
           <td>{{ row.item.birthday }}</td>
           <td>{{ row.item.fax }}</td>
           <td>{{ row.item.email }}</td>
@@ -53,7 +54,7 @@
     <el-dialog
       title="Update thông tin người dùng"
       :visible.sync="centerDialogVisible"
-      width="40%"
+      :width="dialog"
       center
       destroy-on-close
       id="createCustomers"
@@ -86,6 +87,7 @@ export default {
       selectedCustomer: {},
       centerDialogVisible: false,
       childKey: 0,
+      dialog: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "40%",
       headers: [
         { text: "#", value: "id", sortable: false, width: "58px" },
         {
@@ -96,6 +98,7 @@ export default {
           width: "50px",
         },
         { text: "Tên", value: "name", sortable: false, width: "160px" },
+        { text: "Số điện thoại", value: "phone", sortable: false, width: "160px" },
         { text: "Ngày sinh", value: "birthday", sortable: false, width: "120px" },
         { text: "Fax", value: "fax", sortable: false, width: "100px" },
         { text: "Email", value: "email", sortable: false, width: "180px" },
@@ -113,10 +116,15 @@ export default {
   },
   computed: {
     ...mapState("customers", ["customers", "total"]),
+    ...mapState("auth", ["currentUser"]),
   },
   methods: {
     async getCustomerListPerPage() {
       this.loading = true;
+      if (this.currentUser.results.user.role_id === 2) {
+        this.loading = false;
+        return;
+      }
       try {
         await this.$store.dispatch("customers/getCustomerListPerPage", {
           limit: this.rowPerPage,
@@ -135,16 +143,16 @@ export default {
           id: item.id,
           picture: item.avatar_image?.thumbnail,
           name: item.name,
+          phone: item.phone,
           birthday: item.birth_day,
           fax: item.fax,
           email: item.email,
           address: item.address,
           cmnd: item.identity_card,
           note: item.note,
-          staff: item.user.name,
+          staff: item.user?.name,
           user_id: item.user_id,
           avatar: item.avatar,
-          phone: item.phone,
           gender: item.gender,
           province_id: item.province_id,
           district_id: item.district_id,

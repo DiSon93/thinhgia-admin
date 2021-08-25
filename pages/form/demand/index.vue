@@ -507,41 +507,43 @@ export default {
   }
 }
 @media screen and (max-width: 600px) {
-  .address,
-  .estate,
-  .direction,
-  .tool {
-    display: block;
-  }
-  .addres_items,
-  .tool_item {
-    width: 100% !important;
-    .label {
-      margin-top: 4px;
+  .create_demand {
+    .address,
+    .estate,
+    .direction,
+    .tool {
+      display: block;
     }
-  }
-  .estate_items {
-    width: 100%;
-    .label {
-      margin-top: 4px;
+    .addres_items,
+    .tool_item {
+      width: 100% !important;
+      .label {
+        margin-top: 4px;
+      }
     }
-  }
-  .price_staff {
-    display: block;
-    margin-bottom: 15px;
-    .label {
-      margin-top: 10px;
-    }
-    .price {
+    .estate_items {
       width: 100%;
+      .label {
+        margin-top: 4px;
+      }
     }
-    .staff {
-      margin-top: 15px;
-      width: 100%;
+    .price_staff {
+      display: block;
+      margin-bottom: 15px;
+      .label {
+        margin-top: 10px;
+      }
+      .price {
+        width: 100%;
+      }
+      .staff {
+        margin-top: 15px;
+        width: 100%;
+      }
     }
-  }
-  .save {
-    margin-bottom: 60px;
+    .save {
+      margin-bottom: 60px;
+    }
   }
 }
 </style>

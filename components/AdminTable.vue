@@ -79,7 +79,7 @@
     <el-dialog
       title="Update thông tin người dùng"
       :visible.sync="centerDialogVisible"
-      width="40%"
+      :width="modal"
       center
       destroy-on-close
     >
@@ -112,6 +112,7 @@ export default {
     page: 1,
     rowPerPage: 10,
     role_user: "",
+    modal: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "40%",
     headers: [
       {
         text: "#",

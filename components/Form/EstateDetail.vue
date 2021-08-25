@@ -18,10 +18,20 @@
       <div class="d-flex small">
         <div class="price">VNĐ {{ estateItem.price }} {{ estateItem.unit_price }}</div>
         <div>
-          <button id="congdong" v-if="estateItem.share_public == 1 && estateItem.approve_public == 2" disabled>
+          <button
+            id="congdong"
+            v-if="estateItem.share_public == 1 && estateItem.approve_public == 2"
+            disabled
+          >
             Cộng Đồng
           </button>
-          <button id="web" v-if="estateItem.share_web == 1  && estateItem.approve_web == 2" disabled>Web</button>
+          <button
+            id="web"
+            v-if="estateItem.share_web == 1 && estateItem.approve_web == 2"
+            disabled
+          >
+            Web
+          </button>
           <el-tag
             type="danger"
             v-if="
@@ -50,6 +60,7 @@
         @command="handleCommand"
         trigger="click"
         placement="bottom"
+        v-if="estateItem.share_web == 1 && estateItem.approve_web == 2"
       >
         <v-btn class="chiase"> <v-icon>mdi-share</v-icon> Chia sẻ</v-btn>
         <el-dropdown-menu slot="dropdown" id="dropdown_social">
@@ -80,6 +91,7 @@
           <el-dropdown-item command="URL"> Copy URL </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+      <v-btn class="chiase" v-else> <v-icon>mdi-share</v-icon> Chia sẻ</v-btn>
       <div class="more_info">
         <div>
           <img src="@image/icons/bed.svg" alt="" /> <span>{{ estateItem.bedroom }}</span>

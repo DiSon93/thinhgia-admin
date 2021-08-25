@@ -272,14 +272,14 @@ export default {
       this.getCustomerList();
     },
     async getUpdateList() {
-      await this.$store.dispatch("demand/showDemanDetail", this.$route.params.id)
+      await this.$store.dispatch("demand/showDemanDetail", this.$route.params.id);
       console.log("demand", this.demandDetail);
       this.value01 = this.demandDetail.province_id;
       await this.$store.dispatch("global/getDictrictList", this.value01);
       this.value02 = this.demandDetail.district_id;
       await this.$store.dispatch("global/getWardList", this.value02);
       this.value03 = this.demandDetail.ward_id?.split(",");
-      this.value03 = this.value03?.map(u => parseInt(u));
+      this.value03 = this.value03?.map((u) => parseInt(u));
       this.value04 = this.demandDetail.real_estate_type;
       this.value05 = this.demandDetail.house_type;
       this.value06 = this.demandDetail.price_min;
@@ -287,7 +287,7 @@ export default {
       this.value08 = this.demandDetail.user_id;
       this.value09 = this.demandDetail.customer_id;
       this.value10 = this.demandDetail.house_orientation.split(",");
-      this.value10 = this.value10?.map(u =>  parseInt(u));
+      this.value10 = this.value10?.map((u) => parseInt(u));
       this.value11 = this.demandDetail.bedroom_number_min;
       this.value12 = this.demandDetail.floor_number_min;
       this.value13 = this.demandDetail.land_area_min;
@@ -528,41 +528,43 @@ export default {
   }
 }
 @media screen and (max-width: 600px) {
-  .address,
-  .estate,
-  .direction,
-  .tool {
-    display: block;
-  }
-  .addres_items,
-  .tool_item {
-    width: 100% !important;
-    .label {
-      margin-top: 4px;
+  .create_demand {
+    .address,
+    .estate,
+    .direction,
+    .tool {
+      display: block;
     }
-  }
-  .estate_items {
-    width: 100%;
-    .label {
-      margin-top: 4px;
+    .addres_items,
+    .tool_item {
+      width: 100% !important;
+      .label {
+        margin-top: 4px;
+      }
     }
-  }
-  .price_staff {
-    display: block;
-    margin-bottom: 15px;
-    .label {
-      margin-top: 10px;
-    }
-    .price {
+    .estate_items {
       width: 100%;
+      .label {
+        margin-top: 4px;
+      }
     }
-    .staff {
-      margin-top: 15px;
-      width: 100%;
+    .price_staff {
+      display: block;
+      margin-bottom: 15px;
+      .label {
+        margin-top: 10px;
+      }
+      .price {
+        width: 100%;
+      }
+      .staff {
+        margin-top: 15px;
+        width: 100%;
+      }
     }
-  }
-  .save {
-    margin-bottom: 60px;
+    .save {
+      margin-bottom: 60px;
+    }
   }
 }
 </style>

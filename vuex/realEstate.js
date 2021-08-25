@@ -44,6 +44,7 @@ export default {
         },
         showError(state, data){
             state.errorMessage = data;
+            console.log("error", data)
         },
         showDetail(state, data){
             state.detailEstate = data;

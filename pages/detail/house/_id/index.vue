@@ -63,18 +63,28 @@
         <div>
           <div class="address">{{ showDetail.street_name }}</div>
           <div>
-            <button id="congdong" disabled v-if="showDetail.share_public == 1 && showDetail.approve_public == 2">
+            <button
+              id="congdong"
+              disabled
+              v-if="showDetail.share_public == 1 && showDetail.approve_public == 2"
+            >
               Cộng Đồng
             </button>
-            <button id="web" disabled v-if="showDetail.share_web == 1 && showDetail.approve_web == 2">Web</button>
-             <el-tag
-            type="danger"
-            v-if="
-              (showDetail.share_public == 1 && showDetail.approve_public == 1) ||
-              (showDetail.share_web == 1 && showDetail.approve_web == 1)
-            "
-            >Chờ duyệt</el-tag
-          >
+            <button
+              id="web"
+              disabled
+              v-if="showDetail.share_web == 1 && showDetail.approve_web == 2"
+            >
+              Web
+            </button>
+            <el-tag
+              type="danger"
+              v-if="
+                (showDetail.share_public == 1 && showDetail.approve_public == 1) ||
+                (showDetail.share_web == 1 && showDetail.approve_web == 1)
+              "
+              >Chờ duyệt</el-tag
+            >
           </div>
           <div class="sell_estate">
             {{ showDetail.title ? showDetail.title.toUpperCase() : null }}
@@ -333,7 +343,10 @@
             </el-dropdown>
           </div>
         </div>
-        <a href="javascript:;" @click="readMoreComment" v-if="btn_readMore"
+        <a
+          href="javascript:;"
+          @click="readMoreComment"
+          v-if="btn_readMore && commentList.length != 0"
           >Xem thêm bình luận</a
         >
         <div class="d-flex">
@@ -378,8 +391,9 @@
       <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
     <div class="time_change">
-      <div class="time_title">Số lần thay đổi ({{listChange.length}})</div>
-      <el-table :data="tableData" style="width: 100%">
+      <div class="time_title">Số lần thay đổi ({{ listChange.length }})</div>
+      <el-table :data="tableData" style="width: 100%" empty-text>
+        <!-- <div slot="empty">NO DATA CHANGE CAN SHOW</div> -->
         <el-table-column label="Người sửa" width="180">
           <template slot-scope="scope">
             <span style="font-weight: 700" class="staff_table">{{ scope.row.name }}</span>
@@ -392,15 +406,46 @@
         </el-table-column>
         <el-table-column label="Giá trị cũ" width="340">
           <template slot-scope="scope">
-            <span style="margin-left: 0px">{{ scope.row.old }}</span> <br />
-            <a href="#">Xem tất cả</a>
+            <div
+              v-if="scope.row.column == 'Mô tả'"
+              v-html="scope.row.old"
+              class="content_BDS"
+            ></div>
+            <span v-else style="margin-left: 0px">{{ scope.row.old }}</span>
+            <el-popover
+              placement="top"
+              title="Nội dung mô tả"
+              width="500"
+              trigger="click"
+            >
+              <el-divider></el-divider>
+              <div v-html="scope.row.old" style="margin-top: 5px"></div>
+              <a slot="reference" href="javascript:;" v-if="scope.row.column == 'Mô tả'"
+                >Xem tất cả</a
+              >
+            </el-popover>
           </template>
         </el-table-column>
         <el-table-column label="Giá trị mới" width="340">
           <template slot-scope="scope">
-            <span style="margin-left: 0px">{{ scope.row.new }}</span>
-            <br />
-            <a href="#">Xem tất cả</a>
+            <div
+              v-if="scope.row.column == 'Mô tả'"
+              v-html="scope.row.new"
+              class="content_BDS"
+            ></div>
+            <span v-else style="margin-left: 0px">{{ scope.row.new }}</span>
+            <el-popover
+              placement="top"
+              title="Nội dung mô tả"
+              width="500"
+              trigger="click"
+            >
+              <el-divider></el-divider>
+              <div v-html="scope.row.new" style="margin-top: 5px"></div>
+              <a slot="reference" href="javascript:;" v-if="scope.row.column == 'Mô tả'"
+                >Xem tất cả</a
+              >
+            </el-popover>
           </template>
         </el-table-column>
         <el-table-column label="Thời điểm" width="220" sortable prop="times">
@@ -443,8 +488,7 @@ export default {
       file: null,
       dialogVisible: false,
       dialogImageUrl: "",
-      tableData: [
-      ],
+      tableData: [],
     };
   },
   created() {
@@ -510,22 +554,23 @@ export default {
         };
       } catch {}
     },
-    async getListChangeRealEstate(){
-        try{
-          await this.$store.dispatch("realEstate/listChangeRealEstateUpToDay", this.$route.params.id);
-          console.log("real", this.listChange);
-          this.tableData = this.listChange.map((item, index) => {
-            return {
-              name: item.user?.name,
-          column: item.column,
-          old: item.old_value,
-          new: item.new_value,
-          times: moment(item.updated_at).format("YYYY-MM-DD, h:mm:ss a"),
-            }
-          }) 
-        }catch{
-
-        }
+    async getListChangeRealEstate() {
+      try {
+        await this.$store.dispatch(
+          "realEstate/listChangeRealEstateUpToDay",
+          this.$route.params.id
+        );
+        console.log("real", this.listChange);
+        this.tableData = this.listChange.map((item, index) => {
+          return {
+            name: item.user?.name,
+            column: item.column,
+            old: item.old_value,
+            new: item.new_value,
+            times: moment(item.updated_at).format("YYYY-MM-DD, h:mm:ss a"),
+          };
+        });
+      } catch {}
     },
     selectCommen(_id, is_display) {
       this.select_commentID = _id;
@@ -722,6 +767,11 @@ export default {
       margin-top: -24px !important;
     }
   }
+  .el-table .cell {
+    br {
+      display: none;
+    }
+  }
   .contents {
     justify-content: space-between;
     .address {
@@ -835,7 +885,7 @@ export default {
       img {
         width: 100px;
         height: 100px;
-        margin: 0 5px;
+        margin: 5px;
         border-radius: 10px;
       }
       display: flex;
@@ -921,6 +971,13 @@ export default {
     }
   }
 }
+.content_BDS {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .zalo-share-button {
   margin-bottom: -10px;
   margin-top: 5px;
@@ -970,6 +1027,9 @@ export default {
     .header_detail {
       display: block;
     }
+  }
+  .time_change {
+    margin-bottom: 20px;
   }
 }
 </style>

@@ -142,7 +142,7 @@
                 Tên đường/Số nhà <span style="color: red">*</span>
               </div>
               <el-input v-model="value07" id="input_stress"></el-input>
-              <p class="error_message street_name" v-if="errorMessage">
+              <p class="error_message street_name_error" v-if="errorMessage">
                 {{ errorMessage.street_name ? errorMessage.street_name[0] : null }}
               </p>
             </v-col>
@@ -966,6 +966,9 @@ export default {
   .project_id,
   .street_name {
     margin-top: -25px;
+  }
+  .street_name_error {
+    margin-top: 2px;
   }
 }
 .address {

@@ -623,6 +623,9 @@ export default {
   }
   .adjust {
     height: auto !important;
+    br {
+      display: none !important;
+    }
   }
   .sell-department {
     font-weight: bold;

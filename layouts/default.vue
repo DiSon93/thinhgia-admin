@@ -26,15 +26,7 @@
             <v-list-item-title>Bất động sản</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/customers" router exact v-if="role_user != 2">
-          <v-list-item-action>
-            <v-icon>mdi-account-switch</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Khách hàng</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item v-else>
+        <v-list-item to="/customers" router exact>
           <v-list-item-action>
             <v-icon>mdi-account-switch</v-icon>
           </v-list-item-action>
@@ -361,7 +353,7 @@ export default {
       centerDialogVisible03: false,
       centerDialogVisible04: false,
       saw_noti: false,
-      bds_id: 25,
+      bds_id: 17,
       selectedUser: "",
       selectedCustomer: "",
       childKey: 0,
@@ -480,7 +472,7 @@ export default {
     if (window.innerWidth > 600 && window.innerWidth < 1200) {
       this.drawer = false;
     }
-    this.getHandleBarRole();
+    // this.getHandleBarRole();
   },
   methods: {
     getHandleBarRole() {
@@ -500,7 +492,9 @@ export default {
       } else if (keyWord[0] == "customer") {
         this.selectedCustomer = keyWord[1];
         this.childKey02 += 1;
-        this.centerDialogVisible04 = true;
+        if (this.role_user != 2) {
+          this.centerDialogVisible04 = true;
+        }
       } else if (keyWord[0] == "project") {
         // this.$store.commit("homepage/selectedSearch", this.searchList);
         this.routeId = keyWord[1];

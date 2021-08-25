@@ -87,7 +87,7 @@
 
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+            <NuxtLink to="/detail/house/17" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -99,7 +99,7 @@
             </NuxtLink>
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+            <NuxtLink to="/detail/house/17" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -111,7 +111,7 @@
             </NuxtLink>
             <el-divider><i class="el-icon-star-on"></i></el-divider>
 
-            <NuxtLink to="/detail/house/13" class="d-flex notification_item">
+            <NuxtLink to="/detail/house/17" class="d-flex notification_item">
               <div class="d-flex">
                 <img src="@image/icons/user.svg" alt="" />
                 <div class="name">
@@ -202,7 +202,7 @@
       <el-dialog
         title="Update thông tin người dùng"
         :visible.sync="centerDialogVisible03"
-        width="40%"
+        width="96%"
         center
         destroy-on-close
       >
@@ -215,7 +215,7 @@
       <el-dialog
         title="Update thông tin người dùng"
         :visible.sync="centerDialogVisible04"
-        width="40%"
+        width="96%"
         center
         destroy-on-close
         id="createCustomers"
@@ -271,7 +271,7 @@ export default {
       centerDialogVisible03: false,
       centerDialogVisible04: false,
       saw_noti: false,
-      bds_id: 13,
+      bds_id: 17,
       loading: false,
       value: "",
       options: [],

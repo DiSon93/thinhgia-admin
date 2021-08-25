@@ -142,7 +142,7 @@
                 Tên đường/Số nhà <span style="color: red">*</span>
               </div>
               <el-input v-model="value07" id="input_stress"></el-input>
-              <p class="error_message street_name" v-if="errorMessage">
+              <p class="error_message street_name_error" v-if="errorMessage">
                 {{ errorMessage.street_name ? errorMessage.street_name[0] : null }}
               </p>
             </v-col>
@@ -512,7 +512,6 @@ export default {
   },
   data() {
     return {
-      purpose: "0",
       shownmore: false,
       checked01: false,
       loading: false,
@@ -631,8 +630,7 @@ export default {
     ...mapState("dictionaries", ["dictionaryList"]),
     ...mapState("projects", ["allProject"]),
     ...mapState("auth", ["currentUser"]),
-    ...mapState("realEstate", ["detailEstate"]),
-    ...mapState("realEstate", ["errorMessage"]),
+    ...mapState("realEstate", ["detailEstate", "errorMessage"]),
   },
   methods: {
     ...mapActions("customers", ["getCustomerList"]),
@@ -961,6 +959,13 @@ export default {
   .position {
     padding: 10px;
     margin: -10px 0 10px -10px;
+  }
+  .project_id,
+  .street_name {
+    margin-top: -25px;
+  }
+  .street_name_error {
+    margin-top: 2px;
   }
 }
 .address {

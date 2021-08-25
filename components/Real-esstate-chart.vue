@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       datacollection: {},
-      toggle_exclusive: 2,
+      toggle_exclusive: 1,
     };
   },
   mounted() {
