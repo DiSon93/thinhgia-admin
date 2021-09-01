@@ -90,7 +90,7 @@ export default {
         },
         convertDemandOfCustomer: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/needs/update-resolve/${data.id}?resolved=${data.resolved}`, method: "PATCH"}).then(response => {
+                axiosClient({ url: `/admin/needs/update-resolve/${data.id}`, method: "POST", data: data}).then(response => {
                     commit('convertDemands', response.data.results.data);
                     resolve(response.data);
                 }).catch(e => {
