@@ -193,8 +193,8 @@ export default {
     },
 
     editItem(item) {
-      this.$store.commit("projects/selectedProject", item);
-      this.$router.push("/form/projects/update");
+      // this.$store.commit("projects/selectedProject", item);
+      this.$router.push(`/form/projects/update/${item.id}`);
     },
 
     deleteItem(item) {

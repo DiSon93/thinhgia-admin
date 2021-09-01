@@ -263,7 +263,7 @@
             </el-select> -->
           </div>
           <div class="estate_item">
-            <div class="form_label">Hướng</div>
+            <div class="form_label">Hướng <span style="color: red">*</span></div>
             <el-select v-model="value17" placeholder="Chọn hướng">
               <el-option
                 v-for="item in directions"
@@ -273,6 +273,11 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{
+                errorMessage.house_orientation ? errorMessage.house_orientation[0] : null
+              }}
+            </p>
           </div>
           <div class="estate_item">
             <div class="form_label">Tỷ lệ môi giới</div>
@@ -347,7 +352,7 @@
           </div>
           <div class="content_03">
             <div class="items">
-              <div class="form_label">Hướng <span style="color: red">*</span></div>
+              <div class="form_label">Hướng</div>
               <el-select v-model="value26" placeholder="Chọn hướng">
                 <el-option
                   v-for="item in directions"
@@ -378,10 +383,13 @@
         </div>
         <div class="cms">
           <div class="tieude">
-            <div class="form_label">Tiêu đề</div>
+            <div class="form_label">Tiêu đề <span style="color: red">*</span></div>
             <el-input v-model="value29" id="input_estate"></el-input>
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.title ? errorMessage.title[0] : null }}
+            </p>
+            <div class="form_label">Mô tả <span style="color: red">*</span></div>
 
-            <div class="form_label">Mô tả</div>
             <!-- <ckeditor
               :editor="editor"
               v-model="editorData"
@@ -411,6 +419,9 @@
                 content_style: 'p { margin: 0; }',
               }"
             />
+            <p class="error_message" v-if="errorMessage">
+              {{ errorMessage.descriptions ? errorMessage.descriptions[0] : null }}
+            </p>
           </div>
           <!-- 'searchreplace visualblocks code fullscreen autoresize', -->
         </div>

@@ -142,7 +142,7 @@ export default {
         },
         getTableDataList:   ({ commit }, data) => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/real-estates/map?code=${data.code}&min_times=${data.min_times}&max_times=${data.max_times}`, method: "GET"}).then(response => {
+                axiosClient({ url: `/admin/real-estates/map?code=${data.code}`, method: "POST", data: data}).then(response => {
                     commit('getTableDataList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {

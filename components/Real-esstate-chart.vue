@@ -47,7 +47,9 @@ export default {
       } else if (this.toggle_exclusive == 1) {
         this.datacollection.labels = this.dataTable.map((u) => `Tuần${u.week}-${u.year}`);
       } else if (this.toggle_exclusive == 0) {
-        this.datacollection.labels = this.dataTable.map((u) => `${u.day}/${u.month}`);
+        this.datacollection.labels = this.dataTable.map((u) =>
+          moment(u.date).format("DD-MM")
+        );
       }
       this.datacollection = {
         ...this.datacollection,
@@ -90,20 +92,14 @@ export default {
       let min_times = "";
       let max_times;
       if (this.toggle_exclusive == 2) {
-        min_times = moment().subtract(1, "years").format("YYYY-MM").replace("-", "/");
-        max_times = moment().format("YYYY-MM").replace("-", "/");
+        min_times = moment().subtract(1, "years").format("YYYY-MM-DD");
+        max_times = moment().format("YYYY-MM-DD");
       } else if (this.toggle_exclusive == 1) {
-        min_times =
-          moment().subtract(210, "days").format("YYYY") +
-          "/" +
-          moment().subtract(210, "days").week();
-        max_times = moment().format("YYYY") + "/" + moment().week();
+        min_times = moment().subtract(210, "days").format("YYYY-MM-DD");
+        max_times = moment().format("YYYY-MM-DD");
       } else if (this.toggle_exclusive == 0) {
-        min_times = moment()
-          .subtract(30, "days")
-          .format("YYYY-MM-DD")
-          .replaceAll("-", "/");
-        max_times = moment().format("YYYY-MM-DD").replace("-", "/");
+        min_times = moment().subtract(30, "days").format("YYYY-MM-DD");
+        max_times = moment().format("YYYY-MM-DD");
       }
       try {
         await this.$store.dispatch("homepage/getTableDataList", {

@@ -85,6 +85,8 @@
                 >
                 </el-option>
               </el-select>
+              <el-divider></el-divider>
+              <a href="javascript:;" class="all_search" @click="searchAll">Tất cả</a>
             </span>
 
             <el-button slot="reference" circle class="btn_notification"
@@ -267,6 +269,13 @@ export default {
         this.is_public = "web";
         this.keyChild += 1;
       }
+    },
+    searchAll() {
+      this.is_public = null;
+      this.is_sell = null;
+      this.value01 = "";
+      this.value02 = "";
+      this.keyChild += 1;
     },
     selestedEstateDisplay() {
       this.$refs.childComponent.handleSelectedChange();
@@ -460,6 +469,9 @@ export default {
         }
       }
     }
+  }
+  .all_search {
+    text-decoration: none;
   }
   #select_amount {
     width: 120px !important;

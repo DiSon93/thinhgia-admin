@@ -331,10 +331,10 @@ export default {
   mounted() {
     this.getProvinceList();
     this.getDictionaryTypeList();
+    this.getProjectDetail();
     this.token = `bearer ${this.currentUser.results.access_token}`;
     this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
-    this.getProjectUpdate();
-    this.getProjectDetail();
+    // this.getProjectUpdate();
   },
   computed: {
     ...mapState("global", ["dictrictList"]),
@@ -360,28 +360,30 @@ export default {
     },
     async getProjectDetail() {
       try {
-        await this.$store.dispatch("projects/showProjectDetail", this.selectedProject.id);
-        console.log("detailProject", this.detailProject);
-      } catch {}
+        await this.$store.dispatch("projects/showProjectDetail", this.$route.params.id);
+        this.getProjectUpdate();
+      } catch {
+        console.log("Error");
+      }
     },
     async getProjectUpdate() {
-      this.value01 = this.selectedProject.province_id;
+      this.value01 = this.detailProject.province_id;
       await this.$store.dispatch("global/getDictrictList", this.value01);
-      this.value02 = this.selectedProject.district_id;
+      this.value02 = this.detailProject.district_id;
       await this.$store.dispatch("global/getWardList", this.value02);
-      this.value03 = this.selectedProject.ward_id;
-      this.value04 = this.selectedProject.street;
-      this.value05 = this.selectedProject.type;
-      this.value06 = this.selectedProject.progress;
-      this.value07 = this.selectedProject.investor;
-      this.value08 = this.selectedProject.name;
-      this.value09 = this.selectedProject.location;
-      this.value10 = this.selectedProject.utilities;
-      this.value12 = this.selectedProject.ground;
-      this.value13 = this.selectedProject.title;
-      this.value14 = this.selectedProject.descriptions;
-      this.image_id = this.selectedProject?.image_id?.split(",");
-      this.fileList = this.selectedProject?.images?.map((item, index) => {
+      this.value03 = this.detailProject.ward_id;
+      this.value04 = this.detailProject.street;
+      this.value05 = this.detailProject.type;
+      this.value06 = this.detailProject.progress;
+      this.value07 = this.detailProject.investor;
+      this.value08 = this.detailProject.name;
+      this.value09 = this.detailProject.location;
+      this.value10 = this.detailProject.utilities;
+      this.value12 = this.detailProject.ground;
+      this.value13 = this.detailProject.title;
+      this.value14 = this.detailProject.descriptions;
+      this.image_id = this.detailProject?.image_id?.map((u) => parseInt(u.id));
+      this.fileList = this.detailProject?.image_id?.map((item, index) => {
         return { ...item, url: item.thumbnail };
       });
     },
@@ -417,7 +419,7 @@ export default {
           title: this.value13,
           descriptions: this.value14,
           image_id: this.image_id,
-          id: this.selectedProject.id,
+          id: this.$route.params.id,
         });
         setTimeout(this.openNotificationSuccess(), 1000);
         this.loading = false;

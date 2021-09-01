@@ -339,8 +339,8 @@ export default {
         }
       });
     },
-  async  getCustomerDetail() {
-      await this.$store.dispatch("customers/getCustomerDetail", this.customerId)
+    async getCustomerDetail() {
+      await this.$store.dispatch("customers/getCustomerDetail", this.customerId);
       this.ruleForm = {
         name: this.customerDetail.name,
         email: this.customerDetail.email,
@@ -359,7 +359,7 @@ export default {
       };
       this.$store.dispatch("global/getDictrictList", this.ruleForm.province_id);
       this.$store.dispatch("global/getWardList", this.ruleForm.district_id);
-      this.avatar_image = this.customerDetail.picture;
+      this.avatar_image = this.customerDetail.avatar?.thumbnail;
     },
     async updateCustomerToSystem() {
       this.loadingChild = true;

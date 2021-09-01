@@ -21,6 +21,7 @@
             v-model="ruleForm.email"
             autocomplete="off"
             placeholder="Email Address"
+            @keyup.enter.native="submitForm('ruleForm')"
           ></el-input>
         </el-form-item>
         <el-form-item prop="pass">
@@ -29,6 +30,7 @@
             v-model="ruleForm.pass"
             autocomplete="off"
             placeholder="Password"
+            @keyup.enter.native="submitForm('ruleForm')"
           ></el-input>
         </el-form-item>
         <el-form-item class="remember">
@@ -74,7 +76,7 @@ export default {
             trigger: "submit",
           },
         ],
-        pass: [{ required: true, message: "Please input passwword", trigger: "change" }],
+        pass: [{ required: true, message: "Please input password", trigger: "change" }],
       },
     };
   },

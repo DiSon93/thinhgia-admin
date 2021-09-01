@@ -1,5 +1,5 @@
 <template>
-  <v-app v-if="this.$store.state.auth.currentUser && roleList">
+  <v-app v-if="this.$store.state.auth.currentUser">
     <v-navigation-drawer
       class="toolbar"
       v-model="drawer"
@@ -461,7 +461,11 @@ export default {
     if (!this.$store.state.auth.currentUser) {
       this.$router.push("/admin/login");
     } else {
-      this.$store.dispatch("role/getRoleList");
+      this.$store.dispatch("auth/loginIntoServer", {
+        email: this.$store.state.auth.currentUser.results.user.email,
+        password: "",
+        login_token: this.$store.state.auth.currentUser.results.access_token,
+      });
     }
   },
   beforeMount() {

@@ -265,7 +265,7 @@
             </el-select> -->
           </div>
           <div class="estate_item">
-            <div class="form_label">Hướng</div>
+            <div class="form_label">Hướng <span style="color: red">*</span></div>
             <el-select v-model="value17" placeholder="Chọn hướng">
               <el-option
                 v-for="item in directions"
@@ -275,6 +275,11 @@
               >
               </el-option>
             </el-select>
+            <p class="error_message" v-if="errorMessage">
+              {{
+                errorMessage.house_orientation ? errorMessage.house_orientation[0] : null
+              }}
+            </p>
           </div>
           <div class="estate_item">
             <div class="form_label">Tỷ lệ môi giới</div>
@@ -349,7 +354,7 @@
           </div>
           <div class="content_03">
             <div class="items">
-              <div class="form_label">Hướng <span style="color: red">*</span></div>
+              <div class="form_label">Hướng</div>
               <el-select v-model="value26" placeholder="Chọn hướng">
                 <el-option
                   v-for="item in directions"
@@ -380,39 +385,49 @@
         </div>
         <div class="cms">
           <div class="tieude">
-            <div class="form_label">Tiêu đề</div>
-            <el-input v-model="value29" id="input_estate"></el-input>
+            <div>
+              <div class="form_label">Tiêu đề <span style="color: red">*</span></div>
+              <el-input v-model="value29" id="input_estate"></el-input>
+              <p class="error_message" v-if="errorMessage">
+                {{ errorMessage.title ? errorMessage.title[0] : null }}
+              </p>
+            </div>
+            <div>
+              <div class="form_label">Mô tả <span style="color: red">*</span></div>
+              <p class="error_message" v-if="errorMessage">
+                {{ errorMessage.descriptions ? errorMessage.descriptions[0] : null }}
+              </p>
+              <editor
+                api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
+                v-model="value30"
+                :init="{
+                  menubar: true,
+                  resize: true,
+                  fontsize_formats:
+                    '8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt',
+                  plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    ' autoresize',
+                    'insertdatetime media table paste code help wordcount',
+                  ],
+                  toolbar:
+                    'undo redo | formatselect | forecolor   | fontsizeselect | bold italic backcolor | \
+           alignleft aligncenter alignright alignjustify | insertfile link image |  code | \
+           bullist numlist outdent indent | removeformat | help',
+                  images_upload_url: 'postAcceptor.php',
+                  automatic_uploads: false,
+                  images_reuse_filename: true,
+                  images_file_types: 'jpg,svg,webp',
+                  content_style: 'p { margin: 0; }',
+                }"
+              />
+            </div>
 
-            <div class="form_label">Mô tả</div>
             <!-- <ckeditor
               :editor="editor"
               v-model="editorData"
               :config="editorConfig"
             ></ckeditor> -->
-            <editor
-              api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
-              v-model="value30"
-              :init="{
-                menubar: true,
-                resize: true,
-                fontsize_formats:
-                  '8pt 9pt 10pt 11pt 12pt 14pt 18pt 24pt 30pt 36pt 48pt 60pt 72pt 96pt',
-                plugins: [
-                  'advlist autolink lists link image charmap print preview anchor',
-                  ' autoresize',
-                  'insertdatetime media table paste code help wordcount',
-                ],
-                toolbar:
-                  'undo redo | formatselect | forecolor   | fontsizeselect | bold italic backcolor | \
-           alignleft aligncenter alignright alignjustify | insertfile link image |  code | \
-           bullist numlist outdent indent | removeformat | help',
-                images_upload_url: 'postAcceptor.php',
-                automatic_uploads: false,
-                images_reuse_filename: true,
-                images_file_types: 'jpg,svg,webp',
-                content_style: 'p { margin: 0; }',
-              }"
-            />
           </div>
           <!-- 'searchreplace visualblocks code fullscreen autoresize', -->
         </div>
@@ -781,7 +796,7 @@ export default {
           floor_number: parseInt(this.value25),
           directions: this.value26,
           bedroom_number: this.value27,
-          bathroom_number: this.value28,
+          bathroom_number: this.value28 ? this.value28 : null,
           title: this.value29,
           descriptions: this.value30,
           image_private_id: this.img_val_private,
