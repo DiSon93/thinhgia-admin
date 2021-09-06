@@ -18,7 +18,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/batdongsanviet.png' },
     ],
     script: [
-      { type: 'text/javascript', src:'https://sp.zalo.me/plugins/sdk.js' },
+      { type: 'text/javascript', src: 'https://sp.zalo.me/plugins/sdk.js' },
     ]
   },
 
@@ -26,6 +26,11 @@ export default {
   css: [
     '~/assets/scss/main.scss'
   ],
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
+  },
 
   apps: [
     {
@@ -47,10 +52,10 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: "@/plugins/bootstrap_icon.js", mode: "client"},
+    { src: "@/plugins/bootstrap_icon.js", mode: "client" },
     // { src: "@/plugins/vue-select.js",  ssr: false},
-    { src: "@/plugins/element-ui.js", mode: "client"},
-    { src: "@/plugins/socket-io.js", mode: "client"},
+    { src: "@/plugins/element-ui.js", mode: "client" },
+    { src: "@/plugins/socket-io.js", mode: "client" },
 
     // { src: "@/plugins/vue-lazyloading.js", mode: "client"},
   ],
@@ -88,7 +93,7 @@ export default {
   // },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://thinhgiacore.demo.fit/api', 
+    baseURL: 'https://thinhgiacore.demo.fit/api',
     requestInterceptor: (config, { store }) => {
       config.headers.common['access-token'] = store.state.user.headers.access_token
       config.headers.common['token-type'] = store.state.user.headers.token_type
