@@ -358,16 +358,14 @@ export default {
           site_logo: this.site_logo,
           google_analytics: "",
           seo_separator: "",
-          seo_use_meta_keyword: "",
           site_branch_office_en: "",
           site_description_en: "",
           site_head_office_en: "",
-          site_keywords: "",
+          seo_keywords: "",
           site_linkedin: "",
           site_telegram: "",
           site_twitter: "",
           site_youtube: "",
-          tawk_to_id: "",
           // },
         });
         this.loading = false;
