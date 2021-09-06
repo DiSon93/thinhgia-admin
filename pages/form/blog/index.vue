@@ -44,6 +44,7 @@
           images_reuse_filename: true,
           file_picker_types: 'image',
           images_file_types: 'jpg,svg,webp,png,gif',
+          content_style: 'p { margin: 0; }',
         }"
       />
       <p class="error_message" v-if="errorMessage">
@@ -76,6 +77,9 @@
             </video>
           </div> -->
         </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
         <p class="error_message" v-if="errorMessage">
           {{ errorMessage.image_id ? errorMessage.image_id[0] : null }}
         </p>
@@ -133,6 +137,7 @@ export default {
       img_val: "",
       loading: false,
       video: "",
+      dialogVisible: false,
     };
   },
   mounted() {

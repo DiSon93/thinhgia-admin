@@ -10,32 +10,131 @@
         </div>
       </v-row>
     </div>
-    <div class="form">
+    <div class="form" v-if="setting" v-loading="loading">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-        <div class="label">Địa chỉ <span style="color: red">*</span></div>
-        <el-form-item prop="address">
-          <el-input v-model="ruleForm.address"></el-input>
-        </el-form-item>
-        <div class="label">Email <span style="color: red">*</span></div>
-        <el-form-item prop="email">
-          <el-input type="email" v-model="ruleForm.email"></el-input>
-        </el-form-item>
-        <div class="label">Email liên hệ <span style="color: red">*</span></div>
-        <el-form-item prop="contact">
-          <el-input type="email" v-model.number="ruleForm.contact"></el-input>
-        </el-form-item>
-        <div class="label">Web</div>
-        <el-form-item prop="web">
-          <el-input v-model="ruleForm.web"></el-input>
-        </el-form-item>
-        <div class="label">Điện thoại <span style="color: red">*</span></div>
-        <el-form-item prop="phone">
-          <el-input v-model.number="ruleForm.phone"></el-input>
-        </el-form-item>
-        <div class="label">Thời gian làm việc</div>
-        <el-form-item prop="time">
-          <el-input v-model="ruleForm.time"></el-input>
-        </el-form-item>
+        <v-row>
+          <v-col cols="6">
+            <div class="label">Site Title <span style="color: red">*</span></div>
+            <el-form-item prop="title_website">
+              <el-input v-model="ruleForm.title_website"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Email Address<span style="color: red">*</span></div>
+            <el-form-item prop="site_email">
+              <el-input type="email" v-model="ruleForm.site_email"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Điện thoại <span style="color: red">*</span></div>
+            <el-form-item prop="site_phone">
+              <el-input v-model="ruleForm.site_phone"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Thêm số điện thoại</div>
+            <el-form-item prop="site_extra_phone">
+              <el-input v-model="ruleForm.site_extra_phone"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Địa chỉ <span style="color: red">*</span></div>
+            <el-form-item prop="site_head_office_vi">
+              <el-input v-model="ruleForm.site_head_office_vi"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Chi nhánh <span style="color: red">*</span></div>
+            <el-form-item prop="site_branch_office_vi">
+              <el-input v-model="ruleForm.site_branch_office_vi"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="12">
+            <div class="label">Mô tả <span style="color: red">*</span></div>
+            <el-form-item prop="site_description_vi">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 3, maxRows: 10 }"
+                placeholder="Please input"
+                v-model="ruleForm.site_description_vi"
+              >
+              </el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Web</div>
+            <el-form-item prop="site_domain">
+              <el-input v-model="ruleForm.site_domain"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Thời gian làm việc</div>
+            <el-form-item prop="time">
+              <el-input v-model="ruleForm.open_time"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Favicon <span style="color: red">*</span></div>
+            <el-upload
+              v-if="headers"
+              action="https://thinhgiacore.demo.fit/api/admin/blogs/image"
+              list-type="picture-card"
+              drag
+              name="file[]"
+              :on-preview="handlePictureCardPreviewFavicon"
+              :on-remove="handleRemoveFavicon"
+              :on-change="handleChangeFavicon"
+              :on-success="handleAvatarSuccessFavicon"
+              :headers="headers"
+              :show-file-list="false"
+              ref="upload"
+            >
+              <img v-if="imageUrlFav" :src="imageUrlFav" class="avatar" />
+
+              <i v-else slot="default" class="el-icon-picture"></i>
+            </el-upload>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Logo <span style="color: red">*</span></div>
+            <el-upload
+              v-if="headers"
+              action="https://thinhgiacore.demo.fit/api/admin/blogs/image"
+              list-type="picture-card"
+              drag
+              name="file[]"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              :on-change="handleChange"
+              :on-success="handleAvatarSuccess"
+              :headers="headers"
+              :show-file-list="false"
+              ref="upload"
+            >
+              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+              <i v-else slot="default" class="el-icon-picture"></i>
+            </el-upload>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Logo Slogan</div>
+            <el-form-item prop="site_slogan">
+              <el-input v-model="ruleForm.site_slogan"></el-input>
+            </el-form-item>
+          </v-col>
+
+          <v-col cols="6">
+            <div class="label">Link Facebook</div>
+            <el-form-item prop="site_facebook">
+              <el-input v-model="ruleForm.site_facebook"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="6">
+            <div class="label">Link Zalo</div>
+            <el-form-item prop="site_zalo">
+              <el-input v-model="ruleForm.site_zalo"></el-input>
+            </el-form-item>
+          </v-col>
+        </v-row>
+
         <el-form-item id="btn_submit">
           <!-- <el-button id="btn_web" @click="submitForm('ruleForm')">Lưu</el-button> -->
         </el-form-item>
@@ -86,24 +185,39 @@ export default {
     return {
       centerDialogVisible02: false,
       centerDialogVisible03: false,
+      dialogVisible: false,
       dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
+      fileList: [],
+      headers: null,
+      token: "",
+      favicon: "",
+      site_logo: "",
+      imageUrlFav: "",
+      imageUrl: "",
+      loading: false,
       ruleForm: {
-        address: "",
-        email: "",
-        contact: "",
-        web: "",
-        phone: "",
-        time: "",
+        title_website: "",
+        site_email: "",
+        site_phone: "",
+        site_extra_phone: "",
+        site_head_office_vi: "",
+        site_branch_office_vi: "",
+        site_description_vi: "",
+        site_domain: "",
+        open_time: "",
+        logo_slogan: "",
+        site_facebook: "",
+        site_zalo: "",
       },
       rules: {
-        address: [
+        title_website: [
           {
             required: true,
             message: "Please select activity resource",
             trigger: "change",
           },
         ],
-        email: [
+        site_email: [
           {
             required: true,
             message: "Please input email",
@@ -115,50 +229,166 @@ export default {
             trigger: "submit",
           },
         ],
-        contact: [
-          {
-            required: true,
-            message: "Please input email",
-            trigger: "change",
-          },
-          {
-            type: "email",
-            message: "Please input email address",
-            trigger: "submit",
-          },
-        ],
-        phone: [
+        site_phone: [
           {
             required: true,
             message: "Please input number",
             trigger: "change",
           },
-          { validator: checkNumber, trigger: "blur" },
+          // { validator: checkNumber, trigger: "blur" },
           {
             min: 7,
             message: "The phone must be at least 7 characters.",
             trigger: "blur",
           },
         ],
+        site_extra_phone: [
+          {
+            required: true,
+            message: "Please input number",
+            trigger: "change",
+          },
+          // { validator: checkNumber, trigger: "blur" },
+          {
+            min: 7,
+            message: "The phone must be at least 7 characters.",
+            trigger: "blur",
+          },
+        ],
+        site_head_office_vi: [
+          {
+            required: true,
+            message: "Please select activity resource",
+            trigger: "change",
+          },
+        ],
+        site_branch_office_vi: [
+          {
+            required: true,
+            message: "Please select activity resource",
+            trigger: "change",
+          },
+        ],
+        site_description_vi: [
+          {
+            required: true,
+            message: "Please select activity resource",
+            trigger: "change",
+          },
+        ],
       },
     };
   },
+  mounted() {
+    this.token = `bearer ${this.currentUser.results.access_token}`;
+    this.headers = { Authorization: `bearer ${this.currentUser.results.access_token}` };
+    this.getSettingList();
+  },
+  computed: {
+    ...mapState("auth", ["currentUser"]),
+    ...mapState("web", ["setting"]),
+  },
   methods: {
+    async getSettingList() {
+      try {
+        await this.$store.dispatch("web/getSettingList");
+        console.log("set", this.setting);
+        this.ruleForm = {
+          title_website: this.setting.title_website,
+          site_email: this.setting.site_email,
+          site_phone: this.setting.site_phone,
+          site_extra_phone: this.setting.site_extra_phone,
+          site_head_office_vi: this.setting.site_head_office_vi,
+          site_branch_office_vi: this.setting.site_branch_office_vi,
+          site_description_vi: this.setting.site_description_vi,
+          site_domain: this.setting.site_domain,
+          open_time: this.setting.open_time,
+          site_slogan: this.setting.site_slogan,
+          site_facebook: this.setting.site_facebook,
+          site_zalo: this.setting.site_zalo,
+        };
+        this.favicon = this.setting.favicon;
+        this.site_logo = this.setting.site_logo;
+        this.imageUrlFav = this.setting.favicon;
+        this.imageUrl = this.setting.site_logo;
+      } catch {}
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.updateSettingType();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
+    handleRemove(file, fileList) {},
+    handleRemoveFavicon(file, fileList) {
+      console.log("remore", file);
+      this.$store.dispatch("blog/deleteBlogPhoto", file.response.results[0].id);
+    },
+    handlePictureCardPreview(file) {},
+    handlePictureCardPreviewFavicon(file) {},
+    handleChange(list, fileList) {},
+    handleChangeFavicon(list, fileList) {},
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      this.site_logo = res.results[0].main;
+    },
+    handleAvatarSuccessFavicon(res, file) {
+      this.imageUrlFav = URL.createObjectURL(file.raw);
+      this.favicon = res.results[0].thumbnail;
+    },
     handleChangePassword() {
       this.centerDialogVisible03 = true;
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
+    },
+    async updateSettingType() {
+      console.log("rule", this.ruleForm);
+      this.loading = true;
+      // debugger;
+      try {
+        await this.$store.dispatch("web/updateSettingType", {
+          // setting_name: {
+          ...this.ruleForm,
+          favicon: this.favicon,
+          site_logo: this.site_logo,
+          google_analytics: "",
+          seo_separator: "",
+          seo_use_meta_keyword: "",
+          site_branch_office_en: "",
+          site_description_en: "",
+          site_head_office_en: "",
+          site_keywords: "",
+          site_linkedin: "",
+          site_telegram: "",
+          site_twitter: "",
+          site_youtube: "",
+          tawk_to_id: "",
+          // },
+        });
+        this.loading = false;
+        this.openNotificationSuccess();
+      } catch {
+        this.loading = false;
+        this.showErrorNotification();
+      }
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
+    openNotificationSuccess() {
+      this.$notify({
+        title: "Success",
+        message: "Update type of contact successfull!!!",
+        type: "success",
+      });
     },
   },
 };
@@ -201,7 +431,7 @@ export default {
   }
 }
 .form {
-  width: 50%;
+  width: 100%;
   margin: 0 auto;
   background: #ffffff;
   border: 1px solid #dfdfdf;
@@ -209,9 +439,13 @@ export default {
   border-radius: 4px;
   padding: 30px 20px;
   margin-bottom: 60px;
+  .col-6 {
+    padding: 0 12px;
+  }
   .label {
     font-size: 14px;
     font-weight: 500;
+    margin-top: -10px;
   }
 }
 @media screen and (min-width: 1265px) {

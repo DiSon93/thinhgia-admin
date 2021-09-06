@@ -16,7 +16,11 @@
       <!-- <p class="error_message" v-if="errorMessage">
         {{ errorMessage.title ? errorMessage.title[0] : null }}
       </p> -->
-
+      <div class="label">Email <span style="color: red">*</span></div>
+      <el-input v-model="email" type="email"></el-input>
+      <p class="error_message" v-if="errorMessage">
+        {{ errorMessage }}
+      </p>
       <div class="label">Nội dung <span style="color: red">*</span></div>
       <editor
         api-key="onivchqt2jlmk6u6jubfmjfzk2s33x828b1yq198t8fiv9aq"
@@ -41,16 +45,17 @@
           images_reuse_filename: true,
           file_picker_types: 'image',
           images_file_types: 'jpg,svg,webp,png,gif',
+          content_style: 'p { margin: 0; }',
         }"
       />
 
       <div class="label">Chọn liên hệ <span style="color: red">*</span></div>
-      <el-select v-model="contactType" placeholder="Chọn liên hệ">
+      <el-select v-model="contactType" placeholder="Chọn liên hệ" disabled>
         <el-option
-          v-for="item in blogs"
+          v-for="item in list"
           :key="item.id"
           :label="item.name"
-          :value="item.id"
+          :value="item.name"
         >
         </el-option>
       </el-select>
@@ -62,7 +67,7 @@
       </p> -->
     </div>
     <div id="btn_submit">
-      <el-button id="btn_contact">Lưu</el-button>
+      <el-button id="btn_contact" @click="updateContactType">Lưu</el-button>
     </div>
     <el-dialog
       :visible.sync="centerDialogVisible02"
@@ -106,28 +111,52 @@ export default {
       title: "",
       content: "",
       contactType: "",
-      blogs: [],
+      list: [],
+      email: "",
     };
   },
   mounted() {
-    this.getDictionaryList();
+    // this.getDictionaryList();
+    this.getContactTypeList();
+    this.getDetailContactTypeList();
   },
   computed: {
     ...mapState("dictionaries", ["dictionaryList"]),
+    ...mapState("contact", ["detailContact", "contactTypeList", "errorMessage"]),
   },
   methods: {
+    // ...mapActions("contact", ["getContactTypeList"]),
+
     handleChangePassword() {
       this.centerDialogVisible03 = true;
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
     },
-    async getDictionaryList() {
-      await this.$store.dispatch("dictionaries/getDictionaryList", {
-        limit: 10,
-        page: 1,
+    async getDetailContactTypeList() {
+      try {
+        await this.$store.dispatch(
+          "contact/getDetailContactTypeList",
+          this.$route.params.id
+        );
+        console.log("detailContact", this.detailContact);
+        this.fillDetailInForm();
+      } catch {}
+    },
+    async getContactTypeList() {
+      await this.$store.dispatch("contact/getContactTypeList");
+      this.list = this.contactTypeList.map((u) => {
+        return {
+          id: u.id,
+          name: u.name,
+        };
       });
-      await this.getDicOptions();
+    },
+    fillDetailInForm() {
+      this.title = this.detailContact.title;
+      this.email = this.detailContact.email;
+      this.content = this.detailContact.content;
+      this.contactType = this.detailContact.name;
     },
     getDicOptions() {
       const blogType = this.dictionaryList.filter((u, i) => u.id == 9);
@@ -136,6 +165,36 @@ export default {
           id: item.id,
           name: item.name,
         };
+      });
+    },
+    async updateContactType() {
+      this.loading = true;
+      try {
+        await this.$store.dispatch("contact/updateContactType", {
+          id: this.$route.params.id,
+          email: this.email,
+          title: this.title,
+          content: this.content,
+        });
+        this.loading = false;
+        this.openNotificationSuccess();
+        this.$router.push("/contact");
+      } catch {
+        this.loading = false;
+        this.showErrorNotification();
+      }
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Unsuccess require!!!",
+      });
+    },
+    openNotificationSuccess() {
+      this.$notify({
+        title: "Success",
+        message: "Update type of contact successfull!!!",
+        type: "success",
       });
     },
   },
@@ -193,6 +252,12 @@ export default {
       margin: 6px 0;
     }
   }
+}
+.error_message {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 @media screen and (min-width: 1265px) {
   .header_box {

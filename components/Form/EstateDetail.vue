@@ -68,7 +68,7 @@
             <div
               class="zalo-share-button"
               data-href="https://khobatdongsanviet.demo.fit/"
-              data-oaid="579745863508352884"
+              data-oaid="53253160592962497"
               data-layout="1"
               data-color="blue"
               data-customize="false"

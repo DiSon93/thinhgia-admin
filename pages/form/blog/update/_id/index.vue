@@ -44,6 +44,7 @@
           images_reuse_filename: true,
           file_picker_types: 'image',
           images_file_types: 'jpg,svg,webp,png,gif',
+          content_style: 'p { margin: 0; }',
         }"
       />
       <p class="error_message" v-if="errorMessage">

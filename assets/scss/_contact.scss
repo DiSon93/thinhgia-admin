@@ -6,7 +6,7 @@
           .v-data-table > .v-data-table__wrapper > table > thead > tr > td,
           .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
               font-size: 14px !important;
-              text-align: center;
+            //   text-align: center;
           }
           tr th {
               color: teal !important;
@@ -14,7 +14,17 @@
               font-size: 14px !important;
 
           }
-          tr td:nth-child(4) .v-icon.mdi-pencil{
+          tr td{
+              text-align: center;
+          }
+          tr td:nth-child(2){
+              font-weight: 500;
+          }
+          tr td:nth-child(5){
+            //   display: flex;
+              text-align: justify;
+          }
+          tr td:nth-child(6) .v-icon.mdi-pencil{
               color: red;
           }
       }

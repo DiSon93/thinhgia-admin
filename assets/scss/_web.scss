@@ -4,6 +4,27 @@
         border: 1px solid #dfdfdf;
         box-sizing: border-box;
         border-radius: 16px;
+        height: 30px;
+        // margin-bottom: -40px;
+    }
+    .el-upload-dragger {
+        width: 120px;
+        height: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .el-upload--picture-card {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+    }
+    .el-upload-list--picture-card .el-upload-list__item{
+        width: 120px;
+        height: 120px;
+    }
+    .el-form-item__error{
+        padding-top: 0px;
     }
     #btn_web.el-button {
         background: #fbad18;

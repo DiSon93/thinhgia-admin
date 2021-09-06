@@ -10,10 +10,10 @@
         </div>
       </v-row>
     </div>
-    <div id="contact" v-loading="loading">
+    <div id="contact" v-loading="loading" v-if="contactTypeList.length != 0">
       <v-data-table
         :headers="headers"
-        :items="contacts"
+        :items="contactTypeList"
         class="elevation-1"
         :mobile-breakpoint="0"
         :items-per-page="100"
@@ -22,12 +22,23 @@
         <template v-slot:item="row">
           <tr>
             <td>{{ row.item.id }}</td>
-            <td>{{ row.item.name.toUpperCase() }}</td>
+            <td>{{ row.item.title ? row.item.title.toUpperCase() : null }}</td>
             <td>
-              {{ row.item.type }}
+              {{ row.item.email }}
             </td>
             <td>
-              <v-icon small class="mr-2" @click="$router.push('/form/contact')">
+              {{ row.item.name }}
+            </td>
+            <td>
+              <div class="content" v-html="row.item.content"></div>
+              <!-- <div class="readMore">Xem thêm</div> -->
+            </td>
+            <td>
+              <v-icon
+                small
+                class="mr-2"
+                @click="$router.push(`/form/contact/${row.item.id}`)"
+              >
                 mdi-pencil
               </v-icon>
             </td>
@@ -77,10 +88,14 @@ export default {
           text: "Tiêu đề",
           align: "start",
           sortable: false,
-          value: "name",
+          value: "title",
           width: "150px",
         },
-        { text: "Loại liên hệ", value: "type", sortable: false, width: "250px" },
+        { text: "Email", value: "email", sortable: false, width: "250px" },
+
+        { text: "Loại liên hệ", value: "name", sortable: false, width: "200px" },
+        { text: "Nội dung", value: "content", sortable: false, width: "450px" },
+
         { text: "Chỉnh sửa", value: "actions", sortable: false, width: "100px" },
       ],
       contacts: [
@@ -91,7 +106,15 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.getContactTypeList();
+  },
+  computed: {
+    ...mapState("contact", ["contactTypeList"]),
+  },
   methods: {
+    ...mapActions("contact", ["getContactTypeList"]),
+
     editItem() {},
     handleChangePassword() {
       this.centerDialogVisible03 = true;
@@ -104,14 +127,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#contact {
-  width: 630px;
-  margin: 0 auto;
+.contact {
+  .header_box {
+    margin-bottom: 20px;
+  }
+  #contact {
+    // width: 630px;
+    margin: 0px auto;
+    tr td:nth-child(5) {
+      .content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        margin: 10px 0;
+      }
+
+      // height: 67px;
+    }
+  }
 }
+
 .header_box {
   left: 208px !important;
   background: #eff5f9 !important;
-  margin: 20px 0 40px !important;
+  margin: 20px 0 60px !important;
   padding-top: 10px;
   .homepage {
     width: 100px;
