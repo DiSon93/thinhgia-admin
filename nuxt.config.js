@@ -131,6 +131,9 @@ export default {
     '@lib': resolve(__dirname, './library'),
     '@utils': resolve(__dirname, './utils')
   },
-
+  server: {
+    host: '0',
+    port: 3001
+  },
   extensions: ['*', '.js', '.vue', '.json']
 }
