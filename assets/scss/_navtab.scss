@@ -1,4 +1,5 @@
 #navtab_admin {
+<<<<<<< HEAD
     .tabs{
         .nav-tab.nav-fill.nav {
             border-bottom: none !important;
@@ -15,3 +16,32 @@
           }
     }
   }
+=======
+    .tabs {
+        .nav-tab.nav-fill.nav {
+            border-bottom: none !important;
+            .nav-item {
+                a.nav-link {
+                    font-size: 12px;
+                    color: red;
+                }
+                &:hover {
+                    border: none;
+                }
+            }
+        }
+    }
+}
+
+.v-bottom-navigation {
+    display: none !important;
+}
+.theme--light.v-navigation-drawer{
+    background-color: #f8f8f8!important;
+}
+@media screen and (max-width: 600px) {
+    .v-bottom-navigation {
+        display: block !important;
+    }
+}
+>>>>>>> main

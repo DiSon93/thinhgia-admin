@@ -8,6 +8,7 @@
     transition="fade-transition"
   >
     <div class="header_box">
+<<<<<<< HEAD
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Bất động sản</button>
         <v-btn depressed color="primary" id="social_network"> 16:52 </v-btn>
@@ -49,12 +50,141 @@
       <v-row class="data_table">
         <RealEstateTable />
       </v-row>
+=======
+      <v-row align="center">
+        <button class="homepage" disabled>Bất động sản</button>
+        <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
+        <div class="select_box">
+          <el-select v-model="value" placeholder="Select">
+            <el-option
+              v-for="item in search"
+              :key="item.value"
+              :label="item.price"
+              :value="item.value"
+            >
+              <span style="float: left" class="search_label">{{ item.label }}</span>
+              <span
+                style="float: right; color: #8492a6; font-size: 13px"
+                class="prices"
+                >{{ item.price }}</span
+              >
+            </el-option>
+          </el-select>
+        </div>
+        <div id="search">
+          <el-input
+            placeholder="Tìm kiếm tất cả thông tin"
+            prefix-icon="el-icon-search"
+            v-model="input"
+          >
+          </el-input>
+        </div>
+        <div class="option_button">
+          <v-btn
+            class="mx-2 add_btn"
+            fab
+            dark
+            small
+            color="warning"
+            @click="$router.push('/form/house')"
+          >
+            <v-icon dark small> mdi-plus </v-icon>
+          </v-btn>
+          <v-btn class="account" fab @click="centerDialogVisible02 = true"
+            ><v-icon dark small>mdi-account</v-icon></v-btn
+          >
+          <v-btn class="export" fab @click="exportRealEstateList"
+            ><img src="@image/icons/export.png" alt=""
+          /></v-btn>
+
+          <!-- <v-btn class="setting" fab><v-icon dark small>mdi-cog</v-icon></v-btn> -->
+          <el-popover placement="bottom-end" width="200" trigger="click" id="setting">
+            <span class="setting">
+              <div class="label">Tùy chỉnh</div>
+              <el-divider></el-divider>
+              <el-select
+                v-model="value01"
+                placeholder="Cộng đồng"
+                @change="handleChangePublic($event)"
+              >
+                <el-option
+                  v-for="item in shares"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select
+                v-model="value02"
+                placeholder="Mở bán"
+                @change="handleChangeSell($event)"
+              >
+                <el-option
+                  v-for="item in sells"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-divider></el-divider>
+              <a href="javascript:;" class="all_search" @click="searchAll">Tất cả</a>
+            </span>
+
+            <el-button slot="reference" circle class="btn_notification"
+              ><v-icon dark small>mdi-cog</v-icon></el-button
+            >
+          </el-popover>
+        </div>
+      </v-row>
+      <div class="selected_estate" v-if="isSelectedEstate">
+        <el-button type="primary" plain>Nhãn</el-button>
+        <el-button @click="removeSelectedEstate">Bỏ chọn</el-button>
+        <el-button @click="selestedEstateDisplay" type="warning" plain
+          >Hiển thị</el-button
+        >
+      </div>
+
+      <v-row class="data_table" v-loading="loading">
+        <EstateTable
+          :is_public="is_public"
+          :is_sell="is_sell"
+          :key="keyChild"
+          :searchKey="input"
+          :min_price="min_price"
+          :max_price="max_price"
+          ref="childComponent"
+          v-on:display-select="isSelectedEstate = true"
+          v-on:display-nonselect="isSelectedEstate = false"
+        />
+      </v-row>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        :width="dialog"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible03"
+        :width="dialog"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
+      </el-dialog>
+>>>>>>> main
     </div>
   </v-lazy>
 </template>
 
 <script>
 import RealEstateTable from "@component/RealEstateTable.vue";
+<<<<<<< HEAD
 import SelectBox from "@component/SelectBox.vue";
 export default {
   components: {
@@ -138,6 +268,181 @@ export default {
       ],
     };
   },
+=======
+import EstateTable from "@component/EstateTable.vue";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+import { mapState, mapActions } from "vuex";
+import { exportFileList } from "../../utils/exportFile";
+export default {
+  components: {
+    RealEstateTable,
+    EstateTable,
+    UserDetail,
+    ChangePassword,
+  },
+  data() {
+    return {
+      input: "",
+      clipped: false,
+      drawer: true,
+      fixed: false,
+      isActive: false,
+      loading: false,
+      centerDialogVisible02: false,
+      centerDialogVisible03: false,
+      value01: "",
+      value02: "",
+      keyChild: 0,
+      min_price: "",
+      max_price: "",
+      is_public: null,
+      is_sell: null,
+      isSelectedEstate: false,
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
+      shares: [
+        {
+          id: 1,
+          name: "Cộng đồng",
+        },
+        {
+          id: 2,
+          name: "Cá nhân",
+        },
+      ],
+      sells: [
+        {
+          id: 1,
+          name: "Mở bán",
+        },
+        {
+          id: 2,
+          name: "Ngưng bán",
+        },
+      ],
+      search: [
+        {
+          value: "1",
+          label: "1",
+          price: "1 tỷ",
+        },
+        {
+          value: "2",
+          label: "2",
+          price: "2 tỷ",
+        },
+        {
+          value: "5",
+          label: "5",
+          price: "5 tỷ",
+        },
+        {
+          value: "10",
+          label: "10",
+          price: "10 tỷ",
+        },
+        {
+          value: "0",
+          label: "0",
+          price: "Tất cả",
+        },
+      ],
+      value: "0",
+    };
+  },
+
+  computed: {
+    ...mapState("realEstate", ["total"]),
+  },
+  watch: {
+    input: function (val) {
+      this.keyChild += 1;
+    },
+    value: function (val) {
+      console.log("val", val);
+      if (val == 1) {
+        this.min_price = 0;
+        this.max_price = 1;
+      } else if (val == 2) {
+        this.min_price = 1;
+        this.max_price = 2;
+      } else if (val == 5) {
+        this.min_price = 2;
+        this.max_price = 5;
+      } else if (val == 10) {
+        this.min_price = 5;
+        this.max_price = 10;
+      } else if (val == 0) {
+        this.min_price = "";
+        this.max_price = "";
+      }
+      this.keyChild += 1;
+    },
+  },
+  methods: {
+    handleChangePassword() {
+      this.centerDialogVisible03 = true;
+      setTimeout(() => {
+        this.centerDialogVisible02 = false;
+      }, 100);
+    },
+    handleChangePublic(e) {
+      if (this.is_sell == null) {
+        this.is_sell = 1;
+      }
+      if (e == 1) {
+        this.is_public = "public";
+        this.keyChild += 1;
+      }
+      if (e == 2) {
+        this.is_public = "web";
+        this.keyChild += 1;
+      }
+    },
+    searchAll() {
+      this.is_public = null;
+      this.is_sell = null;
+      this.value01 = "";
+      this.value02 = "";
+      this.keyChild += 1;
+    },
+    selestedEstateDisplay() {
+      this.$refs.childComponent.handleSelectedChange();
+    },
+    removeSelectedEstate() {
+      this.$refs.childComponent.removeSelected();
+    },
+    async handleChangeSell(e) {
+      if (this.is_public == null) {
+        this.is_public = "public";
+      }
+      if (e == 1) {
+        this.is_sell = 1;
+        this.keyChild += 1;
+      }
+      if (e == 2) {
+        this.is_sell = 0;
+        this.keyChild += 1;
+      }
+    },
+    async exportRealEstateList() {
+      this.loading = true;
+      try {
+        await exportFileList("/admin/real-estates/export", "Danh sách Bất Động Sản");
+        this.loading = false;
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Cannot export Customer List!!!",
+      });
+    },
+  },
+>>>>>>> main
 };
 </script>
 
@@ -158,6 +463,19 @@ export default {
     margin-left: 8px;
     margin-right: 8px;
   }
+<<<<<<< HEAD
+=======
+  .selected_estate {
+    position: absolute;
+    top: 0px;
+    left: 30px;
+    z-index: 99;
+    .el-button {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+  }
+>>>>>>> main
   .homepage {
     width: 100px;
     height: 25px !important;
@@ -176,12 +494,16 @@ export default {
     font-weight: 300 !important;
     margin-left: 8px;
     background-color: #fff;
+<<<<<<< HEAD
     // border: 1px solid rgba(96, 96, 96, 0.2);
     // border-radius: 15px;
+=======
+>>>>>>> main
     #vs2__combobox {
       border: 1px solid rgba(96, 96, 96, 0.2);
       border-radius: 15px !important;
     }
+<<<<<<< HEAD
     // .number {
     //   width: 13px !important;
     //   height: 13px !important;
@@ -191,6 +513,9 @@ export default {
     //   font-size: 11px;x`
     //   font-weight: 300;
     // }
+=======
+
+>>>>>>> main
     .title {
       font-size: 11px !important;
       font-weight: 300 !important;
@@ -231,10 +556,13 @@ export default {
       border-radius: 15px;
       border: 1px solid rgba(96, 96, 96, 0.2);
       border-left: none;
+<<<<<<< HEAD
       &:hover {
         border: 1px solid blue;
         transition: 0.5s;
       }
+=======
+>>>>>>> main
     }
     .input-group-text {
       position: absolute;
@@ -277,20 +605,47 @@ export default {
         transition: 0.5s;
       }
     }
+<<<<<<< HEAD
     .setting {
       padding: 0;
       width: 24px !important;
       height: 24px !important;
+=======
+    #setting {
+      padding: 0;
+      // width: 24px !important;
+      // height: 24px !important;
+>>>>>>> main
       border-radius: 50%;
       background-color: #fff !important;
       box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
       margin-left: 10px;
+<<<<<<< HEAD
       &:hover {
         border: 1px solid blue;
         transition: 0.5s;
       }
     }
   }
+=======
+
+      .el-button {
+        padding: 4px !important;
+        .v-icon {
+          // line-height: 24px;
+          color: #000;
+        }
+        &:hover {
+          border: 1px solid blue;
+          transition: 0.5s;
+        }
+      }
+    }
+  }
+  .all_search {
+    text-decoration: none;
+  }
+>>>>>>> main
   #select_amount {
     width: 120px !important;
     border-radius: 15px !important;
@@ -310,4 +665,36 @@ export default {
     margin-top: -50px !important;
   }
 }
+<<<<<<< HEAD
+=======
+@media screen and (max-width: 600px) {
+  #search {
+    display: none;
+  }
+  .select_box {
+    position: absolute;
+    top: 65px;
+    left: 15px;
+  }
+  .data_table {
+    padding: 30px 15px 80px;
+  }
+  .option_button {
+    top: 68px;
+    right: 15px !important;
+  }
+  .homepage {
+    margin-left: 15px !important;
+  }
+  .v-input--hide-details {
+    display: none !important;
+  }
+  .header_box {
+    .selected_estate {
+      left: 200px;
+      top: 5px;
+    }
+  }
+}
+>>>>>>> main
 </style>

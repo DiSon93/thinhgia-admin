@@ -9,7 +9,11 @@
   >
     <div class="header_box">
       <v-row align="center" d-flex>
+<<<<<<< HEAD
         <v-col cols="6" class="app_bar">
+=======
+        <v-col cols="8" sm="6" class="app_bar">
+>>>>>>> main
           <button class="homepage" disabled>Quản trị</button>
           <v-btn-toggle v-model="toggle_exclusive" mandatory id="administrator_btn">
             <v-btn v-on:click="user"> Người dùng </v-btn>
@@ -17,16 +21,102 @@
             <v-btn @click="realEstate"> Duyệt BĐS </v-btn>
           </v-btn-toggle>
         </v-col>
+<<<<<<< HEAD
         <v-col cols="6" class="app_bar">
           <div class="option_button">
             <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
             <v-btn class="notifiaction" fab
               ><img src="@image/icons/bell-badge-noti.jpg" alt=""
             /></v-btn>
+=======
+        <v-col cols="4" sm="6" class="app_bar">
+          <div class="option_button">
+            <v-btn class="account" fab @click="centerDialogVisible02 = true"
+              ><v-icon dark small>mdi-account</v-icon></v-btn
+            >
+            <!-- <v-btn class="notifiaction" fab
+              ><img src="@image/icons/bell-badge-noti.jpg" alt=""
+            /></v-btn> -->
+            <el-popover
+              placement="bottom-end"
+              width="500"
+              trigger="click"
+              id="notification"
+            >
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">a few seconds ago</div>
+              </NuxtLink>
+              <el-divider><i class="el-icon-star-on"></i></el-divider>
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">26 minutes ago</div>
+              </NuxtLink>
+
+              <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">39 minutes ago</div>
+              </NuxtLink>
+              <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">39 minutes ago</div>
+              </NuxtLink>
+              <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+              <NuxtLink to="/detail/house/10" class="d-flex notification_item">
+                <div class="d-flex">
+                  <img src="@image/icons/user.svg" alt="" />
+                  <div class="name">
+                    <span class="staff_name">Vũ Nguyễn Lệ Chi</span> đã chia sẻ bất động
+                    sản lên cộng đồng
+                  </div>
+                </div>
+                <div class="time">39 minutes ago</div>
+              </NuxtLink>
+
+              <el-button
+                slot="reference"
+                circle
+                class="btn_notification"
+                @click="saw_noti = true"
+                ><img v-if="!saw_noti" src="@image/icons/bell-badge-noti.jpg" alt="" />
+                <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
+              </el-button>
+            </el-popover>
+>>>>>>> main
           </div>
         </v-col>
       </v-row>
       <v-row class="admin_option">
+<<<<<<< HEAD
         <v-col cols="4" v-if="isUser"> 51 người dùng </v-col>
         <v-col cols="4" v-if="isDictionary"> Tổng cộng: 8 loại Loại BĐS </v-col>
         <v-col cols="4" v-if="isRealEstate"> 1BĐS </v-col>
@@ -35,6 +125,29 @@
         <v-col cols="4" align="center" v-if="isRealEstate"> </v-col>
         <v-col cols="4" align="right">
           <div class="phanquyen" :class="{ adjust: isRealEstate }">
+=======
+        <v-col cols="6" sm="4" v-if="isUser">
+          <span class="figure">{{ totalUser }}</span> người dùng
+        </v-col>
+        <v-col cols="6" sm="4" v-if="isDictionary">
+          Tổng cộng:
+          <span class="figure"> {{ dicSelected[0].dictionaries.length }}</span>
+          {{ dicSelected[0].name }}
+        </v-col>
+        <v-col cols="6" sm="4" v-if="isRealEstate">
+          <span class="figure">{{ approveRealList.length }}</span> BĐS
+        </v-col>
+
+        <v-col cols="6" sm="4" align="center" v-if="isUser || isDictionary">
+          1 / 1
+        </v-col>
+        <v-col cols="6" sm="4" align="center" v-if="isRealEstate"> </v-col>
+        <v-col cols="12" sm="4" align="right" class="res_phanquyen">
+          <div
+            class="phanquyen"
+            :class="{ adjust: isRealEstate, dictionary_option: isDictionary }"
+          >
+>>>>>>> main
             <span v-if="isUser">Phân quyền</span>
             <span v-if="isDictionary">Loại từ điển</span>
             <span v-if="isRealEstate"></span>
@@ -44,7 +157,17 @@
                   <span> {{ option.title }}</span>
                 </template>
               </v-select> -->
+<<<<<<< HEAD
             <el-select v-model="value1" placeholder="Tất cả" v-if="isUser">
+=======
+
+            <el-select
+              v-model="value1"
+              placeholder="Tất cả"
+              v-if="isUser"
+              @change="handleChangeRole($event)"
+            >
+>>>>>>> main
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -53,7 +176,16 @@
               >
               </el-option>
             </el-select>
+<<<<<<< HEAD
             <el-select v-model="value2" placeholder="Tất cả" v-if="isDictionary">
+=======
+            <el-select
+              v-model="value2"
+              placeholder="Tất cả"
+              v-if="isDictionary"
+              @change="handleChangeDic($event)"
+            >
+>>>>>>> main
               <el-option
                 v-for="item in dictionaris"
                 :key="item.value"
@@ -67,6 +199,10 @@
               placeholder="Tất cả"
               v-if="isRealEstate"
               class="congDong"
+<<<<<<< HEAD
+=======
+              @change="handleChangeApp($event)"
+>>>>>>> main
             >
               <el-option
                 v-for="item in estate"
@@ -83,16 +219,39 @@
               dark
               small
               color="warning"
+<<<<<<< HEAD
               v-if="!isRealEstate"
             >
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
             <v-btn class="export" fab v-if="!isRealEstate"
+=======
+              v-if="isUser"
+              @click="centerDialogVisible = true"
+              :disabled="role_user == 3 || role_user == 4"
+            >
+              <v-icon dark small> mdi-plus </v-icon>
+            </v-btn>
+            <v-btn
+              class="mx-2 add_btn"
+              fab
+              dark
+              small
+              color="warning"
+              v-if="isDictionary"
+              @click="dialogVisible = true"
+              :disabled="role_user == 3 || role_user == 4"
+            >
+              <v-icon dark small> mdi-plus </v-icon>
+            </v-btn>
+            <v-btn class="export" fab v-if="isUser" @click="exportUserList"
+>>>>>>> main
               ><img src="@image/icons/export.png" alt=""
             /></v-btn>
           </div>
         </v-col>
       </v-row>
+<<<<<<< HEAD
       <v-row class="data_table" v-if="isUser">
         <AdminTable />
       </v-row>
@@ -103,6 +262,65 @@
         <DefineRealEstate />
       </v-row>
       <v-row class="data_table" v-if="isUser"> </v-row>
+=======
+      <el-dialog
+        title="Tạo người dùng mới"
+        :visible.sync="centerDialogVisible"
+        :width="modal"
+        center
+        destroy-on-close
+      >
+        <CreateUser
+          v-on:close-modals="centerDialogVisible = false"
+          v-on:reload-page="reload"
+        />
+      </el-dialog>
+      <el-dialog :visible.sync="dialogVisible" :width="modalDic" destroy-on-close>
+        <CreateDictionaries
+          :select_dic="dicSelected[0]"
+          v-on:close-modals="dialogVisible = false"
+          v-on:close-add-modals="reloadDic"
+        />
+      </el-dialog>
+      <v-row class="data_table" v-show="isUser" v-loading="loading">
+        <AdminTable
+          :key="keyChild"
+          @getTotal="getTotalUser"
+          :select_role="role_id"
+          v-if="role_user != 3 || role_user != 4"
+        />
+      </v-row>
+      <v-row class="data_table dictionary" v-if="isDictionary">
+        <Dictionary
+          :key="keyDic"
+          :select_dic="dicSelected[0]"
+          v-on:close-update="reloadDic"
+          v-if="role_user != 3"
+        />
+      </v-row>
+      <v-row class="data_table define" v-if="isRealEstate">
+        <DefineRealEstate :is_share="value3" :key="keyApp" />
+      </v-row>
+      <v-row class="data_table" v-if="isUser"> </v-row>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        :width="dialog"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible03"
+        :width="dialog"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
+      </el-dialog>
+>>>>>>> main
     </div>
   </v-lazy>
 </template>
@@ -111,20 +329,43 @@
 import AdminTable from "@component/AdminTable";
 import Dictionary from "@component/Dictionary";
 import DefineRealEstate from "@component/DefineRealEstate";
+<<<<<<< HEAD
+=======
+import CreateUser from "@component/Form/CreateUser";
+import CreateDictionaries from "@component/Form/CreateDictionaries";
+import { mapState, mapActions } from "vuex";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+import { exportFileList } from "../../utils/exportFile";
+>>>>>>> main
 
 export default {
   components: {
     AdminTable,
     Dictionary,
     DefineRealEstate,
+<<<<<<< HEAD
   },
   data() {
     return {
+=======
+    CreateUser,
+    CreateDictionaries,
+    UserDetail,
+    ChangePassword,
+  },
+  data() {
+    return {
+      keyChild: 0,
+      keyDic: 0,
+      keyApp: 0,
+>>>>>>> main
       isActive: false,
       isUser: true,
       isDictionary: false,
       isRealEstate: false,
       toggle_exclusive: [],
+<<<<<<< HEAD
       // options: [
       //   {
       //     title: "Tất cả",
@@ -202,6 +443,25 @@ export default {
           label: "Đường",
         },
       ],
+=======
+      centerDialogVisible: false,
+      centerDialogVisible02: false,
+      centerDialogVisible03: false,
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
+      modal: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "40%",
+      modalDic:
+        window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "60%" : "30%",
+      dialogVisible: false,
+      saw_noti: false,
+      dicSelected: "",
+      opSelected: 1,
+      addDicVal: 1,
+      options: [],
+      totalUser: 0,
+      role_id: 0,
+      role_user: "",
+      loading: false,
+>>>>>>> main
       estate: [
         {
           value: "Cộng Đồng",
@@ -212,12 +472,113 @@ export default {
           label: "Web",
         },
       ],
+<<<<<<< HEAD
       value1: "",
       value2: "",
       value3: "",
     };
   },
   methods: {
+=======
+      dictionaris: [],
+      value1: "",
+      value2: 1,
+      value3: "Cộng Đồng",
+    };
+  },
+  mounted() {
+    this.role_user = this.currentUser ? this.currentUser.results.user.role_id : "";
+    this.getRoleList();
+    this.getDictionaryTypeList();
+  },
+  computed: {
+    ...mapState("role", ["roleList"]),
+    ...mapState("dictionaries", ["dictionaryList"]),
+    ...mapState("realEstate", ["approveRealList"]),
+    ...mapState("auth", ["currentUser"]),
+  },
+  methods: {
+    getTotalUser(value) {
+      this.totalUser = value;
+    },
+    handleChangeDic(e) {
+      this.opSelected = e;
+      this.dicSelected = this.dictionaryList.filter((u, i) => u.id == e);
+      this.keyDic += 1;
+    },
+    handleChangeRole(e) {
+      this.role_id = e;
+      this.keyChild += 1;
+    },
+    handleChangeApp(e) {
+      this.keyApp += 1;
+    },
+    reload() {
+      this.keyChild += 1;
+    },
+    async reloadDic() {
+      await this.getDictionaryTypeList();
+      await this.handleChangeDic(this.opSelected);
+      this.dialogVisible = false;
+    },
+    async getRoleList() {
+      await this.$store.dispatch("role/getRoleList");
+      await this.getRoleOptions();
+    },
+    async getDictionaryTypeList() {
+      await this.$store.dispatch("dictionaries/getDictionaryList", {
+        limit: 10,
+        page: 1,
+      });
+      await this.getDicOptions();
+    },
+    getRoleOptions() {
+      this.options = this.roleList.map((item, index) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+      this.options.push({
+        value: 0,
+        label: "Tất cả",
+      });
+    },
+    getDicOptions() {
+      if (!this.dicSelected) {
+        this.dicSelected = this.dictionaryList;
+      }
+      this.dictionaris = this.dictionaryList.map((item, index) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+    },
+    handleChangePassword() {
+      this.centerDialogVisible03 = true;
+      setTimeout(() => {
+        this.centerDialogVisible02 = false;
+      }, 100);
+    },
+
+    async exportUserList() {
+      this.loading = true;
+      try {
+        await exportFileList("/admin/users/export", "Danh Sách Nhân Viên");
+        this.loading = false;
+      } catch {
+        this.showErrorExportNotification();
+        this.loading = false;
+      }
+    },
+    showErrorExportNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Cannot export Customer List!!!",
+      });
+    },
+>>>>>>> main
     user: function () {
       this.isUser = true;
       this.isDictionary = false;
@@ -271,6 +632,10 @@ export default {
     top: -12px;
     .account {
       margin-left: 2px;
+<<<<<<< HEAD
+=======
+      margin-right: 40px;
+>>>>>>> main
       padding: 0;
       width: 24px !important;
       height: 24px !important;
@@ -282,6 +647,7 @@ export default {
         transition: 0.5s;
       }
     }
+<<<<<<< HEAD
     .notifiaction {
       border: none;
       box-shadow: none;
@@ -300,6 +666,26 @@ export default {
         transition: 0.5s;
       }
     }
+=======
+    // .notifiaction {
+    //   border: none;
+    //   box-shadow: none;
+    //   background-color: #eff5f9 !important;
+    //   width: 24px !important;
+    //   height: 24px !important;
+    //   //   margin-right: 10px;
+    //   margin-left: 10px;
+    //   img {
+    //     width: 18px;
+    //     height: 20.57px;
+    //     border-radius: 50%;
+    //   }
+    //   &:hover {
+    //     border: 1px solid blue;
+    //     transition: 0.5s;
+    //   }
+    // }
+>>>>>>> main
     .setting {
       padding: 0;
       width: 24px !important;
@@ -315,6 +701,27 @@ export default {
     }
   }
 }
+<<<<<<< HEAD
+=======
+.btn_notification {
+  background-color: #eff5f9 !important;
+  border: none;
+  img {
+    width: 18px;
+    height: 20.57px;
+    border-radius: 50%;
+  }
+  img.saw_noti {
+    margin-top: 7px;
+    width: 16px;
+    height: 22px;
+  }
+  position: absolute;
+  right: 0px;
+  bottom: -2px;
+  padding: 4px;
+}
+>>>>>>> main
 .admin_option {
   margin-top: 40px;
   font-size: 13px;
@@ -387,6 +794,12 @@ export default {
       right: 0;
     }
   }
+<<<<<<< HEAD
+=======
+  .dictionary_option {
+    width: 252px;
+  }
+>>>>>>> main
   .adjust {
     width: 150px !important;
   }
@@ -421,4 +834,54 @@ export default {
     margin-top: -50px !important;
   }
 }
+<<<<<<< HEAD
+=======
+@media screen and (max-width: 600px) {
+  .data_table {
+    padding: 20px 15px 20px;
+  }
+  .app_bar {
+    display: block;
+  }
+  #administrator_btn {
+    margin-top: 20px;
+    .v-btn {
+      width: 90px;
+      font-size: 11px !important;
+    }
+  }
+  .option_button {
+    top: -35px !important;
+  }
+  .admin_option {
+    padding: 0 15px !important;
+  }
+  .res_phanquyen {
+    padding: 12px 0;
+  }
+  .dictionary {
+    margin-bottom: 60px;
+    margin-top: 20px;
+  }
+  .define {
+    margin-top: 20px;
+    margin-bottom: 60px;
+  }
+  .homepage {
+    margin-left: 15px !important;
+  }
+  .congDong {
+    margin-top: -60px;
+    .el-select-dropdown__item.hover,
+    .el-select-dropdown__item:hover {
+      height: 40px !important;
+    }
+  }
+}
+.figure {
+  color: teal;
+  font-weight: 500;
+  font-size: 15px;
+}
+>>>>>>> main
 </style>

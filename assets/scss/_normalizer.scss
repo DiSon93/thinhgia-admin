@@ -1,0 +1,217 @@
+.el-popup-parent--hidden {
+    padding-right: 0px !important;
+}
+.el-dropdown-menu.el-popper {
+    .v-icon {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    .el-dropdown-menu__item {
+        font-size: 13px !important;
+        height: 36px !important;
+        overflow-y: hidden;
+        &:hover {
+            color: teal;
+            // font-weight: 500;
+            background-color: #fdd27f !important;
+            .v-icon {
+                color: teal;
+            }
+        }
+    }
+    #uploadWeb {
+        height: 42px !important;
+    }
+}
+
+.el-popover {
+    min-width: 20px !important;
+}
+#search {
+    margin-left: 100px;
+    width: 280px;
+    .el-input .el-input__inner {
+        border-radius: 15px !important;
+        height: 28px;
+    }
+    .el-input__prefix {
+        height: 28px;
+        .el-input__icon {
+            line-height: 28px !important;
+        }
+    }
+}
+.header_box .select_box {
+    .el-input__inner {
+        height: 28px;
+        width: 120px;
+        border-radius: 15px;
+    }
+    .el-input__prefix {
+        height: 28px;
+        top: 5px;
+    }
+    .el-input__icon {
+        line-height: 28px !important;
+    }
+}
+.el-select-dropdown__item {
+    .search_label {
+        margin-left: -5px;
+        margin-top: 4px;
+        background-color: rgba(247, 175, 125, 0.288);
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+}
+.theme--light.v-navigation-drawer {
+    background: #f8f8f8;
+}
+
+body .el-table th.gutter {
+    display: table-cell !important;
+}
+
+#user_detail_dialog .el-dialog {
+    border-radius: 20px;
+}
+#user_changePass_dialog .el-dialog {
+    border-radius: 20px;
+    .el-dialog__title {
+        font-weight: bold;
+        float: left;
+    }
+    .el-input .el-input__inner {
+        background: #eff5f9;
+        border: 1px solid #dfdfdf;
+        box-sizing: border-box;
+        border-radius: 20px;
+    }
+}
+
+.el-popover.el-popper {
+    a.notification_item {
+        padding: 10px 0;
+        justify-content: space-between;
+        text-decoration: none !important;
+        img {
+            width: 30px;
+            height: 30px;
+        }
+        &:hover {
+            background-color: rgba(97, 95, 95, 0.075);
+        }
+        .name {
+            margin-left: 5px;
+            color: #000;
+            font-size: 13px;
+            .staff_name {
+                font-weight: 700;
+                color: rgb(83, 83, 83);
+            }
+        }
+    }
+    .el-divider--horizontal {
+        margin: 0px !important;
+    }
+    .time {
+        margin-left: 30px;
+        text-align: right;
+        width: 140px;
+        font-size: 11px;
+        color: gray;
+        font-weight: 500;
+    }
+    .el-button {
+        background-color: transparent !important;
+    }
+    .setting {
+        font-size: 13px;
+        .el-divider--horizontal {
+            margin: 10px 0 5px !important;
+        }
+        .el-input__inner {
+            margin: 5px 0;
+            font-size: 13px;
+        }
+    }
+    .dimention {
+        line-height: 24px;
+        margin-top: 5px;
+        font-size: 13px;
+        .detail_small {
+            display: flex;
+            justify-content: space-between;
+            .hightlight {
+                font-weight: 700;
+            }
+        }
+    }
+}
+.compensate-for-scrollbar {
+    margin-right: 0px !important;
+}
+.zalo-share-button {
+    overflow: unset !important ;
+}
+
+.connect {
+    .el-input__inner {
+        height: 35px !important;
+        margin-top: 10px;
+    }
+    .el-input__icon {
+        margin-top: 6px;
+        // line-height: 35px!important;
+    }
+    .btn_send {
+        margin-top: 10px;
+        height: 35px;
+        font-size: 12px;
+    }
+    .btn_hide.el-button.is-circle {
+        border: none;
+        padding: 6px !important;
+    }
+    .el-dropdown-menu__item {
+        font-size: 12px !important;
+    }
+}
+// #dropdown_social{
+//     .el-dropdown-menu__item{
+//         line-height: 28px;
+//     }
+// }
+
+#search_all{
+    width: 100%;
+.el-select{
+    width: 100%;
+    border-radius: 10px;
+    .el-input__inner{
+        border-radius: 10px;
+        height: 30px;
+    }
+    .el-input__icon {
+        line-height:30px!important;
+    }
+    .el-icon-arrow-up:before{
+        content: "\e778"!important;
+    }
+}
+}
+
+@media screen and (max-width: 800px) {
+    #search {
+        margin-left: 10px;
+    }
+}
+@media screen and (max-width: 600px) {
+    .el-message-box {
+        width: 300px !important;
+    }
+}

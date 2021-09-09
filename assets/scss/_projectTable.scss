@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 #project_table{
 overflow-x: auto;
@@ -41,3 +42,66 @@ tr td:nth-child(7) .v-icon.mdi-delete{
 table{
   border-collapse: unset!important;
 }
+=======
+#project_table {
+  overflow-x: auto;
+
+  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
+  .v-data-table > .v-data-table__wrapper > table > thead > tr > td,
+  .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
+    font-size: 13px !important;
+    text-align: center;
+  }
+  tr th {
+    color: teal !important;
+    text-align: center;
+  }
+  .v-toolbar__content {
+    display: none;
+  }
+  .v-sheet.theme--light {
+    display: none;
+  }
+  tr td:nth-child(1) {
+    text-align: left !important;
+  }
+  tr th:nth-child(1) {
+    text-align: left;
+  }
+
+  tr td:nth-child(2) {
+    font-weight: 700;
+  }
+  tr td:nth-child(4) {
+    // color: orange;
+    // font-weight: 700;
+    .el-button{
+      padding: 8px 10px;
+      background: transparent;
+      &:hover{
+        // background-color: rgb(231, 150, 0);
+        color: #E6A23C;
+      }
+    }
+  }
+  tr td:nth-child(7) .v-icon.mdi-pencil {
+    color: green;
+    border-radius: 50%;
+    padding: 5px;
+    &:hover {
+      background: rgba(115, 226, 115, 0.24);
+    }
+  }
+  tr td:nth-child(7) .v-icon.mdi-delete {
+    color: red;
+    border-radius: 50%;
+    padding: 5px;
+    &:hover {
+      background: rgba(241, 139, 139, 0.164);
+    }
+  }
+}
+table {
+  border-collapse: unset !important;
+}
+>>>>>>> main

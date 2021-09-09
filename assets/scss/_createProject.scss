@@ -1,0 +1,39 @@
+.create_project {
+    .el-input__inner {
+        border-radius: 16px !important;
+        height: 30px;
+        margin-top: 5px;
+        background-color: #e5e5e5;
+    }
+    .el-select .el-input__inner {
+        border-radius: 16px;
+        height: 30px;
+        background-color: #ffff;
+    }
+    .el-select {
+        width: 100% !important;
+    }
+    .el-select__caret.el-input__icon.el-icon-arrow-up {
+        margin-top: 5px;
+        height: 30px;
+        line-height: 30px;
+    }
+    .upload {
+        padding: 6px 0px 0 0!important;
+        .el-upload--picture-card {
+          width: 120px;
+          height: 120px;
+        }
+        .el-upload-list--picture-card .el-upload-list__item{
+          width: 120px;
+          height: 120px;
+        }
+        .el-upload-dragger {
+          width: 120px;
+          height: 120px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+}

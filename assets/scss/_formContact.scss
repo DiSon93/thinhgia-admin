@@ -1,0 +1,46 @@
+.form_contact{
+    .el-input__inner {
+        border-radius: 16px !important;
+        height: 30px;
+        margin-top: 5px;
+        background-color: #e5e5e5;
+    }
+    .el-select .el-input__inner {
+        border-radius: 16px;
+        height: 30px;
+        background-color: #ffff;
+    }
+    .el-select {
+        width: 100% !important;
+    }
+    .el-select__caret.el-input__icon.el-icon-arrow-up {
+        margin-top: 5px;
+        height: 30px;
+        line-height: 30px;
+    }
+    #btn_submit{
+        text-align: center;
+        margin-bottom: 0px;
+        position: absolute;
+        bottom: 0px;
+        // left: 48%;
+        background-color: #fff;
+        width: 100%;
+        margin-left: -5px;
+    }
+    #btn_contact.el-button{
+        background: #fbad18;
+        border-radius: 15px;
+        color: #ffff;
+        border: none;
+        margin: 10px 0;
+    }
+}
+@media screen and (max-width: 600px) {
+    .form_contact{
+        margin-bottom: 130px;
+        #btn_submit{
+            bottom: 45px;
+        }  
+    }
+}

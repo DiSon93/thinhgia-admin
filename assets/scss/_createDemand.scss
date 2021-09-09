@@ -1,0 +1,79 @@
+.create_demand {
+    .el-select .el-input__inner,
+    .el-input__inner {
+        border-radius: 16px;
+        height: 30px;
+        margin-top: 5px;
+    }
+
+    .el-select__tags {
+        margin-top: 2px;
+    }
+    // .el-select__caret {
+    //     margin-top: 5px !important;
+    // }
+    .el-select__caret.el-input__icon.el-icon-arrow-up {
+        height: 30px;
+        line-height: 30px;
+        margin-top: 5px !important;
+    }
+    #input_price {
+        background-color: #e5e5e5;
+    }
+    .createCustomer{
+        .el-input__inner {
+              height: 40px!important;
+            }
+      }
+
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner{
+    background-color: orange!important;
+    border-color: orange!important;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label{
+    color: orange!important;
+}
+
+@media screen and (max-width: 600px) {
+    .create_demand{
+      .address,
+      .estate,
+      .direction,
+      .tool {
+        display: block;
+      }
+      .addres_items,
+      .tool_item {
+        width: 100% !important;
+        .label {
+          margin-top: 4px;
+        }
+      }
+      .estate_items {
+        width: 100%;
+        .label {
+          margin-top: 4px;
+        }
+      }
+      .price_staff {
+        display: block;
+        margin-bottom: 15px;
+        .label {
+          margin-top: 10px;
+        }
+        .price {
+          width: 100%;
+        }
+        .staff {
+          margin-top: 15px;
+          width: 100%;
+        }
+      }
+      .save {
+        margin-bottom: 60px;
+      }
+    }
+
+  }

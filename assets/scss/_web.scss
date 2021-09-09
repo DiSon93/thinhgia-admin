@@ -1,0 +1,60 @@
+.web {
+    .el-input .el-input__inner {
+        background: #e5e5e5;
+        border: 1px solid #dfdfdf;
+        box-sizing: border-box;
+        border-radius: 16px;
+        height: 30px;
+        // margin-bottom: -40px;
+    }
+    .el-upload-dragger {
+        width: 120px;
+        height: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .el-upload--picture-card {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+    }
+    .el-upload-list--picture-card .el-upload-list__item{
+        width: 120px;
+        height: 120px;
+    }
+    .el-form-item__error{
+        padding-top: 0px;
+    }
+    #btn_web.el-button {
+        background: #fbad18;
+        border-radius: 15px;
+        color: #ffff;
+        border: none;
+        margin: 10px 0;
+    }
+    #btn_submit{
+        text-align: center;
+        margin-bottom: 0px;
+        position: absolute;
+        bottom: 0px;
+        // left: 48%;
+        background-color: #fff;
+        width: 100%;
+        margin-left: -5px;
+    }
+    // #btn_submit::before{
+    //     content: "";
+    //     box-shadow: 1px 4px 10px 2px rgba(0, 0, 0, 0.25);
+    //     width: 100%;
+    //     height: 1px;
+    //     z-index: 9;
+    // }
+}
+@media screen and (max-width: 600px) {
+    .web{
+        #btn_submit{
+            bottom: 45px;
+        } 
+    }
+}

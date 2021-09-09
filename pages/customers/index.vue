@@ -10,6 +10,7 @@
     <div class="header_box">
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Khách hàng</button>
+<<<<<<< HEAD
         <v-btn depressed color="primary" id="social_network"> 16:52 </v-btn>
         <div id="select_amount"></div>
         <b-input-group class="search">
@@ -31,6 +32,70 @@
       </v-row>
       <v-row class="data_table">
         <CustomerTable />
+=======
+        <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
+        <div id="select_amount"></div>
+        <div id="search">
+          <el-input
+            placeholder="Tìm kiếm tất cả thông tin"
+            prefix-icon="el-icon-search"
+            v-model="input"
+          >
+          </el-input>
+        </div>
+        <div class="option_button">
+          <v-btn
+            class="mx-2 add_btn"
+            fab
+            dark
+            small
+            color="warning"
+            @click="centerDialogVisible = true"
+          >
+            <v-icon dark small> mdi-plus </v-icon>
+          </v-btn>
+          <v-btn class="account" fab @click="centerDialogVisible02 = true"
+            ><v-icon dark small>mdi-account</v-icon></v-btn
+          >
+          <v-btn class="export" fab @click="exportCustomerList"
+            ><img src="@image/icons/export.png" alt=""
+          /></v-btn>
+        </div>
+      </v-row>
+      <el-dialog
+        title="Tạo khách hàng mới"
+        :visible.sync="centerDialogVisible"
+        :width="modal"
+        center
+        destroy-on-close
+        id="createCustomers"
+      >
+        <CreateCustomer
+          v-on:close-modals="centerDialogVisible = false"
+          v-on:reload-page="reload"
+        />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible02"
+        :width="dialog"
+        center
+        id="user_detail_dialog"
+      >
+        <UserDetail v-on:close-modals="handleChangePassword" />
+      </el-dialog>
+      <el-dialog
+        :visible.sync="centerDialogVisible03"
+        :width="dialog"
+        center
+        id="user_changePass_dialog"
+        title="Đổi mật khẩu"
+        destroy-on-close
+      >
+        <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
+      </el-dialog>
+      <v-row class="data_table" v-loading="loading">
+        <CustomerTable :key="keyChild" :searchKey="input" />
+>>>>>>> main
       </v-row>
     </div>
   </v-lazy>
@@ -38,6 +103,7 @@
 
 <script>
 import CustomerTable from "@component/CustomerTable";
+<<<<<<< HEAD
 export default {
   components: {
     CustomerTable,
@@ -47,6 +113,82 @@ export default {
       isActive: false,
     };
   },
+=======
+import CreateCustomer from "@component/Form/CreateCustomer";
+import { mapState } from "vuex";
+import UserDetail from "@component/Form/UserDetail";
+import ChangePassword from "@component/Form/ChangePassword";
+import { exportFileList } from "../../utils/exportFile";
+
+export default {
+  components: {
+    CustomerTable,
+    CreateCustomer,
+    UserDetail,
+    ChangePassword,
+  },
+  data() {
+    return {
+      keyChild: 0,
+      isActive: false,
+      centerDialogVisible: false,
+      centerDialogVisible02: false,
+      centerDialogVisible03: false,
+      textContent: "",
+      input: "",
+      loading: false,
+      dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
+      modal: window.innerWidth < 600 ? "96%" : window.innerWidth < 1200 ? "70%" : "40%",
+    };
+  },
+  watch: {
+    input: function (val) {
+      this.keyChild += 1;
+    },
+  },
+  computed: {
+    ...mapState("customers", ["total", "exportList"]),
+    ...mapState("auth", ["currentUser"]),
+  },
+  methods: {
+    reload() {
+      this.keyChild += 1;
+    },
+    searchKey(e) {
+      // if (e.key != "noBackspace" && e.key != "Backspace") {
+      this.textContent += `${e.key}`;
+      console.log(e);
+      // }
+    },
+    handleChangePassword() {
+      this.centerDialogVisible03 = true;
+      setTimeout(() => {
+        this.centerDialogVisible02 = false;
+      }, 100);
+    },
+
+    async exportCustomerList() {
+      this.loading = true;
+      if (this.currentUser.results.user.role_id === 2) {
+        this.loading = false;
+        return;
+      }
+      try {
+        await exportFileList("/admin/customers/export", "Danh Sách Khách Hàng");
+        this.loading = false;
+      } catch {
+        this.showErrorNotification();
+        this.loading = false;
+      }
+    },
+    showErrorNotification() {
+      this.$notify.error({
+        title: "Error",
+        message: "Cannot export Customer List!!!",
+      });
+    },
+  },
+>>>>>>> main
 };
 </script>
 
@@ -117,6 +259,7 @@ export default {
     }
   }
 
+<<<<<<< HEAD
   .search {
     margin-left: 378px;
     position: relative;
@@ -151,6 +294,8 @@ export default {
       background-color: transparent;
     }
   }
+=======
+>>>>>>> main
   .option_button {
     position: absolute;
     right: 30px;
@@ -200,6 +345,10 @@ export default {
     }
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 .data_table {
   margin-top: 60px;
   padding: 0 30px;
@@ -209,4 +358,22 @@ export default {
     margin-top: -50px !important;
   }
 }
+<<<<<<< HEAD
+=======
+@media screen and (max-width: 600px) {
+  #search {
+    display: none;
+  }
+  .option_button {
+    top: 65px;
+    left: 10px;
+  }
+  .data_table {
+    padding: 30px 15px 80px;
+  }
+  .homepage {
+    margin-left: 15px !important;
+  }
+}
+>>>>>>> main
 </style>

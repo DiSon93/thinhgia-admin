@@ -1,4 +1,8 @@
 #dictionary_table{
+<<<<<<< HEAD
+=======
+  width: 94vw!important;
+>>>>>>> main
     tr th{
         color: teal!important;
       }
@@ -8,4 +12,13 @@
       .v-sheet.theme--light{
        display: none;
       }
+<<<<<<< HEAD
+=======
+      @media screen and (max-width: 600px) {
+        .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
+          font-size: 13px!important;
+        }
+        padding-right: 10px;
+      }
+>>>>>>> main
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #estate_table{
     overflow-x: auto!important;
     .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td{
@@ -31,10 +32,51 @@ tr td:nth-child(18){
     font-weight: 700;
     color: orange;
     .s_detail{
+=======
+#estate_table {
+  overflow-x: auto !important;
+  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
+  .v-data-table > .v-data-table__wrapper > table > thead > tr > td,
+  .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
+    font-size: 13px;
+  }
+  .v-application--is-ltr .v-data-table > .v-data-table__wrapper > table > tbody > tr > th,
+  .v-application--is-ltr .v-data-table > .v-data-table__wrapper > table > thead > tr > th,
+  .v-application--is-ltr .v-data-table > .v-data-table__wrapper > table > tfoot > tr > th {
+    width: 40px;
+  }
+
+  tr th,
+  td:first-child {
+    width: 10px !important;
+  }
+  tr td:nth-child(4) {
+    font-weight: 700;
+    color: blue;
+  }
+  tr {
+    height: 60px !important;
+  }
+  tr td:nth-child(3) {
+    font-weight: 700;
+  }
+  tr td:nth-child(18) {
+    font-weight: 700;
+  }
+  tr td:nth-child(6) {
+    font-weight: 700;
+    color: orange;
+  }
+  tr td:nth-child(10) {
+    font-weight: 700;
+    color: orange;
+    .s_detail {
+>>>>>>> main
       font-weight: 500;
       color: gray;
     }
   }
+<<<<<<< HEAD
   tr td:nth-child(7){
     font-weight: 700;
     .district{
@@ -67,3 +109,103 @@ tr td:nth-child(18){
   }
   }
   
+=======
+  tr td:nth-child(7) {
+    font-weight: 700;
+    .district {
+      font-weight: 500 !important;
+    }
+  }
+  tr td:nth-child(8) {
+    font-weight: 700;
+  }
+
+  tr td:nth-child(15) {
+    font-weight: 700;
+  }
+
+}
+#real_estate_table {
+  overflow-x: auto !important;
+  .el-table {
+    font-size: 13px;
+    border-radius: 6px;
+    tr th {
+      color: teal;
+    }
+  }
+  .el-table__row td:nth-child(1) .cell {
+    height: 22px;
+    padding-left: 10px;
+    padding-right: 0px;
+  }
+  .el-table-column--selection .cell {
+    height: 22px;
+    padding-right: 0px;
+  }
+
+  tr td:nth-child(4) {
+    font-weight: 700;
+    color: blue;
+  }
+  tr {
+    height: 60px !important;
+  }
+  tr td:nth-child(3) {
+    font-weight: 700;
+  }
+  tr td:nth-child(18) {
+    font-weight: 700;
+  }
+  tr td:nth-child(6) {
+    font-weight: 700;
+    color: orange;
+  }
+  tr td:nth-child(10) {
+    font-weight: 700;
+    color: orange;
+    .s_detail {
+      font-weight: 500;
+      color: gray;
+    }
+  }
+  tr td:nth-child(7) {
+    font-weight: 700;
+    .district {
+      font-weight: 500 !important;
+    }
+  }
+  tr td:nth-child(8) {
+    font-weight: 700;
+  }
+
+  tr td:nth-child(15) {
+    font-weight: 700;
+  }
+  tr th:nth-child(4){
+    padding-top: 14px;
+  }
+  .el-icon-arrow-down:before {
+    content: "\e798";
+    font-size: 18px;
+    font-weight: 700;
+    margin-left: 10px;
+    position: relative;
+    top: 3px;
+  }
+}
+// @media screen and (max-width: 600px){
+//    #real_estate_table{
+//   overflow-x: auto!important;
+
+//    }
+// }
+.el-tag{
+  height: 22px!important;
+  line-height: 22px!important;
+}
+.el-table__empty-text{
+  text-align: left;
+  margin-left: -1600px!important;
+}
+>>>>>>> main
