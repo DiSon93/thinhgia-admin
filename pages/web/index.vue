@@ -13,41 +13,65 @@
     <div class="form" v-if="setting" v-loading="loading">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Site Title <span style="color: red">*</span></div>
             <el-form-item prop="title_website">
               <el-input v-model="ruleForm.title_website"></el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Email Address<span style="color: red">*</span></div>
             <el-form-item prop="site_email">
               <el-input type="email" v-model="ruleForm.site_email"></el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Điện thoại <span style="color: red">*</span></div>
             <el-form-item prop="site_phone">
               <el-input v-model="ruleForm.site_phone"></el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Thêm số điện thoại</div>
             <el-form-item prop="site_extra_phone">
               <el-input v-model="ruleForm.site_extra_phone"></el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Địa chỉ <span style="color: red">*</span></div>
             <el-form-item prop="site_head_office_vi">
               <el-input v-model="ruleForm.site_head_office_vi"></el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
-            <div class="label">Chi nhánh <span style="color: red">*</span></div>
-            <el-form-item prop="site_branch_office_vi">
+          <v-col cols="12" sm="6">
+            <div class="label">Chi nhánh</div>
+            <!-- <el-form-item prop="site_branch_office_vi">
               <el-input v-model="ruleForm.site_branch_office_vi"></el-input>
-            </el-form-item>
+            </el-form-item> -->
+            <el-input
+              class="input-new-tag"
+              v-model="inputValue"
+              ref="saveTagInput"
+              size="mini"
+              @keyup.enter.native="handleInputConfirm"
+              @blur="handleInputConfirm"
+              placeholder="Thêm chi nhánh ở đây"
+            >
+            </el-input>
+            <el-tag
+              :key="tag"
+              v-for="tag in dynamicTags"
+              closable
+              :disable-transitions="false"
+              @close="handleClose(tag)"
+              type="info"
+            >
+              {{ tag }}
+            </el-tag>
+
+            <!-- <el-button v-else class="button-new-tag" size="small" @click="showInput"
+              >+ New Tag</el-button
+            > -->
           </v-col>
           <v-col cols="12">
             <div class="label">Mô tả <span style="color: red">*</span></div>
@@ -61,19 +85,19 @@
               </el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Web</div>
             <el-form-item prop="site_domain">
               <el-input v-model="ruleForm.site_domain"></el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Thời gian làm việc</div>
             <el-form-item prop="time">
               <el-input v-model="ruleForm.open_time"></el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Favicon <span style="color: red">*</span></div>
             <el-upload
               v-if="headers"
@@ -94,7 +118,7 @@
               <i v-else slot="default" class="el-icon-picture"></i>
             </el-upload>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Logo <span style="color: red">*</span></div>
             <el-upload
               v-if="headers"
@@ -114,20 +138,20 @@
               <i v-else slot="default" class="el-icon-picture"></i>
             </el-upload>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Logo Slogan</div>
             <el-form-item prop="site_slogan">
               <el-input v-model="ruleForm.site_slogan"></el-input>
             </el-form-item>
           </v-col>
 
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Link Facebook</div>
             <el-form-item prop="site_facebook">
               <el-input v-model="ruleForm.site_facebook"></el-input>
             </el-form-item>
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6">
             <div class="label">Link Zalo</div>
             <el-form-item prop="site_zalo">
               <el-input v-model="ruleForm.site_zalo"></el-input>
@@ -195,13 +219,17 @@ export default {
       imageUrlFav: "",
       imageUrl: "",
       loading: false,
+      dynamicTags: [],
+      inputVisible: false,
+      branch: "",
+      inputValue: "",
       ruleForm: {
         title_website: "",
         site_email: "",
         site_phone: "",
         site_extra_phone: "",
         site_head_office_vi: "",
-        site_branch_office_vi: "",
+        // site_branch_office_vi: "",
         site_description_vi: "",
         site_domain: "",
         open_time: "",
@@ -262,13 +290,13 @@ export default {
             trigger: "change",
           },
         ],
-        site_branch_office_vi: [
-          {
-            required: true,
-            message: "Please select activity resource",
-            trigger: "change",
-          },
-        ],
+        // site_branch_office_vi: [
+        //   {
+        //     required: true,
+        //     message: "Please select activity resource",
+        //     trigger: "change",
+        //   },
+        // ],
         site_description_vi: [
           {
             required: true,
@@ -278,6 +306,13 @@ export default {
         ],
       },
     };
+  },
+  watch: {
+    dynamicTags: function () {
+      console.log("tag", this.dynamicTags);
+      this.branch = this.dynamicTags.join("?");
+      console.log("branch", this.branch);
+    },
   },
   mounted() {
     this.token = `bearer ${this.currentUser.results.access_token}`;
@@ -292,14 +327,13 @@ export default {
     async getSettingList() {
       try {
         await this.$store.dispatch("web/getSettingList");
-        console.log("set", this.setting);
         this.ruleForm = {
           title_website: this.setting.title_website,
           site_email: this.setting.site_email,
           site_phone: this.setting.site_phone,
           site_extra_phone: this.setting.site_extra_phone,
           site_head_office_vi: this.setting.site_head_office_vi,
-          site_branch_office_vi: this.setting.site_branch_office_vi,
+          // site_branch_office_vi: this.setting.site_branch_office_vi,
           site_description_vi: this.setting.site_description_vi,
           site_domain: this.setting.site_domain,
           open_time: this.setting.open_time,
@@ -311,7 +345,10 @@ export default {
         this.site_logo = this.setting.site_logo;
         this.imageUrlFav = this.setting.favicon;
         this.imageUrl = this.setting.site_logo;
-      } catch {}
+        this.dynamicTags = this.setting.site_branch_office_vi.split("?");
+      } catch {
+        console.log("Error Setting!");
+      }
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -354,6 +391,7 @@ export default {
         await this.$store.dispatch("web/updateSettingType", {
           // setting_name: {
           ...this.ruleForm,
+          site_branch_office_vi: this.branch,
           favicon: this.favicon,
           site_logo: this.site_logo,
           google_analytics: "",
@@ -387,6 +425,26 @@ export default {
         message: "Update type of contact successfull!!!",
         type: "success",
       });
+    },
+
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick((_) => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = "";
     },
   },
 };
@@ -437,7 +495,7 @@ export default {
   border-radius: 4px;
   padding: 30px 20px;
   margin-bottom: 60px;
-  .col-6 {
+  .col-sm-6.col-12 {
     padding: 0 12px;
   }
   .label {
@@ -445,6 +503,21 @@ export default {
     font-weight: 500;
     margin-top: -10px;
   }
+}
+
+.el-tag + .el-tag {
+  margin-top: 10px;
+  // display: block;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  margin-bottom: 10px;
 }
 @media screen and (min-width: 1265px) {
   .header_box {
@@ -465,7 +538,7 @@ export default {
     }
   }
   .form {
-    width: 80%;
+    width: 96%;
     margin-bottom: 100px;
   }
   .header_box {

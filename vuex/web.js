@@ -13,7 +13,6 @@ export default {
         getSettingList(state, data) {
             state.setting = data;
             // state.total = data.total;
-            console.log(data);
             state.errorMessage = null
         },
         showError(state, data){
@@ -29,7 +28,7 @@ export default {
         getSettingList: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/settings`, method: "GET"}).then(response => {
-                    commit('getSettingList', response.data.message);
+                    commit('getSettingList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showError', e.response.data);
@@ -40,7 +39,7 @@ export default {
         updateSettingType:({ commit }, data) => {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/settings`, method: "POST", data: data}).then(response => {
-                    commit('updateSettingType', response.data.message);
+                    commit('updateSettingType', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showError', e.response.data);

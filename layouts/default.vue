@@ -139,7 +139,7 @@
           >
           </el-button>
 
-          <el-popover
+          <!-- <el-popover
             placement="bottom-end"
             width="500"
             trigger="click"
@@ -212,31 +212,35 @@
               ><img v-if="!saw_noti" src="@image/icons/bell-badge-noti.jpg" alt="" />
               <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
             </el-button>
-          </el-popover>
-          <!-- <el-popover
+          </el-popover> -->
+          <el-popover
             placement="bottom-end"
             width="500"
             trigger="click"
             id="notification"
           >
-            <NuxtLink
-              :to="`/detail/house/${item.bds_id}`"
-              class="d-flex notification_item"
-              v-for="item in noti"
-              :key="item.bds_id"
-            >
-              <div class="d-flex">
-                <img :src="item.message.avatar" alt="" />
-                <div class="name">
-                  <span class="staff_name">{{ item.message.username }}</span> đã
-                  {{ item.message.type == "like" ? "like" : "chia sẻ" }} bất động sản
-                  {{ item.message.type == "like" ? null : "lên cộng đồng" }}
+            <div v-if="noti">
+              <NuxtLink
+                :to="`/detail/house/${item.bds_id}`"
+                class="d-flex notification_item"
+                v-for="item in noti"
+                :key="item.bds_id"
+              >
+                <div class="d-flex">
+                  <img :src="item.message.avatar" alt="" />
+                  <div class="name">
+                    <span class="staff_name">{{ item.message.username }}</span> đã
+                    {{ item.message.type == "like" ? "like" : "chia sẻ" }} bất động sản
+                    {{ item.message.type == "like" ? null : "lên cộng đồng" }}
+                  </div>
                 </div>
-              </div>
-              <div class="time">
-                {{ moment(item.message.timestamp).startOf("day").fromNow() }}
-              </div>
-            </NuxtLink>
+                <div class="time">
+                  {{ moment(item.message.timestamp).startOf("day").fromNow() }}
+                </div>
+              </NuxtLink>
+            </div>
+
+            <div v-else class="empty_noti"><i>Không có thông báo nào</i></div>
 
             <el-button
               slot="reference"
@@ -246,7 +250,7 @@
               ><img v-if="!saw_noti" src="@image/icons/bell-badge-noti.jpg" alt="" />
               <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
             </el-button>
-          </el-popover> -->
+          </el-popover>
           <!-- <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn> -->
           <!-- <v-btn class="notifiaction" fab
             ><img src="@image/icons/bell-badge-noti.jpg" alt=""
