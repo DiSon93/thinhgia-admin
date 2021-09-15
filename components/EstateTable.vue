@@ -68,6 +68,7 @@
                 v-model="search_address"
                 class="input"
                 placeholder="Tìm kiếm địa chỉ"
+                v-on:keyup.enter="searchAddress" 
               />
               <i class="el-icon-search"></i>
               <div>
@@ -381,7 +382,7 @@ export default {
             house_type: this.house_type,
             projects: this.projects,
             province: this.districts,
-            search_text: this.search_address,
+            search_address: this.search_address,
           });
           await this.showEstateList();
           this.loading = false;
