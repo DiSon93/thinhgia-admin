@@ -115,6 +115,9 @@ export default {
       if (this.error?.new_password) {
         message = this.error?.new_password[0];
       }
+      if (this.error?.message) {
+        message = this.error.message;
+      }
       this.$notify.error({
         title: "Error",
         message,

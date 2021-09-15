@@ -399,19 +399,54 @@
             <span style="font-weight: 700" class="staff_table">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Cột" sortable prop="column">
+        <el-table-column label="Cột" sortable prop="column" width="240">
           <template slot-scope="scope">
             <span style="margin-left: 0px">{{ scope.row.column }}</span>
           </template>
         </el-table-column>
         <el-table-column label="Giá trị cũ" width="340">
           <template slot-scope="scope">
-            <div
+            <!-- <div
               v-if="scope.row.column == 'Mô tả'"
               v-html="scope.row.old"
               class="content_BDS"
-            ></div>
-            <span v-else style="margin-left: 0px">{{ scope.row.old }}</span>
+            ></div> -->
+            <div
+              v-if="
+                scope.row.column == 'Hình ảnh nội bộ' ||
+                scope.row.column == 'Hình ảnh công khai'
+              "
+              class="img_change"
+            >
+              <span v-for="slot in scope.row.old" :key="slot.id">
+                <img :src="slot.thumbnail" alt="" />
+              </span>
+              <el-popover
+                placement="top"
+                :title="scope.row.column"
+                width="500"
+                trigger="click"
+              >
+                <img
+                  :src="item.thumbnail"
+                  alt=""
+                  v-for="item in scope.row.old"
+                  :key="item.id"
+                  class="table_change"
+                />
+                <a slot="reference" href="javascript:;" v-if="scope.row.old.length > 6"
+                  >Xem thêm...</a
+                >
+              </el-popover>
+            </div>
+            <span v-else style="margin-left: 0px">
+              <div
+                v-if="scope.row.column == 'Mô tả'"
+                v-html="scope.row.old"
+                class="content_BDS"
+              ></div>
+              <div v-else>{{ scope.row.old }}</div>
+            </span>
             <el-popover
               placement="top"
               title="Nội dung mô tả"
@@ -429,11 +464,46 @@
         <el-table-column label="Giá trị mới" width="340">
           <template slot-scope="scope">
             <div
-              v-if="scope.row.column == 'Mô tả'"
-              v-html="scope.row.new"
-              class="content_BDS"
-            ></div>
-            <span v-else style="margin-left: 0px">{{ scope.row.new }}</span>
+              v-if="
+                scope.row.column == 'Hình ảnh nội bộ' ||
+                scope.row.column == 'Hình ảnh công khai'
+              "
+              class="img_change"
+            >
+              <img
+                :src="item.thumbnail"
+                alt=""
+                v-for="item in scope.row.new.slice(0, 6)"
+                :key="item.id"
+              />
+              <el-popover
+                placement="top"
+                :title="scope.row.column"
+                width="500"
+                trigger="click"
+              >
+                <img
+                  :src="item.thumbnail"
+                  alt=""
+                  v-for="item in scope.row.new"
+                  :key="item.id"
+                  class="table_change"
+                />
+                <a slot="reference" href="javascript:;" v-if="scope.row.new.length > 6"
+                  >Xem thêm...</a
+                >
+              </el-popover>
+            </div>
+            <span v-else style="margin-left: 0px">
+              <div
+                v-if="scope.row.column == 'Mô tả'"
+                v-html="scope.row.new"
+                class="content_BDS"
+              ></div>
+              <div v-else>
+                {{ scope.row.new }}
+              </div>
+            </span>
             <el-popover
               placement="top"
               title="Nội dung mô tả"
@@ -570,6 +640,7 @@ export default {
             times: moment(item.updated_at).format("YYYY-MM-DD, h:mm:ss a"),
           };
         });
+        console.log("dataTable", this.tableData);
       } catch {}
     },
     selectCommen(_id, is_display) {
@@ -998,6 +1069,16 @@ export default {
   }
   .staff_table {
     font-weight: 700;
+  }
+  .img_change {
+    margin-top: 0px !important;
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 5px;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
   }
 }
 .chiase.v-btn {

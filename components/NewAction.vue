@@ -532,7 +532,7 @@
               </button>
             </v-col>
             <v-col cols="4" align="center" v-if="item.approve_web == 2">
-              <ShareSocialNetwork />
+              <ShareSocialNetwork :id="item.id" :title="item.title" />
             </v-col>
             <v-col cols="4" align="center" v-else>
               <button class="share" disabled>
@@ -808,6 +808,10 @@ export default {
           min_price: "",
           max_price: "",
           approve_public: 2,
+          purpose: "",
+          house_type: "",
+          projects: "",
+          province: "",
         });
         // await this.renderAcitonList();
         // console.log("realEstate", this.realEstateList);

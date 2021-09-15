@@ -7,4 +7,20 @@
         width: 100%;
         margin-right: 20px;
       }
+      .time_change{
+        tr td:nth-child(3),tr td:nth-child(3){
+          vertical-align: top!important;
+        }
+        p{
+          margin-bottom: 5px;
+        }
+      }
+}
+p{
+  margin-bottom: 5px;
+}
+.el-popover{
+  img.table_change{
+    margin: 3px;
+  }
 }

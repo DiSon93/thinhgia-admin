@@ -298,10 +298,6 @@
               <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
             </el-button>
           </el-popover>
-          <!-- <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn> -->
-          <!-- <v-btn class="notifiaction" fab
-            ><img src="@image/icons/bell-badge-noti.jpg" alt=""
-          /></v-btn> -->
         </v-col>
       </v-row>
     </v-app-bar>

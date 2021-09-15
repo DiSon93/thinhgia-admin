@@ -1,50 +1,39 @@
 <template>
   <div class="contact">
     <div class="header_box d-flex">
-      <v-row align="center" d-flex>
+      <!-- <v-row align="center" d-flex>
         <button class="homepage" disabled>Liên hệ</button>
         <div class="option_button">
           <v-btn class="account" fab @click="centerDialogVisible02 = true"
             ><v-icon dark small>mdi-account</v-icon></v-btn
           >
         </div>
+      </v-row> -->
+      <v-row align="center" d-flex>
+        <v-col cols="8" sm="6" class="app_bar">
+          <button class="homepage" disabled>Liên hệ</button>
+          <v-btn-toggle v-model="toggle_exclusive" mandatory id="administrator_btn">
+            <v-btn v-on:click="overview"> Tổng quan </v-btn>
+            <v-btn @click="request"> Yêu cầu khách hàng </v-btn>
+          </v-btn-toggle>
+        </v-col>
+        <v-col cols="4" sm="6" class="app_bar">
+          <div class="option_button">
+            <v-btn class="account" fab @click="centerDialogVisible02 = true"
+              ><v-icon dark small>mdi-account</v-icon></v-btn
+            >
+            <!-- <v-btn class="notifiaction" fab
+              ><img src="@image/icons/bell-badge-noti.jpg" alt=""
+            /></v-btn> -->
+          </div>
+        </v-col>
       </v-row>
     </div>
-    <div id="contact" v-loading="loading" v-if="contactTypeList.length != 0">
-      <v-data-table
-        :headers="headers"
-        :items="contactTypeList"
-        class="elevation-1"
-        :mobile-breakpoint="0"
-        :items-per-page="100"
-        hide-default-footer
-      >
-        <template v-slot:item="row">
-          <tr>
-            <td>{{ row.item.id }}</td>
-            <td>{{ row.item.title ? row.item.title.toUpperCase() : null }}</td>
-            <td>
-              {{ row.item.email }}
-            </td>
-            <td>
-              {{ row.item.name }}
-            </td>
-            <td>
-              <div class="content" v-html="row.item.content"></div>
-              <!-- <div class="readMore">Xem thêm</div> -->
-            </td>
-            <td>
-              <v-icon
-                small
-                class="mr-2"
-                @click="$router.push(`/form/contact/${row.item.id}`)"
-              >
-                mdi-pencil
-              </v-icon>
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
+    <div v-if="isOverview">
+      <ContactOverview />
+    </div>
+    <div v-if="isResquest">
+      <CustomerRequest />
     </div>
     <el-dialog
       :visible.sync="centerDialogVisible02"
@@ -71,49 +60,35 @@
 import { mapState, mapActions } from "vuex";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
+import ContactOverview from "@component/ContactOverview";
+import CustomerRequest from "@component/CustomerRequest";
+
 export default {
   components: {
     UserDetail,
     ChangePassword,
+    ContactOverview,
+    CustomerRequest,
   },
   data() {
     return {
       loading: false,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
+      toggle_exclusive: [],
+      isOverview: true,
+      isResquest: false,
       dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
-      headers: [
-        { text: "#", value: "id", width: "50px", sortable: false },
-        {
-          text: "Tiêu đề",
-          align: "start",
-          sortable: false,
-          value: "title",
-          width: "150px",
-        },
-        { text: "Email", value: "email", sortable: false, width: "250px" },
-
-        { text: "Loại liên hệ", value: "name", sortable: false, width: "200px" },
-        { text: "Nội dung", value: "content", sortable: false, width: "450px" },
-
-        { text: "Chỉnh sửa", value: "actions", sortable: false, width: "100px" },
-      ],
-      contacts: [
-        { id: 1, name: "a", type: "Thông tin liên lạc" },
-        { id: 2, name: "b", type: "Ý kiến" },
-        { id: 3, name: "b", type: "Tuyển dụng" },
-        { id: 4, name: "b", type: "Ký gửi bất động sản" },
-      ],
     };
   },
   mounted() {
-    this.getContactTypeList();
+    // this.getContactTypeList();
   },
   computed: {
-    ...mapState("contact", ["contactTypeList"]),
+    // ...mapState("contact", ["contactTypeList"]),
   },
   methods: {
-    ...mapActions("contact", ["getContactTypeList"]),
+    // ...mapActions("contact", ["getContactTypeList"]),
 
     editItem() {},
     handleChangePassword() {
@@ -121,6 +96,14 @@ export default {
       setTimeout(() => {
         this.centerDialogVisible02 = false;
       }, 100);
+    },
+    overview: function () {
+      this.isOverview = true;
+      this.isResquest = false;
+    },
+    request: function () {
+      this.isOverview = false;
+      this.isResquest = true;
     },
   },
 };
@@ -131,34 +114,52 @@ export default {
   .header_box {
     margin-bottom: 20px;
   }
-  #contact {
-    // width: 630px;
-    margin: 0px auto;
-    tr td:nth-child(5) {
-      .content {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        margin: 10px 0;
-      }
-
-      // height: 67px;
-    }
-  }
 }
+
+// .header_box {
+//   left: 208px !important;
+//   background: #eff5f9 !important;
+//   margin: 20px 0 60px !important;
+//   padding-top: 10px;
+//   .homepage {
+//     width: 100px;
+//     height: 25px !important;
+//     margin-left: 30px;
+//     // margin-top: 55px;
+//     background: #ffffff;
+//     border: 1px solid rgba(96, 96, 96, 0.2);
+//     border-radius: 15px;
+//     font-size: 12px;
+//     letter-spacing: 0.5px;
+//     color: #606060;
+//   }
+//   .option_button {
+//     position: absolute;
+//     right: 30px;
+//     .account {
+//       margin-left: 2px;
+//       padding: 0;
+//       width: 24px !important;
+//       height: 24px !important;
+//       border-radius: 50%;
+//       background-color: #fff !important;
+//       box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+//       &:hover {
+//         border: 1px solid blue;
+//         transition: 0.5s;
+//       }
+//     }
+//   }
+// }
 
 .header_box {
   left: 208px !important;
   background: #eff5f9 !important;
-  margin: 20px 0 60px !important;
-  padding-top: 10px;
+  margin-top: 20px !important;
   .homepage {
-    width: 100px;
+    width: 90px;
     height: 25px !important;
-    margin-left: 30px;
-    // margin-top: 55px;
+    margin-left: 20px;
     background: #ffffff;
     border: 1px solid rgba(96, 96, 96, 0.2);
     border-radius: 15px;
@@ -166,17 +167,53 @@ export default {
     letter-spacing: 0.5px;
     color: #606060;
   }
+  #administrator_btn .v-btn {
+    width: auto !important;
+  }
   .option_button {
     position: absolute;
-    right: 30px;
+    right: 0px;
+    top: 0px;
     .account {
       margin-left: 2px;
+      margin-right: 40px;
       padding: 0;
       width: 24px !important;
       height: 24px !important;
       border-radius: 50%;
       background-color: #fff !important;
       box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+      &:hover {
+        border: 1px solid blue;
+        transition: 0.5s;
+      }
+    }
+    // .notifiaction {
+    //   border: none;
+    //   box-shadow: none;
+    //   background-color: #eff5f9 !important;
+    //   width: 24px !important;
+    //   height: 24px !important;
+    //   //   margin-right: 10px;
+    //   margin-left: 10px;
+    //   img {
+    //     width: 18px;
+    //     height: 20.57px;
+    //     border-radius: 50%;
+    //   }
+    //   &:hover {
+    //     border: 1px solid blue;
+    //     transition: 0.5s;
+    //   }
+    // }
+    .setting {
+      padding: 0;
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 50%;
+      background-color: #fff !important;
+      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+      margin-left: 10px;
       &:hover {
         border: 1px solid blue;
         transition: 0.5s;

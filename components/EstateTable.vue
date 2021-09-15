@@ -11,22 +11,27 @@
       @selection-change="handleSelectionChange"
       @sort-change="sortChangePrice"
       height="80vh"
+      @filter-change="filterHandlerChange"
     >
       <div slot="empty">NO DATA CAN SHOW</div>
       <el-table-column type="selection" width="35" fixed> </el-table-column>
-      <el-table-column prop="amount" label="#" sortable width="60" fixed>
-      </el-table-column>
+      <el-table-column prop="amount" label="#" width="56" fixed> </el-table-column>
       <el-table-column
         prop="side"
         label="Loại"
         width="80"
+        column-key="side"
         :filters="[
           { text: 'Thuê', value: 'THUÊ' },
           { text: 'Bán', value: 'BÁN' },
         ]"
-        :filter-method="filterHandler"
         fixed
       >
+        <template slot-scope="scope">
+          <div>{{ scope.row.side }}</div>
+          <el-tag v-if="scope.row.is_sell">Mở</el-tag>
+          <el-tag type="danger" v-else>Ngưng</el-tag>
+        </template>
       </el-table-column>
       <el-table-column prop="price" label="Giá" width="80" sortable>
         <template slot-scope="scope">
@@ -37,14 +42,48 @@
         prop="project"
         label="Dự án"
         width="100"
+        column-key="project"
         :filters="[
-          { text: 'Có', value: 'Có' },
-          { text: 'Không có', value: 'Không có' },
+          { text: 'Có', value: '1' },
+          { text: 'Không có', value: '0' },
         ]"
-        :filter-method="filterHandler"
       >
       </el-table-column>
       <el-table-column prop="address" label="Địa chỉ" width="200">
+        <template slot="header">
+          Địa chỉ
+          <!-- <i class="el-icon-shopping-cart-2" style="margin-left: 6px"></i> -->
+          <el-popover placement="bottom" width="200" v-model="visible">
+            <!-- <el-input
+              placeholder="Tìm kiếm tất cả thông tin"
+              prefix-icon="el-icon-search"
+              v-model="search_address"
+            >
+            </el-input> -->
+            <!-- <el-input placeholder="Please input"></el-input> -->
+
+            <div id="search_estate">
+              <input
+                type="text"
+                v-model="search_address"
+                class="input"
+                placeholder="Tìm kiếm địa chỉ"
+              />
+              <i class="el-icon-search"></i>
+              <div>
+                <el-button type="primary" round id="confirm" @click="searchAddress"
+                  >Search</el-button
+                >
+                <el-button round type="danger" id="reset" @click="resetAddress">
+                  Reset</el-button
+                >
+              </div>
+            </div>
+            <a href="javascript:;" slot="reference" style="margin-left: 6px"
+              ><i class="el-icon-shopping-cart-2"></i
+            ></a>
+          </el-popover>
+        </template>
         <!-- <div class="d-flex">
           <v-btn depressed color="primary" id="social_network"> Cộng đồng </v-btn>
           <v-btn depressed color="success" id="web"> Web </v-btn>
@@ -81,11 +120,8 @@
         prop="area"
         label="Khu vực"
         width="180"
-        :filters="[
-          { text: 'Vũng Tàu', value: 'Vũng Tàu' },
-          { text: 'Hồ Chí Minh', value: 'Hồ Chí Minh' },
-        ]"
-        :filter-method="filterHandler"
+        :filters="province_list"
+        column-key="district"
       >
         <template slot-scope="scope">
           {{ scope.row.area }}
@@ -97,12 +133,8 @@
         prop="home_type"
         label="Loại nhà"
         width="140"
-        :filters="[
-          { text: 'Nhà cao tầng', value: 'Nhà cao tầng' },
-          { text: 'Nhà câp 2', value: 'Nhà cấp 2' },
-          { text: 'Nhà câp 4', value: 'Nhà cấp 4' },
-        ]"
-        :filter-method="filterHandler"
+        column-key="home_type"
+        :filters="houses"
       ></el-table-column>
       <el-table-column prop="square" label="Diện tích" width="140">
         <template slot-scope="scope">
@@ -182,14 +214,23 @@ export default {
       loading: false,
       rowPerPage: 10,
       page: 1,
+      index: 0,
       selected_id: "",
       selectd_item: {},
+      purpose: null,
       childKey: 0,
+      province_list: [],
       realEstateTable: [],
+      houses: [],
+      house_type: "",
+      projects: "",
+      search_address: "",
+      districts: "",
       multipleSelection: [],
       currentPage: 1,
       beforeSelectArr: [],
       sort_price: "",
+      visible: false,
       drawer_size: window.innerWidth < 600 ? "318px" : "418px",
     };
   },
@@ -197,9 +238,22 @@ export default {
     this.getRealEstateListPerPage();
   },
   computed: {
-    ...mapState("realEstate", ["realEstateList", "total"]),
+    ...mapState("realEstate", ["realEstateList", "total", "listProvince"]),
+    ...mapState("dictionaries", ["dictionaryList"]),
+  },
+  mounted() {
+    this.getDictionaryList();
+    this.listEstateProvince();
   },
   methods: {
+    async listEstateProvince() {
+      try {
+        await this.$store.dispatch("realEstate/listEstateProvince");
+        this.province_list = this.listProvince.map((u) => {
+          return { text: u.name, value: u.id };
+        });
+      } catch {}
+    },
     formatter(row, column) {
       return row.address;
     },
@@ -220,6 +274,63 @@ export default {
       const property = column["property"];
       return row[property] === value;
     },
+    filterHandlerChange(value, row, column) {
+      console.log("Purpose", value);
+      if (value.side?.length == 0 || value.side?.length == 2) {
+        this.purpose = null;
+        this.getRealEstateListPerPage();
+      } else if (value.side) {
+        if (value.side[0] == "THUÊ") {
+          this.purpose = 1;
+          console.log("p", this.purpose);
+        } else {
+          this.purpose = 0;
+        }
+        this.getRealEstateListPerPage();
+      }
+      if (value.home_type?.length == 0) {
+        this.house_type = "";
+        this.getRealEstateListPerPage();
+      } else if (value.home_type && value.home_type.length != 0) {
+        this.house_type = value.home_type.join(",").toString();
+        this.getRealEstateListPerPage();
+      }
+
+      if (value.project && value.project.length == 0) {
+        this.projects = "";
+        this.getRealEstateListPerPage();
+      } else if (value.project && value.project.length != 0) {
+        this.projects = value.project[0];
+        this.getRealEstateListPerPage();
+      }
+      if (value.district && value.district.length == 0) {
+        this.districts = "";
+        this.getRealEstateListPerPage();
+      } else if (value.district && value.district.length != 0) {
+        this.districts = value.district.join(",");
+        this.getRealEstateListPerPage();
+      }
+      // this.index += 1;
+      // if (this.index == 1 && value == "THUÊ") {
+      //   this.purpose = 1;
+      //   this.getRealEstateListPerPage();
+      // } else if (this.index == 1 && value == "BÁN") {
+      //   this.purpose = 0;
+      //   this.getRealEstateListPerPage();
+      // }
+
+      // const property = column["property"];
+      // return (this.index = 0);
+    },
+    searchAddress() {
+      this.visible = false;
+      this.getRealEstateListPerPage();
+    },
+    resetAddress() {
+      this.visible = false;
+      this.search_address = "";
+      this.getRealEstateListPerPage();
+    },
     sortChangePrice(val) {
       console.log("price", val);
       if (val.column.label == "Giá") {
@@ -239,6 +350,22 @@ export default {
       this.drawer = false;
       this.getRealEstateListPerPage();
     },
+    async getDictionaryList() {
+      await this.$store.dispatch("dictionaries/getDictionaryList", {
+        limit: 10,
+        page: 1,
+      });
+      await this.getDicOptions();
+    },
+    getDicOptions() {
+      const houseList = this.dictionaryList.filter((u, i) => u.id == 2);
+      this.houses = houseList[0].dictionaries.map((item) => {
+        return {
+          value: item.id,
+          text: item.name,
+        };
+      });
+    },
     async getRealEstateListPerPage() {
       this.loading = true;
       if (this.is_sell == null && this.is_public == null) {
@@ -250,6 +377,11 @@ export default {
             sort_price: this.sort_price,
             min_price: this.min_price,
             max_price: this.max_price,
+            purpose: this.purpose == null ? "" : this.purpose,
+            house_type: this.house_type,
+            projects: this.projects,
+            province: this.districts,
+            search_text: this.search_address,
           });
           await this.showEstateList();
           this.loading = false;

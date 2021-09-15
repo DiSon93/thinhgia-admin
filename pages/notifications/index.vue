@@ -122,6 +122,10 @@ export default {
           sort_price: "",
           min_price: "",
           max_price: "",
+          purpose: "",
+          house_type: "",
+          projects: "",
+          province: "",
         });
         if (this.lastPage == this.page) {
           this.btn_display = false;

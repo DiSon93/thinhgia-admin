@@ -73,6 +73,42 @@
               >+ New Tag</el-button
             > -->
           </v-col>
+          <v-col cols="12" sm="6">
+            <div class="label" v-bind:class="{ more: dynamicTags.length != 0 }">
+              Google Analytics <span style="color: red">*</span>
+            </div>
+            <el-form-item prop="google_analytics">
+              <el-input v-model="ruleForm.google_analytics"></el-input>
+            </el-form-item>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <div class="label" v-bind:class="{ more: dynamicTags.length != 0 }">
+              Keywords <span style="color: red">*</span>
+            </div>
+            <el-tag
+              :key="tag"
+              v-for="tag in keyTags"
+              closable
+              :disable-transitions="false"
+              @close="handleCloseKeyword(tag)"
+              type="info"
+            >
+              {{ tag }}
+            </el-tag>
+            <el-input
+              class="input-keyword"
+              v-if="keywordVisible"
+              v-model="keyword"
+              ref="saveTagInputKeyword"
+              size="mini"
+              @keyup.enter.native="handleInputConfirmKeyword"
+              @blur="handleInputConfirmKeyword"
+            >
+            </el-input>
+            <el-button v-else class="button-new-tag" size="small" @click="showInput"
+              >+ New Key</el-button
+            >
+          </v-col>
           <v-col cols="12">
             <div class="label">Mô tả <span style="color: red">*</span></div>
             <el-form-item prop="site_description_vi">
@@ -165,7 +201,12 @@
       </el-form>
     </div>
     <div id="btn_submit">
-      <el-button id="btn_web" @click="submitForm('ruleForm')">Lưu</el-button>
+      <el-button
+        id="btn_web"
+        @click="submitForm('ruleForm')"
+        v-if="currentUser.results.user.role_id == 1"
+        >Lưu</el-button
+      >
     </div>
     <el-dialog
       :visible.sync="centerDialogVisible02"
@@ -220,8 +261,12 @@ export default {
       imageUrl: "",
       loading: false,
       dynamicTags: [],
+      keyTags: [],
+      keywordVisible: false,
+      keyword: "",
       inputVisible: false,
       branch: "",
+      seo_keywords: "",
       inputValue: "",
       ruleForm: {
         title_website: "",
@@ -229,7 +274,7 @@ export default {
         site_phone: "",
         site_extra_phone: "",
         site_head_office_vi: "",
-        // site_branch_office_vi: "",
+        google_analytics: "",
         site_description_vi: "",
         site_domain: "",
         open_time: "",
@@ -290,6 +335,13 @@ export default {
             trigger: "change",
           },
         ],
+        google_analytics: [
+          {
+            required: true,
+            message: "Please select activity resource",
+            trigger: "change",
+          },
+        ],
         // site_branch_office_vi: [
         //   {
         //     required: true,
@@ -309,9 +361,10 @@ export default {
   },
   watch: {
     dynamicTags: function () {
-      console.log("tag", this.dynamicTags);
       this.branch = this.dynamicTags.join("?");
-      console.log("branch", this.branch);
+    },
+    keyTags: function () {
+      this.seo_keywords = this.keyTags.join("?");
     },
   },
   mounted() {
@@ -333,7 +386,7 @@ export default {
           site_phone: this.setting.site_phone,
           site_extra_phone: this.setting.site_extra_phone,
           site_head_office_vi: this.setting.site_head_office_vi,
-          // site_branch_office_vi: this.setting.site_branch_office_vi,
+          google_analytics: this.setting.google_analytics,
           site_description_vi: this.setting.site_description_vi,
           site_domain: this.setting.site_domain,
           open_time: this.setting.open_time,
@@ -346,6 +399,7 @@ export default {
         this.imageUrlFav = this.setting.favicon;
         this.imageUrl = this.setting.site_logo;
         this.dynamicTags = this.setting.site_branch_office_vi.split("?");
+        this.keyTags = this.setting.seo_keywords.split("?");
       } catch {
         console.log("Error Setting!");
       }
@@ -394,12 +448,11 @@ export default {
           site_branch_office_vi: this.branch,
           favicon: this.favicon,
           site_logo: this.site_logo,
-          google_analytics: "",
           seo_separator: "",
           site_branch_office_en: "",
           site_description_en: "",
           site_head_office_en: "",
-          seo_keywords: "",
+          seo_keywords: this.seo_keywords,
           site_linkedin: "",
           site_telegram: "",
           site_twitter: "",
@@ -430,12 +483,23 @@ export default {
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
     },
+    handleCloseKeyword(tag) {
+      this.keyTags.splice(this.keyTags.indexOf(tag), 1);
+    },
 
     showInput() {
-      this.inputVisible = true;
+      this.keywordVisible = true;
       this.$nextTick((_) => {
-        this.$refs.saveTagInput.$refs.input.focus();
+        this.$refs.saveTagInputKeyword.$refs.input.focus();
       });
+    },
+    handleInputConfirmKeyword() {
+      let keyword = this.keyword;
+      if (keyword) {
+        this.keyTags.push(keyword);
+      }
+      this.keywordVisible = false;
+      this.keyword = "";
     },
 
     handleInputConfirm() {
@@ -503,10 +567,14 @@ export default {
     font-weight: 500;
     margin-top: -10px;
   }
+  .more {
+    margin-top: 10px;
+  }
 }
 
-.el-tag + .el-tag {
+.el-tag {
   margin-top: 10px;
+  margin-left: 10px;
   // display: block;
 }
 .button-new-tag {
@@ -515,9 +583,15 @@ export default {
   line-height: 30px;
   padding-top: 0;
   padding-bottom: 0;
+  border-radius: 20px;
 }
 .input-new-tag {
-  margin-bottom: 10px;
+  margin-top: 5px;
+}
+.input-keyword {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
 }
 @media screen and (min-width: 1265px) {
   .header_box {
