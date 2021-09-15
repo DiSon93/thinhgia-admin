@@ -399,6 +399,7 @@ export default {
           house_type: "",
           projects: "",
           province: "",
+          search_address: "",
         });
         // await this.renderAcitonList();
         // console.log("realEstate", this.realEstateList);

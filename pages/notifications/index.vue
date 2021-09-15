@@ -126,6 +126,7 @@ export default {
           house_type: "",
           projects: "",
           province: "",
+           search_address: "",
         });
         if (this.lastPage == this.page) {
           this.btn_display = false;
