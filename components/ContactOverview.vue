@@ -1,5 +1,5 @@
 <template>
-  <div id="contact" v-loading="loading" v-if="contactTypeList.length != 0">
+  <div id="contact" v-loading="loading">
     <v-data-table
       :headers="headers"
       :items="contactTypeList"
@@ -102,7 +102,7 @@ export default {
 <style lang="scss" scoped>
 #contact {
   // width: 630px;
-  padding: 20px;
+  margin: 40px 20px;
   tr td:nth-child(5) {
     .content {
       overflow: hidden;
