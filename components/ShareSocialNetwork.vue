@@ -14,7 +14,7 @@
         <el-dropdown-item>
           <div
             class="zalo-share-button"
-            data-href="https://khobatdongsanviet.demo.fit/"
+            :data-href="url"
             data-oaid="53253160592962497"
             data-layout="1"
             data-color="blue"
@@ -24,7 +24,7 @@
         <el-dropdown-item>
           <ShareNetwork
             network="facebook"
-            url="https://khobatdongsanviet.demo.fit/"
+            :url="url"
             title="Say hi to Vite! A brand new, extremely fast development setup for Vue."
             description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
             quote=""
@@ -42,6 +42,16 @@
 
 <script>
 export default {
+  props: ["id", "title"],
+  data() {
+    return {
+      url: "",
+    };
+  },
+  mounted() {
+    this.handleCommand();
+    this.url = `https://khobatdongsanviet.demo.fit`;
+  },
   methods: {
     handleCommand(command) {
       if (command == "URL") {

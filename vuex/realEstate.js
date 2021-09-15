@@ -22,6 +22,7 @@ export default {
       lastPage: 0,
       specialList: [],
       listChange: [],
+      listProvince:[],
     },
     mutations: {
         getRealEstateList(state, data) {
@@ -99,12 +100,16 @@ export default {
         listChangeEstate(state, data){
             state.listChange = data;
             state.errorMessage = null;
+        },
+        listEstateProvince(state, data){
+            state.listProvince = data;
+            state.errorMessage = null;
         }
     },
     actions: {
         getRealEstateList: ({ commit }, data) => {
             return new Promise((resolve, reject) => {
-                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}&search=${data.search}&min_price=${data.min_price}&max_price=${data.max_price}&sort_price=${data.sort_price}&approve_public=${data.approve_public}&sort_view=${data.sort_view}`, method: "GET", data: data}).then(response => {
+                axiosClient({ url: `/admin/real-estates?limit=${data.limit}&page=${data.page}&search=${data.search}&min_price=${data.min_price}&max_price=${data.max_price}&sort_price=${data.sort_price}&approve_public=${data.approve_public}&sort_view=${data.sort_view}&purpose=${data.purpose}&house_type=${data.house_type}&projects=${data.projects}&province=${data.province}&search_text=${data.search_text}`, method: "GET", data: data}).then(response => {
                     commit('getRealEstateList', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
@@ -283,6 +288,17 @@ export default {
             return new Promise((resolve, reject) => {
                 axiosClient({ url: `/admin/real-estates/list-changes/${_id}`, method: "GET"}).then(response => {
                     commit('listChangeEstate', response.data.results);
+                    resolve(response.data);
+                }).catch(e => {
+                    commit('showError', e.response.data);
+                    reject(e);
+                })
+            })
+        },
+        listEstateProvince:({ commit })  => {
+            return new Promise((resolve, reject) => {
+                axiosClient({ url: `/admin/real-estates/list-provinces-exists`, method: "GET"}).then(response => {
+                    commit('listEstateProvince', response.data.results);
                     resolve(response.data);
                 }).catch(e => {
                     commit('showError', e.response.data);

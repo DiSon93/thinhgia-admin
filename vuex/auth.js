@@ -18,6 +18,7 @@ export default {
         },
         setError (state, data){
            state.error = data;
+           console.log(data);
         },
         changePassword(state, data){
             state.changePass = data;
