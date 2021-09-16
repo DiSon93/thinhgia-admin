@@ -10,6 +10,15 @@
     <div class="header_box">
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Nhu cầu</button>
+<<<<<<< HEAD
+        <v-btn depressed color="primary" id="social_network"> 16:52 </v-btn>
+        <div id="select_amount"></div>
+        <div class="option_button">
+          <v-btn class="mx-2 add_btn" fab dark small color="warning">
+            <v-icon dark small> mdi-plus </v-icon>
+          </v-btn>
+          <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
+=======
         <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
         <div id="select_amount"></div>
         <div class="option_button">
@@ -21,11 +30,20 @@
               >mdi-account</v-icon
             ></v-btn
           >
+>>>>>>> main
         </div>
       </v-row>
       <v-row id="pagination_select">
         <v-col cols="4">
+<<<<<<< HEAD
+          <v-select
+            :options="['Hiển thị 10', 'Hiển thị 20', 'Hiển thị 50', 'Hiển thị 100']"
+            class="option"
+            placeholder="Hiển thị 10"
+          ></v-select>
+=======
           Tổng cộng: <span class="highlight">{{ total }}</span>
+>>>>>>> main
         </v-col>
         <v-col cols="4" align="center"> 1 / 1 </v-col>
         <v-col cols="4" align="right" class="option_right">
@@ -37,11 +55,15 @@
                   <span> {{ option.title }}</span>
                 </template>
               </v-select> -->
+<<<<<<< HEAD
+              <el-select v-model="value" placeholder="Chưa giải quyết">
+=======
               <el-select
                 v-model="value"
                 placeholder="Chưa giải quyết"
                 @change="handleChange($event)"
               >
+>>>>>>> main
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -51,13 +73,21 @@
                 </el-option>
               </el-select>
             </div>
+<<<<<<< HEAD
+            <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
+=======
             <v-btn class="export" fab
               ><img src="@image/icons/export.png" alt="" @click="exportDemandList"
             /></v-btn>
+>>>>>>> main
           </div>
         </v-col>
       </v-row>
       <v-row class="data_table">
+<<<<<<< HEAD
+        <Demand />
+      </v-row>
+=======
         <Demand :selected_op="resolved" :key="keyChild" />
       </v-row>
       <el-dialog
@@ -78,11 +108,20 @@
       >
         <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
       </el-dialog>
+>>>>>>> main
     </div>
   </v-lazy>
 </template>
 
 <script>
+<<<<<<< HEAD
+import DemandTable from "@component/DemandTable";
+import Demand from "@component/Demand";
+export default {
+  components: {
+    DemandTable,
+    Demand,
+=======
 import { mapState } from "vuex";
 import Demand from "@component/Demand";
 import UserDetail from "@component/Form/UserDetail";
@@ -94,10 +133,34 @@ export default {
     Demand,
     UserDetail,
     ChangePassword,
+>>>>>>> main
   },
   data() {
     return {
       isActive: false,
+<<<<<<< HEAD
+      // options: [
+      //   {
+      //     title: "Chưa giải quyết",
+      //   },
+      //   {
+      //     title: "Giải quyết",
+      //   },
+      // ],
+      options: [
+        {
+          value: "Chưa giải quyết",
+          label: "Chưa giải quyết",
+        },
+        {
+          value: "Giải quyết",
+          label: "Giải quyết",
+        },
+      ],
+      value: "Chưa giải quyết",
+    };
+  },
+=======
       keyChild: 0,
       resolved: 0,
       centerDialogVisible02: false,
@@ -144,6 +207,7 @@ export default {
       });
     },
   },
+>>>>>>> main
 };
 </script>
 
@@ -246,6 +310,8 @@ export default {
     margin-top: -50px !important;
   }
 }
+<<<<<<< HEAD
+=======
 @media screen and (max-width: 600px) {
   #pagination_select {
     margin-top: 20px;
@@ -271,4 +337,5 @@ export default {
   font-weight: 500;
   font-size: 15px;
 }
+>>>>>>> main
 </style>

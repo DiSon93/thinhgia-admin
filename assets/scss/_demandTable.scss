@@ -49,6 +49,8 @@
   }
   tr td:nth-child(3){
     text-align: center;
+<<<<<<< HEAD
+=======
     .highlight {
       color: orange !important;
       margin: 0 5px;
@@ -59,10 +61,22 @@
   tr td:nth-child(4){
     color: rgb(97, 97, 255);
     font-weight: 700;
+>>>>>>> main
   }
   tr th:nth-child(3),th:nth-child(2){
     text-align: center;
   }
+<<<<<<< HEAD
+  tr td:nth-child(12){
+    color: orange;
+    font-weight: 700;
+  }
+  tr td:nth-child(13) .v-icon.mdi-pencil{
+    color: green;
+  }
+  tr td:nth-child(13) .v-icon.mdi-delete{
+    color: red;
+=======
   tr td:nth-child(11){
     color: rgb(97, 97, 255);
     font-weight: 700;
@@ -105,5 +119,6 @@
     &:hover{
     background: rgba(170, 170, 240, 0.178);
     }
+>>>>>>> main
   }
 }

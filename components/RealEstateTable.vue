@@ -4,20 +4,32 @@
       v-model="selected"
       :headers="headers"
       :items="desserts"
+<<<<<<< HEAD
+      :single-select="singleSelect"
+      item-key="amount"
+      show-select
+=======
       item-key="amount"
       show-select
       :mobile-breakpoint="0"
+>>>>>>> main
       class="elevation-1"
     >
       <template v-slot:item="row">
         <tr>
           <td>
+<<<<<<< HEAD
+            <v-checkbox
+              v-model="selected"
+              :value="row.item"
+=======
             <!-- v-model="selected" -->
             <!-- :value="row.item" -->
             <!-- hide-details -->
             <!-- style="margin: 0px; padding: 0px" -->
             <v-checkbox
               v-model="row.item.selected"
+>>>>>>> main
               hide-details
               style="margin: 0px; padding: 0px"
             ></v-checkbox>
@@ -81,7 +93,10 @@
 <script>
 export default {
   data: () => ({
+<<<<<<< HEAD
+=======
     cb: {},
+>>>>>>> main
     fullscreenLoading: true,
     singleSelect: false,
     selected: [],
@@ -89,7 +104,11 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
+<<<<<<< HEAD
+      { text: "#", value: "amount", width: "50px" },
+=======
       { text: "#", value: "amount", width: "50px", fixed: true },
+>>>>>>> main
       {
         text: "Loại",
         align: "start",
@@ -97,7 +116,11 @@ export default {
         value: "side",
         width: "50px",
       },
+<<<<<<< HEAD
+      { text: "Giá", value: "price", width: "80px" },
+=======
       { text: "Giá", value: "price", width: "80px", fixed: true },
+>>>>>>> main
       { text: "Dự án", value: "project", width: "100px" },
       { text: "Địa chỉ", value: "address", width: "180px" },
       { text: "Khu vực", value: "area", width: "180px" },
@@ -142,6 +165,8 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
+<<<<<<< HEAD
+=======
     checked() {
       return Object.entries(this.cb)
         .filter((o) => o[1])
@@ -155,6 +180,7 @@ export default {
         this.headers
       );
     },
+>>>>>>> main
   },
 
   mounted() {
@@ -169,7 +195,10 @@ export default {
     initialize() {
       this.desserts = [
         {
+<<<<<<< HEAD
+=======
           id: 1,
+>>>>>>> main
           amount: 3243,
           side: "BÁN",
           price: "7.5 tỷ",
@@ -198,7 +227,10 @@ export default {
           update: "8/6/2020 12:09:33",
         },
         {
+<<<<<<< HEAD
+=======
           id: 2,
+>>>>>>> main
           amount: 3456,
           side: "BÁN",
           price: "6.5 tỷ",
@@ -228,7 +260,10 @@ export default {
           web: true,
         },
         {
+<<<<<<< HEAD
+=======
           id: 3,
+>>>>>>> main
           amount: 3086,
           side: "BÁN",
           price: "10.5 tỷ",
@@ -284,7 +319,11 @@ export default {
     margin-left: 4px;
   }
   tr:hover {
+<<<<<<< HEAD
+    background: #ffdf9f41;
+=======
     background: #ffdf9f41 !important;
+>>>>>>> main
   }
 }
 .direction {

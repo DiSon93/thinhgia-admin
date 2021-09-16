@@ -1,4 +1,391 @@
 <template>
+<<<<<<< HEAD
+  <div>
+    <div class="action">
+      <div class="d-flex username">
+        <div class="name_info d-flex">
+          <img src="@image/icons/username.png" alt="" />
+          <div class="name">
+            User Name
+            <div class="seconds">a few seconds ago</div>
+          </div>
+        </div>
+        <div>
+          <img src="@image/icons/i.png" alt="" />
+        </div>
+      </div>
+      <div class="sell-department">
+        BÁN CĂN HỘ VINHOMES TẦNG CAO VIEW BIỂN FULL NỘI THẤT ĐẸP
+      </div>
+      <div class="d-flex address">
+        <img src="@image/icons/nam.png" alt="" />
+        <span>Nam</span>
+        <img src="@image/icons/address.png" alt="" />
+        <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
+      </div>
+      <div class="content" v-bind:class="{ adjust: read }">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+        is simply dummy text of the printing and typesetting industry. Lorem Ipsum is
+        simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply
+        dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy
+        text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of
+        the printing and typesetting industry.
+
+        <br />
+      </div>
+      <button class="more-info" @click="readMore">
+        {{ read ? "Rút gọn" : "Xem thêm" }}
+      </button>
+      <v-row no-gutters class="house-img">
+        <CoolLightBox :items="items" :index="index" @close="index = null"> </CoolLightBox>
+
+        <div class="images-wrapper">
+          <img
+            v-for="(image, imageIndex) in items"
+            :key="imageIndex"
+            @click="index = imageIndex"
+            :src="image.src"
+          />
+          <div class="overlay">+8</div>
+        </div>
+      </v-row>
+      <v-row no-gutters class="comment_like">
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/heart.png" alt="" />
+            <span>Thích</span>
+            <span>1</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/comment.png" alt="" />
+            <span>Bình luận</span>
+            <span>2</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/share.png" alt="" />
+            <span>Chia sẻ</span>
+          </button>
+        </v-col>
+      </v-row>
+    </div>
+    <div class="action">
+      <div class="d-flex username">
+        <div class="name_info d-flex">
+          <img src="@image/icons/username.png" alt="" />
+          <div class="name">
+            User Name
+            <div class="seconds">a few seconds ago</div>
+          </div>
+        </div>
+        <div>
+          <img src="@image/icons/i.png" alt="" />
+        </div>
+      </div>
+      <div class="sell-department">
+        BÁN CĂN HỘ VINHOMES TẦNG CAO VIEW BIỂN FULL NỘI THẤT ĐẸP
+      </div>
+      <div class="d-flex address">
+        <img src="@image/icons/nam.png" alt="" />
+        <span>Nam</span>
+        <img src="@image/icons/address.png" alt="" />
+        <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
+      </div>
+      <div class="content" v-bind:class="{ adjust: read }">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+        is simply dummy text of the printing and typesetting industry. Lorem Ipsum is
+        simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply
+        dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy
+        text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of
+        the printing and typesetting industry.
+
+        <br />
+      </div>
+      <button class="more-info" @click="readMore">
+        {{ read ? "Rút gọn" : "Xem thêm" }}
+      </button>
+      <v-row no-gutters class="house-img">
+        <CoolLightBox :items="items" :index="index" @close="index = null"> </CoolLightBox>
+
+        <div class="images-wrapper">
+          <img
+            v-for="(image, imageIndex) in items"
+            :key="imageIndex"
+            @click="index = imageIndex"
+            :src="image.src"
+          />
+          <div class="overlay">+8</div>
+        </div>
+      </v-row>
+      <v-row no-gutters class="comment_like">
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/heart.png" alt="" />
+            <span>Thích</span>
+            <span>1</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/comment.png" alt="" />
+            <span>Bình luận</span>
+            <span>2</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/share.png" alt="" />
+            <span>Chia sẻ</span>
+          </button>
+        </v-col>
+      </v-row>
+    </div>
+    <div class="action">
+      <div class="d-flex username">
+        <div class="name_info d-flex">
+          <img src="@image/icons/username.png" alt="" />
+          <div class="name">
+            User Name
+            <div class="seconds">a few seconds ago</div>
+          </div>
+        </div>
+        <div>
+          <img src="@image/icons/i.png" alt="" />
+        </div>
+      </div>
+      <div class="sell-department">
+        BÁN CĂN HỘ VINHOMES TẦNG CAO VIEW BIỂN FULL NỘI THẤT ĐẸP
+      </div>
+      <div class="d-flex address">
+        <img src="@image/icons/nam.png" alt="" />
+        <span>Nam</span>
+        <img src="@image/icons/address.png" alt="" />
+        <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
+      </div>
+      <div class="content" v-bind:class="{ adjust: read }">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+        is simply dummy text of the printing and typesetting industry. Lorem Ipsum is
+        simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply
+        dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy
+        text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of
+        the printing and typesetting industry.
+
+        <br />
+      </div>
+      <button class="more-info" @click="readMore">
+        {{ read ? "Rút gọn" : "Xem thêm" }}
+      </button>
+      <v-row no-gutters class="house-img">
+        <CoolLightBox :items="items" :index="index" @close="index = null"> </CoolLightBox>
+
+        <div class="images-wrapper">
+          <img
+            v-for="(image, imageIndex) in items"
+            :key="imageIndex"
+            @click="index = imageIndex"
+            :src="image.src"
+          />
+          <div class="overlay">+8</div>
+        </div>
+      </v-row>
+      <v-row no-gutters class="comment_like">
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/heart.png" alt="" />
+            <span>Thích</span>
+            <span>1</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/comment.png" alt="" />
+            <span>Bình luận</span>
+            <span>2</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/share.png" alt="" />
+            <span>Chia sẻ</span>
+          </button>
+        </v-col>
+      </v-row>
+    </div>
+    <div class="action">
+      <div class="d-flex username">
+        <div class="name_info d-flex">
+          <img src="@image/icons/username.png" alt="" />
+          <div class="name">
+            User Name
+            <div class="seconds">a few seconds ago</div>
+          </div>
+        </div>
+        <div>
+          <img src="@image/icons/i.png" alt="" />
+        </div>
+      </div>
+      <div class="sell-department">
+        BÁN CĂN HỘ VINHOMES TẦNG CAO VIEW BIỂN FULL NỘI THẤT ĐẸP
+      </div>
+      <div class="d-flex address">
+        <img src="@image/icons/nam.png" alt="" />
+        <span>Nam</span>
+        <img src="@image/icons/address.png" alt="" />
+        <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
+      </div>
+      <div class="content" v-bind:class="{ adjust: read }">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+        Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+        is simply dummy text of the printing and typesetting industry. Lorem Ipsum is
+        simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply
+        dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy
+        text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of
+        the printing and typesetting industry.
+
+        <br />
+      </div>
+      <button class="more-info" @click="readMore">
+        {{ read ? "Rút gọn" : "Xem thêm" }}
+      </button>
+      <v-row no-gutters class="house-img">
+        <CoolLightBox :items="items" :index="index" @close="index = null"> </CoolLightBox>
+
+        <div class="images-wrapper">
+          <img
+            v-for="(image, imageIndex) in items"
+            :key="imageIndex"
+            @click="index = imageIndex"
+            :src="image.src"
+          />
+          <div class="overlay">+8</div>
+        </div>
+      </v-row>
+      <v-row no-gutters class="comment_like">
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/heart.png" alt="" />
+            <span>Thích</span>
+            <span>1</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/comment.png" alt="" />
+            <span>Bình luận</span>
+            <span>2</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/share.png" alt="" />
+            <span>Chia sẻ</span>
+          </button>
+        </v-col>
+      </v-row>
+    </div>
+
+    <!-- <div class="action">
+      <div class="d-flex username">
+        <div class="name_info d-flex">
+          <img src="@image/icons/username.png" alt="" />
+          <div class="name">
+            User Name
+            <div class="seconds">a few seconds ago</div>
+          </div>
+        </div>
+        <div>
+          <img src="@image/icons/i.png" alt="" />
+        </div>
+      </div>
+      <div class="sell-department">
+        BÁN CĂN HỘ VINHOMES TẦNG CAO VIEW BIỂN FULL NỘI THẤT ĐẸP
+      </div>
+      <div class="d-flex address">
+        <img src="@image/icons/nam.png" alt="" />
+        <span>Nam</span>
+        <img src="@image/icons/address.png" alt="" />
+        <span>Nguyễn Hữu Cảnh, Bình Thạnh</span>
+      </div>
+      <div class="content">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+        <br />
+        <button class="more-info">Xem thêm</button>
+      </div>
+      <v-row no-gutters class="house-img">
+        <v-col cols="6">
+          <v-dialog v-model="dialog" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <img v-bind="attrs" v-on="on" src="@image/layouts/house1.png" />
+            </template>
+            <v-card>
+              <img src="@image/layouts/house1.png" alt="" class="big_img" />
+            </v-card>
+          </v-dialog>
+        </v-col>
+        <v-col cols="6" class="img_last">
+          <v-dialog v-model="dialog" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <img v-bind="attrs" v-on="on" src="@image/layouts/house2.png" />
+            </template>
+            <v-card>
+              <img src="@image/layouts/house2.png" alt="" class="big_img" />
+            </v-card>
+          </v-dialog>
+        </v-col>
+      </v-row>
+      <v-row no-gutters class="house-img">
+        <v-col cols="6">
+          <v-dialog v-model="dialog" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <img v-bind="attrs" v-on="on" src="@image/layouts/house3.png" />
+            </template>
+            <v-card>
+              <img src="@image/layouts/house3.png" alt="" class="big_img" />
+            </v-card>
+          </v-dialog>
+        </v-col>
+        <v-col cols="6" class="img_last more_picture">
+          <div class="overlay">+8</div>
+          <v-dialog v-model="dialog" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <img v-bind="attrs" v-on="on" src="@image/layouts/house4.png" />
+            </template>
+            <v-card>
+              <img src="@image/layouts/house3.png" alt="" class="big_img" />
+            </v-card>
+          </v-dialog>
+        </v-col>
+      </v-row>
+      <v-row no-gutters class="comment_like">
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/heart.png" alt="" />
+            <span>Thích</span>
+            <span>1</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/comment.png" alt="" />
+            <span>Bình luận</span>
+            <span>2</span>
+          </button>
+        </v-col>
+        <v-col cols="4" align="center">
+          <button>
+            <img src="@image/icons/share.png" alt="" />
+            <span>Chia sẻ</span>
+          </button>
+        </v-col>
+      </v-row>
+    </div> -->
+=======
   <div v-loading="loading">
     <div class="infinite-list-wrapper" style="overflow: auto">
       <ul
@@ -251,12 +638,18 @@
       <p v-if="loadingMore">Loading...</p>
       <p v-if="noMore">No more</p>
     </div>
+>>>>>>> main
   </div>
 </template>
 
 <script>
 import CoolLightBox from "vue-cool-lightbox";
 import "vue-cool-lightbox/dist/vue-cool-lightbox.min.css";
+<<<<<<< HEAD
+export default {
+  components: {
+    CoolLightBox,
+=======
 import { mapState, mapActions } from "vuex";
 import CoolLightBoxImage from "@component/CoolLightBoxImage.vue";
 import ShareSocialNetwork from "@component/ShareSocialNetwork";
@@ -268,10 +661,13 @@ export default {
     CoolLightBoxImage,
     ShareSocialNetwork,
     ZaloPlugin,
+>>>>>>> main
   },
   data: function () {
     return {
       read: false,
+<<<<<<< HEAD
+=======
       limit: 3,
       page: 1,
       loading: false,
@@ -294,6 +690,7 @@ export default {
       file: null,
       dialogVisible: false,
       dialogImageUrl: "",
+>>>>>>> main
       items: [
         {
           title: "In nature, nothing is perfect and everything is perfect",
@@ -301,8 +698,13 @@ export default {
           src: require(`@/assets/images/layouts/house1.png`),
         },
         {
+<<<<<<< HEAD
+          title: "A beautiful mountain view",
+          description: "Photo by Facundo",
+=======
           title: "In nature, nothing is perfect and everything is perfect",
           description: "Photo by Lucas",
+>>>>>>> main
           src: require("@/assets/images/layouts/house2.png"),
         },
         {
@@ -311,14 +713,25 @@ export default {
           src: require(`@/assets/images/layouts/house3.png`),
         },
         {
+<<<<<<< HEAD
+          title: "A beautiful mountain view",
+          description: "Photo by Facundo",
+=======
           title: "In nature, nothing is perfect and everything is perfect",
           description: "Photo by Lucas",
+>>>>>>> main
           src: require("@/assets/images/layouts/house4.png"),
         },
       ],
       index: null,
     };
   },
+<<<<<<< HEAD
+  methods: {
+    readMore: function () {
+      this.read = !this.read;
+    },
+=======
   created() {
     this.getNewActionList();
   },
@@ -568,6 +981,7 @@ export default {
         "403, Forbidden. Can not do this function due to lacking of permission."
       );
     },
+>>>>>>> main
   },
 };
 </script>
@@ -590,6 +1004,8 @@ export default {
         width: 25px;
         height: 25px;
         margin-right: 15px;
+<<<<<<< HEAD
+=======
         border-radius: 50%;
       }
       .stop_selling {
@@ -599,6 +1015,7 @@ export default {
         //   margin-left: 20px;
         //   opacity: 0.5;
         // }
+>>>>>>> main
       }
       .name {
         font-size: 13px;
@@ -607,13 +1024,19 @@ export default {
         /* identical to box height, or 200% */
         letter-spacing: 0.5px;
         .seconds {
+<<<<<<< HEAD
+          font-weight: 300;
+=======
           font-weight: 500;
           color: grey;
+>>>>>>> main
           font-size: 10px;
           letter-spacing: 0.5px;
         }
       }
     }
+<<<<<<< HEAD
+=======
     .el-button {
       padding: 2px 3px;
     }
@@ -633,6 +1056,7 @@ export default {
     br {
       display: none !important;
     }
+>>>>>>> main
   }
   .sell-department {
     font-weight: bold;
@@ -657,12 +1081,20 @@ export default {
       margin: 0 8px;
     }
   }
+<<<<<<< HEAD
+  .content {
+=======
   .adjust {
+>>>>>>> main
     font-weight: 300;
     font-size: 13px;
     line-height: 24px;
     letter-spacing: 0.5px;
+<<<<<<< HEAD
+    height: 25px;
+=======
     // height: 25px;
+>>>>>>> main
     overflow: hidden;
   }
   .more-info {
@@ -677,6 +1109,11 @@ export default {
   }
   .house-img {
     // margin-bottom: 5px;
+<<<<<<< HEAD
+    img {
+      width: 48%;
+      margin-bottom: 3%;
+=======
     // display: flex;
     // .images-wrapper {
     //   width: 50%;
@@ -685,17 +1122,22 @@ export default {
       width: 48%;
       margin-bottom: 3%;
       height: 100px;
+>>>>>>> main
     }
     img:nth-child(1),
     img:nth-child(3) {
       margin-right: 4%;
     }
     .images-wrapper {
+<<<<<<< HEAD
+      position: relative;
+=======
       width: 100%;
       position: relative;
       .image {
         height: 100px;
       }
+>>>>>>> main
       .overlay {
         position: absolute;
         top: 50%;
@@ -705,11 +1147,17 @@ export default {
         text-align: center;
         color: #fff;
         font-size: 24px;
+<<<<<<< HEAD
+        padding-top: 48px;
+=======
         padding-top: 9%;
+>>>>>>> main
         background-color: rgba(0, 0, 0, 0.329);
       }
     }
   }
+<<<<<<< HEAD
+=======
   .connect {
     margin-top: 10px;
   }
@@ -765,10 +1213,18 @@ export default {
       margin-top: -24px !important;
     }
   }
+>>>>>>> main
   .comment_like {
     font-style: normal;
     font-weight: 300;
     font-size: 11px;
+<<<<<<< HEAD
+    span {
+      margin: 0 3px;
+    }
+  }
+}
+=======
     .share {
       font-size: 11px;
       text-decoration: line-through;
@@ -785,10 +1241,13 @@ export default {
   }
 }
 
+>>>>>>> main
 .big_img {
   width: 500px;
   height: auto;
 }
+<<<<<<< HEAD
+=======
 .share_facebook {
   text-decoration: none;
   img {
@@ -830,4 +1289,5 @@ div::-webkit-scrollbar {
   width: 3px !important;
   opacity: 0.1 !important;
 }
+>>>>>>> main
 </style>
