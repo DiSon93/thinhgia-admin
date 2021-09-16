@@ -8,112 +8,6 @@
     transition="fade-transition"
   >
     <div class="header_box">
-<<<<<<< HEAD
-      <v-row align="center" d-flex>
-        <v-col cols="6" class="app_bar">
-          <button class="homepage" disabled>Tin tức</button>
-          <v-btn depressed color="primary" id="social_network"> 16 </v-btn>
-        </v-col>
-        <v-col cols="6" class="app_bar">
-          <div class="option_button">
-            <v-btn class="mx-2 add_btn" fab dark small color="warning">
-              <v-icon dark small> mdi-plus </v-icon>
-            </v-btn>
-            <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row class="news_table">
-        <v-col cols="6" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-        <v-col cols="6" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-        <v-col cols="6" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-        <v-col cols="6" class="content_items">
-          <div class="content">
-            <div class="d-flex img_fix">
-              <img src="@image/layouts/house1.png" alt="" />
-              <v-btn class="mx-2" icon color="cyan">
-                <v-icon dark> mdi-pencil </v-icon>
-              </v-btn>
-            </div>
-            <div class="create">Tạo bởi My Admin lúc 11-06-2021</div>
-            <div class="blog">Loại blog: Tin tức</div>
-            <h5>Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land</h5>
-            <div class="introduce">GIỚI THIỆU</div>
-            <div class="detail">
-              Công ty Cổ phần dịch vụ Bất động sản Thịnh Gia Land, tiền thân là công ty
-              tnhh dịch vụ Thịnh Gia, với chức năng chính là môi giới các sản phẩm Bất
-              động sản như nhà phố, đất ở và chung cư trên địa bàn thành phố Vũng Tàu. Tuy
-              mới thành lập không lâu nhưng Thịnh Gia Land đã xác định được hướng đi, thế
-              mạnh để kinh doanh
-              <span> <a href="">...Xem thêm</a> </span>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-=======
       <v-row align="center" d-flex class="header_option">
         <v-col cols="8" sm="6" class="app_bar new_titles">
           <button class="homepage" disabled>Tin tức</button>
@@ -229,20 +123,11 @@
       >
         <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
       </el-dialog>
->>>>>>> main
     </div>
   </v-lazy>
 </template>
 
 <script>
-<<<<<<< HEAD
-export default {
-  data() {
-    return {
-      isActive: false,
-    };
-  },
-=======
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
 import { mapState, mapActions } from "vuex";
@@ -394,7 +279,6 @@ export default {
       });
     },
   },
->>>>>>> main
 };
 </script>
 
@@ -466,25 +350,17 @@ export default {
 .news_table {
   padding: 20px 20px;
 }
-<<<<<<< HEAD
-.content_items {
-=======
 .content_loading {
   margin-top: 40px;
   min-height: 300px;
 }
 .content_items {
   padding: 2px 12px;
->>>>>>> main
   h5 {
     font-size: 16px;
   }
   .content {
-<<<<<<< HEAD
-    border-radius: 20px;
-=======
     border-radius: 10px;
->>>>>>> main
     background-color: #fff;
     padding: 20px 34px;
     box-shadow: 0 0 20px 1px hsl(0deg 0% 65% / 20%);
@@ -495,12 +371,9 @@ export default {
       font-size: 13px;
       font-weight: 500;
       margin-top: 5px;
-<<<<<<< HEAD
-=======
       .username {
         font-weight: 700;
       }
->>>>>>> main
     }
     .blog {
       color: rgb(78, 78, 245);
@@ -510,22 +383,14 @@ export default {
     }
     .img_fix {
       justify-content: space-between;
-<<<<<<< HEAD
-=======
       img {
         width: 200px;
         height: 200px;
       }
->>>>>>> main
     }
     a {
       font-size: 14px;
     }
-<<<<<<< HEAD
-    .detail {
-      font-size: 13px;
-      color: gray;
-=======
     .estate_content {
       // font-size: 14px;
       // height: 70px;
@@ -542,27 +407,15 @@ export default {
       color: gray;
       line-height: 25px;
       height: auto !important;
->>>>>>> main
     }
     .introduce {
       font-weight: 500;
       color: gray;
-<<<<<<< HEAD
-      font-size: 14px;
-=======
       font-size: 15px;
->>>>>>> main
       margin-bottom: 3px;
     }
   }
 }
-<<<<<<< HEAD
-@media screen and (min-width: 1265px) {
-  .header_box {
-    margin-top: -50px !important;
-  }
-}
-=======
 .header_option {
   position: sticky;
   top: 0;
@@ -627,5 +480,4 @@ div::-webkit-scrollbar {
 .infinite-list-wrapper {
   height: 800px;
 }
->>>>>>> main
 </style>

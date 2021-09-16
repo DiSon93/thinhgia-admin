@@ -9,11 +9,7 @@
   >
     <div class="header_box">
       <v-row align="center" d-flex>
-<<<<<<< HEAD
-        <v-col cols="6" class="app_bar">
-=======
         <v-col cols="8" sm="6" class="app_bar">
->>>>>>> main
           <button class="homepage" disabled>Quản trị</button>
           <v-btn-toggle v-model="toggle_exclusive" mandatory id="administrator_btn">
             <v-btn v-on:click="user"> Người dùng </v-btn>
@@ -21,14 +17,6 @@
             <v-btn @click="realEstate"> Duyệt BĐS </v-btn>
           </v-btn-toggle>
         </v-col>
-<<<<<<< HEAD
-        <v-col cols="6" class="app_bar">
-          <div class="option_button">
-            <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
-            <v-btn class="notifiaction" fab
-              ><img src="@image/icons/bell-badge-noti.jpg" alt=""
-            /></v-btn>
-=======
         <v-col cols="4" sm="6" class="app_bar">
           <div class="option_button">
             <v-btn class="account" fab @click="centerDialogVisible02 = true"
@@ -111,21 +99,10 @@
                 <img class="saw_noti" v-else src="@image/icons/notification.png" alt="" />
               </el-button>
             </el-popover>
->>>>>>> main
           </div>
         </v-col>
       </v-row>
       <v-row class="admin_option">
-<<<<<<< HEAD
-        <v-col cols="4" v-if="isUser"> 51 người dùng </v-col>
-        <v-col cols="4" v-if="isDictionary"> Tổng cộng: 8 loại Loại BĐS </v-col>
-        <v-col cols="4" v-if="isRealEstate"> 1BĐS </v-col>
-
-        <v-col cols="4" align="center" v-if="isUser || isDictionary"> 1 / 1 </v-col>
-        <v-col cols="4" align="center" v-if="isRealEstate"> </v-col>
-        <v-col cols="4" align="right">
-          <div class="phanquyen" :class="{ adjust: isRealEstate }">
-=======
         <v-col cols="6" sm="4" v-if="isUser">
           <span class="figure">{{ totalUser }}</span> người dùng
         </v-col>
@@ -147,7 +124,6 @@
             class="phanquyen"
             :class="{ adjust: isRealEstate, dictionary_option: isDictionary }"
           >
->>>>>>> main
             <span v-if="isUser">Phân quyền</span>
             <span v-if="isDictionary">Loại từ điển</span>
             <span v-if="isRealEstate"></span>
@@ -157,9 +133,6 @@
                   <span> {{ option.title }}</span>
                 </template>
               </v-select> -->
-<<<<<<< HEAD
-            <el-select v-model="value1" placeholder="Tất cả" v-if="isUser">
-=======
 
             <el-select
               v-model="value1"
@@ -167,7 +140,6 @@
               v-if="isUser"
               @change="handleChangeRole($event)"
             >
->>>>>>> main
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -176,16 +148,12 @@
               >
               </el-option>
             </el-select>
-<<<<<<< HEAD
-            <el-select v-model="value2" placeholder="Tất cả" v-if="isDictionary">
-=======
             <el-select
               v-model="value2"
               placeholder="Tất cả"
               v-if="isDictionary"
               @change="handleChangeDic($event)"
             >
->>>>>>> main
               <el-option
                 v-for="item in dictionaris"
                 :key="item.value"
@@ -199,10 +167,7 @@
               placeholder="Tất cả"
               v-if="isRealEstate"
               class="congDong"
-<<<<<<< HEAD
-=======
               @change="handleChangeApp($event)"
->>>>>>> main
             >
               <el-option
                 v-for="item in estate"
@@ -219,13 +184,6 @@
               dark
               small
               color="warning"
-<<<<<<< HEAD
-              v-if="!isRealEstate"
-            >
-              <v-icon dark small> mdi-plus </v-icon>
-            </v-btn>
-            <v-btn class="export" fab v-if="!isRealEstate"
-=======
               v-if="isUser"
               @click="centerDialogVisible = true"
               :disabled="role_user == 3 || role_user == 4"
@@ -245,24 +203,11 @@
               <v-icon dark small> mdi-plus </v-icon>
             </v-btn>
             <v-btn class="export" fab v-if="isUser" @click="exportUserList"
->>>>>>> main
               ><img src="@image/icons/export.png" alt=""
             /></v-btn>
           </div>
         </v-col>
       </v-row>
-<<<<<<< HEAD
-      <v-row class="data_table" v-if="isUser">
-        <AdminTable />
-      </v-row>
-      <v-row class="data_table" v-if="isDictionary">
-        <Dictionary />
-      </v-row>
-      <v-row class="data_table" v-if="isRealEstate">
-        <DefineRealEstate />
-      </v-row>
-      <v-row class="data_table" v-if="isUser"> </v-row>
-=======
       <el-dialog
         title="Tạo người dùng mới"
         :visible.sync="centerDialogVisible"
@@ -320,7 +265,6 @@
       >
         <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
       </el-dialog>
->>>>>>> main
     </div>
   </v-lazy>
 </template>
@@ -329,26 +273,18 @@
 import AdminTable from "@component/AdminTable";
 import Dictionary from "@component/Dictionary";
 import DefineRealEstate from "@component/DefineRealEstate";
-<<<<<<< HEAD
-=======
 import CreateUser from "@component/Form/CreateUser";
 import CreateDictionaries from "@component/Form/CreateDictionaries";
 import { mapState, mapActions } from "vuex";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
 import { exportFileList } from "../../utils/exportFile";
->>>>>>> main
 
 export default {
   components: {
     AdminTable,
     Dictionary,
     DefineRealEstate,
-<<<<<<< HEAD
-  },
-  data() {
-    return {
-=======
     CreateUser,
     CreateDictionaries,
     UserDetail,
@@ -359,91 +295,11 @@ export default {
       keyChild: 0,
       keyDic: 0,
       keyApp: 0,
->>>>>>> main
       isActive: false,
       isUser: true,
       isDictionary: false,
       isRealEstate: false,
       toggle_exclusive: [],
-<<<<<<< HEAD
-      // options: [
-      //   {
-      //     title: "Tất cả",
-      //   },
-      //   {
-      //     title: "Super Admin",
-      //   },
-      //   {
-      //     title: "Admin",
-      //   },
-      //   {
-      //     title: "Staff",
-      //   },
-      //   {
-      //     title: "Marketer",
-      //   },
-      // ],
-      options: [
-        {
-          value: "Tất cả",
-          label: "Tất cả",
-        },
-        {
-          value: "Super Admin",
-          label: "Super Admin",
-        },
-        {
-          value: "Admin",
-          label: "Admin",
-        },
-        {
-          value: "Staff",
-          label: "Staff",
-        },
-        {
-          value: "Marketer",
-          label: "Marketer",
-        },
-      ],
-      dictionaris: [
-        {
-          value: "Loại BĐS",
-          label: "Loại BĐS",
-        },
-        {
-          value: "Loại Nhà",
-          label: "Loại Nhà",
-        },
-        {
-          value: "Loại Đường",
-          label: "Loại Đường",
-        },
-        {
-          value: "Khách Hàng",
-          label: "Khách Hàng",
-        },
-        {
-          value: "Pháp lý",
-          label: "Pháp lý",
-        },
-        {
-          value: "Hướng",
-          label: "Hướng",
-        },
-        {
-          value: "Quận/Huyện",
-          label: "Quận/Huyện",
-        },
-        {
-          value: "Phường/Xã",
-          label: "Phường/Xã",
-        },
-        {
-          value: "Đường",
-          label: "Đường",
-        },
-      ],
-=======
       centerDialogVisible: false,
       centerDialogVisible02: false,
       centerDialogVisible03: false,
@@ -461,7 +317,6 @@ export default {
       role_id: 0,
       role_user: "",
       loading: false,
->>>>>>> main
       estate: [
         {
           value: "Cộng Đồng",
@@ -472,14 +327,6 @@ export default {
           label: "Web",
         },
       ],
-<<<<<<< HEAD
-      value1: "",
-      value2: "",
-      value3: "",
-    };
-  },
-  methods: {
-=======
       dictionaris: [],
       value1: "",
       value2: 1,
@@ -578,7 +425,6 @@ export default {
         message: "Cannot export Customer List!!!",
       });
     },
->>>>>>> main
     user: function () {
       this.isUser = true;
       this.isDictionary = false;
@@ -632,10 +478,7 @@ export default {
     top: -12px;
     .account {
       margin-left: 2px;
-<<<<<<< HEAD
-=======
       margin-right: 40px;
->>>>>>> main
       padding: 0;
       width: 24px !important;
       height: 24px !important;
@@ -647,26 +490,6 @@ export default {
         transition: 0.5s;
       }
     }
-<<<<<<< HEAD
-    .notifiaction {
-      border: none;
-      box-shadow: none;
-      background-color: #eff5f9 !important;
-      width: 24px !important;
-      height: 24px !important;
-      //   margin-right: 10px;
-      margin-left: 10px;
-      img {
-        width: 18px;
-        height: 20.57px;
-        border-radius: 50%;
-      }
-      &:hover {
-        border: 1px solid blue;
-        transition: 0.5s;
-      }
-    }
-=======
     // .notifiaction {
     //   border: none;
     //   box-shadow: none;
@@ -685,7 +508,6 @@ export default {
     //     transition: 0.5s;
     //   }
     // }
->>>>>>> main
     .setting {
       padding: 0;
       width: 24px !important;
@@ -701,8 +523,6 @@ export default {
     }
   }
 }
-<<<<<<< HEAD
-=======
 .btn_notification {
   background-color: #eff5f9 !important;
   border: none;
@@ -721,7 +541,6 @@ export default {
   bottom: -2px;
   padding: 4px;
 }
->>>>>>> main
 .admin_option {
   margin-top: 40px;
   font-size: 13px;
@@ -794,12 +613,9 @@ export default {
       right: 0;
     }
   }
-<<<<<<< HEAD
-=======
   .dictionary_option {
     width: 252px;
   }
->>>>>>> main
   .adjust {
     width: 150px !important;
   }
@@ -834,8 +650,6 @@ export default {
     margin-top: -50px !important;
   }
 }
-<<<<<<< HEAD
-=======
 @media screen and (max-width: 600px) {
   .data_table {
     padding: 20px 15px 20px;
@@ -883,5 +697,4 @@ export default {
   font-weight: 500;
   font-size: 15px;
 }
->>>>>>> main
 </style>

@@ -16,12 +16,8 @@
 <script>
 // Chart.defaults.global.legend.display = false;
 import LineChart from "@lib/LineChart.js";
-<<<<<<< HEAD
-
-=======
 import { mapState, mapActions } from "vuex";
 import moment from "moment";
->>>>>>> main
 export default {
   components: {
     LineChart,
@@ -29,31 +25,6 @@ export default {
   data() {
     return {
       datacollection: {},
-<<<<<<< HEAD
-      toggle_exclusive: undefined,
-    };
-  },
-  mounted() {
-    this.fillData();
-  },
-  methods: {
-    fillData() {
-      this.datacollection = {
-        labels: [
-          "T1",
-          "T2",
-          "T3",
-          "T4",
-          "T5",
-          "T6",
-          "T7",
-          "T8",
-          "T9",
-          "T10",
-          "T11",
-          "T12",
-        ],
-=======
       toggle_exclusive: 1,
     };
   },
@@ -82,19 +53,13 @@ export default {
       }
       this.datacollection = {
         ...this.datacollection,
->>>>>>> main
         datasets: [
           {
             label: "BĐS",
             borderColor: "#2DB7F5",
             pointBorderColor: "#2DB7F5",
-<<<<<<< HEAD
-            pointBorderWidth: 2,
-            data: [34, 45, 34, 56, 35, 56, 54, 23, 43, 45, 34, 56],
-=======
             pointBorderWidth: 1,
             data: this.dataTable.map((u) => u.count),
->>>>>>> main
             tension: 0.1,
             fill: false,
           },
@@ -103,10 +68,6 @@ export default {
           legend: {
             display: false,
           },
-<<<<<<< HEAD
-        },
-      };
-=======
           // tooltips: {
           //   callbacks: {
           //     labelColor: function (context) {
@@ -153,7 +114,6 @@ export default {
         });
         this.renderDataTable();
       } catch {}
->>>>>>> main
     },
   },
 };

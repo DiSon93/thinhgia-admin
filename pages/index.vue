@@ -6,17 +6,6 @@
     }"
     min-height="200"
     transition="fade-transition"
-<<<<<<< HEAD
-    max-height="300"
-  >
-    <v-container fluid id="homepage">
-      <v-row no-gutters>
-        <v-col cols="7" class="action">
-          <div class="pt-0 new-action">Hoạt động mới cập nhật</div>
-          <NewAction />
-        </v-col>
-        <v-col cols="5" class="detail_data">
-=======
   >
     <v-container fluid id="homepage">
       <v-row align="center" class="res_homapage">
@@ -183,7 +172,6 @@
           <NewAction />
         </v-col>
         <v-col cols="12" md="5" class="detail_data">
->>>>>>> main
           <div class="pt-0 time-action" tile>Bất động sản theo thời gian</div>
           <div class="chart">
             <RealEstateChart />
@@ -193,8 +181,6 @@
           <Special />
         </v-col>
       </v-row>
-<<<<<<< HEAD
-=======
       <el-dialog
         :visible.sync="centerDialogVisible02"
         width="80%"
@@ -240,7 +226,6 @@
           :key="childKey02"
         />
       </el-dialog>
->>>>>>> main
     </v-container>
   </v-lazy>
 </template>
@@ -248,12 +233,6 @@
 <script>
 import RealEstateChart from "@component/Real-esstate-chart.vue";
 import NewAction from "@component/NewAction.vue";
-<<<<<<< HEAD
-import Overview from "@component/Overview.vue";
-import Notification from "@component/Notification.vue";
-import Special from "@component/Special.vue";
-
-=======
 import NewActionMobile from "@component/NewActionMobile.vue";
 import Overview from "@component/Overview.vue";
 import Notification from "@component/Notification.vue";
@@ -266,16 +245,10 @@ import UpdateCustomerSearch from "@component/Form/UpdateCustomerSearch.vue";
 import { mapState, mapActions } from "vuex";
 
 // var socket = io.connect("https://thinhgiacore.demo.fit/socket.io");
->>>>>>> main
 export default {
   components: {
     RealEstateChart,
     NewAction,
-<<<<<<< HEAD
-    Overview,
-    Notification,
-    Special,
-=======
     NewActionMobile,
     Overview,
     Notification,
@@ -284,21 +257,10 @@ export default {
     ChangePassword,
     UpdateUser,
     UpdateCustomerSearch,
->>>>>>> main
   },
   data() {
     return {
       isActive: false,
-<<<<<<< HEAD
-    };
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start();
-
-      setTimeout(() => this.$nuxt.$loading.finish(), 500);
-    });
-=======
       isWidth: window.innerWidth > 1263 ? true : false,
       isMobile: window.innerWidth < 600 ? true : false,
       height1: window.innerHeight - 130,
@@ -480,7 +442,6 @@ export default {
         this.$router.push(`/search/${keyWord[1]}`);
       }
     },
->>>>>>> main
   },
 };
 </script>
@@ -501,15 +462,9 @@ export default {
 }
 .detail_data {
   overflow-y: auto;
-<<<<<<< HEAD
-  height: 700px;
-  .chart {
-    height: 300px;
-=======
   // height: 700px;
   .chart {
     // height: 300px;
->>>>>>> main
     background: #ffffff;
     border-radius: 15px;
     margin-top: 15px;
@@ -518,18 +473,12 @@ export default {
 }
 .action {
   overflow-y: auto;
-<<<<<<< HEAD
-  height: 700px;
-=======
   // height: 700px;
->>>>>>> main
 }
 div::-webkit-scrollbar {
   width: 3px !important;
   opacity: 0.1 !important;
 }
-<<<<<<< HEAD
-=======
 .homepage {
   width: 77px;
   height: 25px;
@@ -692,5 +641,4 @@ div::-webkit-scrollbar {
     height: 300px;
   }
 }
->>>>>>> main
 </style>

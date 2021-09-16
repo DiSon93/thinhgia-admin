@@ -8,49 +8,6 @@
     transition="fade-transition"
   >
     <div class="header_box">
-<<<<<<< HEAD
-      <v-row align="center" d-flex>
-        <button class="homepage" disabled>Bất động sản</button>
-        <v-btn depressed color="primary" id="social_network"> 16:52 </v-btn>
-        <!-- <div id="select_amount">
-          <v-select
-            :options="options"
-            label="title"
-            placeholder="Tất cả"
-            class="style-chooser"
-          >
-            <template slot="option" slot-scope="option">
-              <div>
-                <span class="number">{{ option.number }}</span>
-                <span class="title"> {{ option.title }}</span>
-              </div>
-            </template>
-          </v-select>
-        </div> -->
-        <SelectBox />
-        <b-input-group class="search">
-          <b-input-group-prepend is-text>
-            <b-icon icon="search"></b-icon>
-          </b-input-group-prepend>
-          <b-form-input
-            placeholder="Tìm kiếm tất cả thông tin"
-            type="search"
-          ></b-form-input>
-        </b-input-group>
-        <div class="option_button">
-          <v-btn class="mx-2 add_btn" fab dark small color="warning">
-            <v-icon dark small> mdi-plus </v-icon>
-          </v-btn>
-          <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
-          <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
-
-          <v-btn class="setting" fab><v-icon dark small>mdi-cog</v-icon></v-btn>
-        </div>
-      </v-row>
-      <v-row class="data_table">
-        <RealEstateTable />
-      </v-row>
-=======
       <v-row align="center">
         <button class="homepage" disabled>Bất động sản</button>
         <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
@@ -177,98 +134,12 @@
       >
         <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
       </el-dialog>
->>>>>>> main
     </div>
   </v-lazy>
 </template>
 
 <script>
 import RealEstateTable from "@component/RealEstateTable.vue";
-<<<<<<< HEAD
-import SelectBox from "@component/SelectBox.vue";
-export default {
-  components: {
-    RealEstateTable,
-    SelectBox,
-  },
-  data() {
-    return {
-      isActive: false,
-      options: [
-        {
-          title: "Tất cả",
-          number: ".",
-        },
-        {
-          title: "2 tỷ",
-          number: 0,
-        },
-        {
-          title: "10 tỷ ",
-          number: 1,
-        },
-        {
-          title: "2-3 tỷ",
-          number: 2,
-        },
-      ],
-      desserts: [
-        {
-          id: 2971,
-          name: "18-04 30 tháng 04",
-          calories: 159,
-          web: true,
-        },
-        {
-          id: 2972,
-          name: "18-04 30 tháng 04",
-          calories: 237,
-        },
-        {
-          id: 2973,
-          name: "18-04 30 tháng 04",
-          calories: 262,
-          web: true,
-        },
-        {
-          id: 2974,
-          name: "18-04 30 tháng 04",
-          calories: 305,
-        },
-        {
-          id: 2975,
-          name: "18-04 30 tháng 04",
-          calories: 356,
-        },
-        {
-          id: 2976,
-          name: "18-04 30 tháng 04",
-          calories: 375,
-        },
-        {
-          id: 2977,
-          name: "18-04 30 tháng 04",
-          calories: 392,
-        },
-        {
-          id: 2978,
-          name: "18-04 30 tháng 04",
-          calories: 408,
-        },
-        {
-          id: 2979,
-          name: "18-04 30 tháng 04",
-          calories: 452,
-        },
-        {
-          id: 2980,
-          name: "18-04 30 tháng 04",
-          calories: 518,
-        },
-      ],
-    };
-  },
-=======
 import EstateTable from "@component/EstateTable.vue";
 import UserDetail from "@component/Form/UserDetail";
 import ChangePassword from "@component/Form/ChangePassword";
@@ -442,7 +313,6 @@ export default {
       });
     },
   },
->>>>>>> main
 };
 </script>
 
@@ -463,8 +333,6 @@ export default {
     margin-left: 8px;
     margin-right: 8px;
   }
-<<<<<<< HEAD
-=======
   .selected_estate {
     position: absolute;
     top: 0px;
@@ -475,7 +343,6 @@ export default {
       font-size: 12px;
     }
   }
->>>>>>> main
   .homepage {
     width: 100px;
     height: 25px !important;
@@ -494,28 +361,10 @@ export default {
     font-weight: 300 !important;
     margin-left: 8px;
     background-color: #fff;
-<<<<<<< HEAD
-    // border: 1px solid rgba(96, 96, 96, 0.2);
-    // border-radius: 15px;
-=======
->>>>>>> main
     #vs2__combobox {
       border: 1px solid rgba(96, 96, 96, 0.2);
       border-radius: 15px !important;
     }
-<<<<<<< HEAD
-    // .number {
-    //   width: 13px !important;
-    //   height: 13px !important;
-    //   border-radius: 50%;
-    //   background: #c4c4c4;
-    //   color: white;
-    //   font-size: 11px;x`
-    //   font-weight: 300;
-    // }
-=======
-
->>>>>>> main
     .title {
       font-size: 11px !important;
       font-weight: 300 !important;
@@ -556,13 +405,6 @@ export default {
       border-radius: 15px;
       border: 1px solid rgba(96, 96, 96, 0.2);
       border-left: none;
-<<<<<<< HEAD
-      &:hover {
-        border: 1px solid blue;
-        transition: 0.5s;
-      }
-=======
->>>>>>> main
     }
     .input-group-text {
       position: absolute;
@@ -605,29 +447,14 @@ export default {
         transition: 0.5s;
       }
     }
-<<<<<<< HEAD
-    .setting {
-      padding: 0;
-      width: 24px !important;
-      height: 24px !important;
-=======
     #setting {
       padding: 0;
       // width: 24px !important;
       // height: 24px !important;
->>>>>>> main
       border-radius: 50%;
       background-color: #fff !important;
       box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
       margin-left: 10px;
-<<<<<<< HEAD
-      &:hover {
-        border: 1px solid blue;
-        transition: 0.5s;
-      }
-    }
-  }
-=======
 
       .el-button {
         padding: 4px !important;
@@ -645,7 +472,6 @@ export default {
   .all_search {
     text-decoration: none;
   }
->>>>>>> main
   #select_amount {
     width: 120px !important;
     border-radius: 15px !important;
@@ -665,8 +491,6 @@ export default {
     margin-top: -50px !important;
   }
 }
-<<<<<<< HEAD
-=======
 @media screen and (max-width: 600px) {
   #search {
     display: none;
@@ -696,5 +520,4 @@ export default {
     }
   }
 }
->>>>>>> main
 </style>

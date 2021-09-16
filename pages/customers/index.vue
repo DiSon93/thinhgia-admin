@@ -10,29 +10,6 @@
     <div class="header_box">
       <v-row align="center" d-flex>
         <button class="homepage" disabled>Khách hàng</button>
-<<<<<<< HEAD
-        <v-btn depressed color="primary" id="social_network"> 16:52 </v-btn>
-        <div id="select_amount"></div>
-        <b-input-group class="search">
-          <b-input-group-prepend is-text>
-            <b-icon icon="search"></b-icon>
-          </b-input-group-prepend>
-          <b-form-input
-            placeholder="Tìm kiếm tất cả thông tin"
-            type="search"
-          ></b-form-input>
-        </b-input-group>
-        <div class="option_button">
-          <v-btn class="mx-2 add_btn" fab dark small color="warning">
-            <v-icon dark small> mdi-plus </v-icon>
-          </v-btn>
-          <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
-          <v-btn class="export" fab><img src="@image/icons/export.png" alt="" /></v-btn>
-        </div>
-      </v-row>
-      <v-row class="data_table">
-        <CustomerTable />
-=======
         <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
         <div id="select_amount"></div>
         <div id="search">
@@ -95,7 +72,6 @@
       </el-dialog>
       <v-row class="data_table" v-loading="loading">
         <CustomerTable :key="keyChild" :searchKey="input" />
->>>>>>> main
       </v-row>
     </div>
   </v-lazy>
@@ -103,17 +79,6 @@
 
 <script>
 import CustomerTable from "@component/CustomerTable";
-<<<<<<< HEAD
-export default {
-  components: {
-    CustomerTable,
-  },
-  data() {
-    return {
-      isActive: false,
-    };
-  },
-=======
 import CreateCustomer from "@component/Form/CreateCustomer";
 import { mapState } from "vuex";
 import UserDetail from "@component/Form/UserDetail";
@@ -188,7 +153,6 @@ export default {
       });
     },
   },
->>>>>>> main
 };
 </script>
 
@@ -259,43 +223,6 @@ export default {
     }
   }
 
-<<<<<<< HEAD
-  .search {
-    margin-left: 378px;
-    position: relative;
-    .bi-search {
-      position: absolute;
-      top: 5px;
-      left: 16px;
-      font-weight: 700;
-      z-index: 9999;
-      font-size: 16px;
-    }
-    .form-control {
-      position: absolute;
-      font-size: 12px;
-      top: -26px;
-      padding-left: 45px;
-      height: 26px;
-      letter-spacing: 0.5px;
-      width: 295px;
-      border-radius: 15px;
-      border: 1px solid rgba(96, 96, 96, 0.2);
-      border-left: none;
-      &:hover {
-        border: 1px solid blue;
-        transition: 0.5s;
-      }
-    }
-    .input-group-text {
-      position: absolute;
-      top: -26px;
-      border: none;
-      background-color: transparent;
-    }
-  }
-=======
->>>>>>> main
   .option_button {
     position: absolute;
     right: 30px;
@@ -345,10 +272,6 @@ export default {
     }
   }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 .data_table {
   margin-top: 60px;
   padding: 0 30px;
@@ -358,8 +281,6 @@ export default {
     margin-top: -50px !important;
   }
 }
-<<<<<<< HEAD
-=======
 @media screen and (max-width: 600px) {
   #search {
     display: none;
@@ -375,5 +296,4 @@ export default {
     margin-left: 15px !important;
   }
 }
->>>>>>> main
 </style>

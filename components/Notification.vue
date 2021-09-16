@@ -2,30 +2,6 @@
   <div>
     <div class="notification d-flex">
       <div class="title">Thông báo</div>
-<<<<<<< HEAD
-      <v-btn color="warning" dark id="btn_readmore"> Xem tất cả </v-btn>
-    </div>
-    <div class="noti_content">
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-      </div>
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-      </div>
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-      </div>
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-      </div>
-      <div class="d-flex user_noti">
-        <img src="@image/icons/username.png" alt="" />
-        <span>User Name đã chia sẻ bđs lên trang cộng đồng</span>
-=======
       <v-btn
         color="warning"
         dark
@@ -47,16 +23,12 @@
         <span
           >{{ item.staff.name.toUpperCase() }} đã chia sẻ bđs lên trang cộng đồng</span
         >
->>>>>>> main
       </div>
     </div>
   </div>
 </template>
 
 <script>
-<<<<<<< HEAD
-export default {};
-=======
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -64,7 +36,6 @@ export default {
     ...mapState("realEstate", ["realEstateList", "lastPage", "total"]),
   },
 };
->>>>>>> main
 </script>
 
 <style lang="scss" scoped>
@@ -107,10 +78,7 @@ export default {
       width: 30px;
       height: 30px;
       margin: 0 25px;
-<<<<<<< HEAD
-=======
       border-radius: 50%;
->>>>>>> main
     }
     span {
       font-size: 13px;
@@ -118,8 +86,6 @@ export default {
     }
   }
 }
-<<<<<<< HEAD
-=======
 @media screen and (max-width: 600px) {
   .user_noti {
     span {
@@ -127,5 +93,4 @@ export default {
     }
   }
 }
->>>>>>> main
 </style>
