@@ -138,6 +138,7 @@ export default {
       loading: false,
       video: "",
       dialogVisible: false,
+      dialogImageUrl: "",
     };
   },
   mounted() {

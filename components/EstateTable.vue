@@ -68,7 +68,7 @@
                 v-model="search_address"
                 class="input"
                 placeholder="Tìm kiếm địa chỉ"
-                v-on:keyup.enter="searchAddress" 
+                v-on:keyup.enter="searchAddress"
               />
               <i class="el-icon-search"></i>
               <div>
@@ -293,7 +293,7 @@ export default {
         this.house_type = "";
         this.getRealEstateListPerPage();
       } else if (value.home_type && value.home_type.length != 0) {
-        this.house_type = value.home_type.join(",").toString();
+        this.house_type = value.home_type.join(",");
         this.getRealEstateListPerPage();
       }
 

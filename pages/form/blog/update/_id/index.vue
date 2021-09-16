@@ -80,6 +80,9 @@
                   />
                 </div> -->
         </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
         <p class="error_message" v-if="errorMessage">
           {{ errorMessage.image_id ? errorMessage.image_id[0] : null }}
         </p>
@@ -110,6 +113,8 @@ export default {
       image_id: [],
       img_val: "",
       loading: false,
+      dialogImageUrl: "",
+      dialogVisible: false,
     };
   },
   mounted() {
