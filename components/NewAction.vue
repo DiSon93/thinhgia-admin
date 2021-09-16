@@ -74,7 +74,9 @@
                 </div>
                 <div class="detail_small">
                   <div>Dự án</div>
-                  <div class="hightlight">{{ item.project ? item.project.name : null}}</div>
+                  <div class="hightlight">
+                    {{ item.project ? item.project.name : null }}
+                  </div>
                 </div>
                 <div class="detail_small">
                   <div>Phí môi giới</div>
