@@ -9,6 +9,19 @@
   >
     <div class="header_box">
       <v-row align="center" d-flex>
+<<<<<<< HEAD
+        <v-col cols="4" class="app_bar">
+          <button class="homepage" disabled>Dự án</button>
+          <v-btn depressed color="primary" id="social_network"> 16 </v-btn>
+        </v-col>
+        <v-col cols="4" align="center" class="app_bar"> 1 / 1 </v-col>
+        <v-col cols="4" class="app_bar">
+          <div class="option_button">
+            <v-btn class="mx-2 add_btn" fab dark small color="warning">
+              <v-icon dark small> mdi-plus </v-icon>
+            </v-btn>
+            <v-btn class="account" fab><v-icon dark small>mdi-account</v-icon></v-btn>
+=======
         <v-col cols="8" sm="4" class="app_bar">
           <button class="homepage" disabled>Dự án</button>
           <v-btn depressed color="primary" id="social_network"> {{ total }} </v-btn>
@@ -31,12 +44,15 @@
                 >mdi-account</v-icon
               ></v-btn
             >
+>>>>>>> main
           </div>
         </v-col>
       </v-row>
       <v-row class="data_table">
         <ProjectTable />
       </v-row>
+<<<<<<< HEAD
+=======
       <el-dialog
         :visible.sync="centerDialogVisible02"
         :width="dialog"
@@ -55,11 +71,18 @@
       >
         <ChangePassword v-on:close-modals="centerDialogVisible03 = false" />
       </el-dialog>
+>>>>>>> main
     </div>
   </v-lazy>
 </template>
 
 <script>
+<<<<<<< HEAD
+import ProjectTable from "@component/ProjectTable";
+export default {
+  components: {
+    ProjectTable,
+=======
 import { mapState } from "vuex";
 import ProjectTable from "@component/ProjectTable";
 import UserDetail from "@component/Form/UserDetail";
@@ -70,10 +93,15 @@ export default {
     ProjectTable,
     UserDetail,
     ChangePassword,
+>>>>>>> main
   },
   data() {
     return {
       isActive: false,
+<<<<<<< HEAD
+    };
+  },
+=======
       centerDialogVisible02: false,
       centerDialogVisible03: false,
       dialog: window.innerWidth < 600 ? "80%" : window.innerWidth < 1200 ? "50%" : "25%",
@@ -90,6 +118,7 @@ export default {
       }, 100);
     },
   },
+>>>>>>> main
 };
 </script>
 
@@ -157,6 +186,8 @@ export default {
     margin-top: -50px !important;
   }
 }
+<<<<<<< HEAD
+=======
 @media screen and (max-width: 600px) {
   .data_table {
     padding: 0px 15px 80px;
@@ -169,4 +200,5 @@ export default {
     margin-top: 20px;
   }
 }
+>>>>>>> main
 </style>

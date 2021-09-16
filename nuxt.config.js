@@ -3,9 +3,14 @@ import { resolve } from 'path';
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+<<<<<<< HEAD
+  head: {
+    title: 'Thịnh Gia',
+=======
   ssr: false,
   head: {
     title: 'Kho Bất Động Sản Việt',
+>>>>>>> main
     htmlAttrs: {
       lang: 'en'
     },
@@ -15,10 +20,14 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
+<<<<<<< HEAD
+      { rel: 'icon', type: 'image/x-icon', href: '/thinhgia_logo_1.png' },
+=======
       { rel: 'icon', type: 'image/x-icon', href: '/batdongsanviet.png' },
     ],
     script: [
       { type: 'text/javascript', src: 'https://sp.zalo.me/plugins/sdk.js' },
+>>>>>>> main
     ]
   },
 
@@ -26,6 +35,12 @@ export default {
   css: [
     '~/assets/scss/main.scss'
   ],
+<<<<<<< HEAD
+  loading: true,
+  loading: {
+    color: 'blue',
+    height: '5px',
+=======
   performance: {
     hints: false,
     maxEntrypointSize: 512000,
@@ -46,17 +61,24 @@ export default {
   loading: {
     color: 'teal',
     height: '3px',
+>>>>>>> main
     duration: 500,
   },
   // loading: '~/components/LoadingBar.vue',
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+<<<<<<< HEAD
+    { src: "@/plugins/bootstrap_icon.js", mode: "client"},
+    { src: "@/plugins/vue-select.js", mode: "client"},
+    { src: "@/plugins/element-ui.js", mode: "client"},
+=======
     { src: "@/plugins/bootstrap_icon.js", mode: "client" },
     // { src: "@/plugins/vue-select.js",  ssr: false},
     { src: "@/plugins/element-ui.js", mode: "client" },
     { src: "@/plugins/socket-io.js", mode: "client" },
 
+>>>>>>> main
     // { src: "@/plugins/vue-lazyloading.js", mode: "client"},
   ],
 
@@ -75,15 +97,24 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+<<<<<<< HEAD
+    'bootstrap-vue/nuxt'
+=======
     'bootstrap-vue/nuxt',
     'nuxt-vue-select',
     'vue-social-sharing/nuxt',
+>>>>>>> main
   ],
 
   // bootstrapVue: {
   //   bootstrapCSS: false, // Or `css: false`
   //   bootstrapVueCSS: false // Or `bvCSS: false`
   // },
+<<<<<<< HEAD
+
+  // Axios module configuration: https://go.nuxtjs.dev/config-axios
+  axios: {},
+=======
   // io: {
   //   // module options
   //   sockets: [{
@@ -103,6 +134,7 @@ export default {
       return config
     },
   },
+>>>>>>> main
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -133,9 +165,16 @@ export default {
     '@lang': resolve(__dirname, './lang'),
     '@scss': resolve(__dirname, './assets/scss'),
     '@asset': resolve(__dirname, './assets'),
+<<<<<<< HEAD
+    '@lib': resolve(__dirname, './library')
+=======
     '@lib': resolve(__dirname, './library'),
     '@utils': resolve(__dirname, './utils')
+>>>>>>> main
   },
-
+  server: {
+    host: '0',
+    port: 3001
+  },
   extensions: ['*', '.js', '.vue', '.json']
 }

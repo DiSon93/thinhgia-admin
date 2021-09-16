@@ -1,4 +1,22 @@
 #navtab_admin {
+<<<<<<< HEAD
+    .tabs{
+        .nav-tab.nav-fill.nav {
+            border-bottom: none !important;
+            .nav-item{
+                a.nav-link{
+                    font-size: 12px;
+                    color: red
+
+                }
+                &:hover{
+                    border: none;
+                }
+            }
+          }
+    }
+  }
+=======
     .tabs {
         .nav-tab.nav-fill.nav {
             border-bottom: none !important;
@@ -26,3 +44,4 @@
         display: block !important;
     }
 }
+>>>>>>> main
